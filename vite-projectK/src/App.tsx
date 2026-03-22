@@ -1,12 +1,29 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useEffect, useState } from "react";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "./assets/vite.svg";
+import heroImg from "./assets/hero.png";
+import "./App.css";
+import { Navigate, Outlet, useLoaderData } from "react-router-dom";
+// fake component
+export function ProtectPath({ auth = false }: { auth: boolean }) {
+  console.log("ProtectPath render", auth);
+  return auth ? <Outlet /> : <Navigate to="/google" replace />;
+}
+
+export function Hello() {
+  return <h1>Hello</h1>;
+}
+
+export function Google() {
+  return <h1>Google</h1>;
+}
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  const [count, setCount] = useState(0);
+  const data = useLoaderData() as {name:string};
+  useEffect(()=>{
+    console.log(data);
+  },[data])
   return (
     <>
       <section id="center">
@@ -114,8 +131,9 @@ function App() {
 
       <div className="ticks"></div>
       <section id="spacer"></section>
+      <Outlet />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
