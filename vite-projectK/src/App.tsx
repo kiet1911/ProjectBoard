@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
-// import reactLogo from "./assets/react.svg";
-// import viteLogo from "./assets/vite.svg";
-// import heroImg from "./assets/hero.png";
 import "./App.css";
 import { Navigate, Outlet } from "react-router-dom";
 import NavBar from "./features/navBar";
+import Footer from "./components/Footer";
 // fake component
 export function ProtectPath({ auth = false }: { auth: boolean }) {
   // console.log("ProtectPath render", auth);
@@ -13,11 +11,13 @@ export function ProtectPath({ auth = false }: { auth: boolean }) {
 
 function App() {
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
       <NavBar auth={true}></NavBar>
-      
-      <Outlet />
-    </>
+      <main className="grow">
+        <Outlet />
+      </main>
+      <Footer />
+    </div>
   );
 }
 

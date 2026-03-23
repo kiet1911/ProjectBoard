@@ -5,6 +5,8 @@ import Error404Page from "../pages/Error.tsx";
 import Login from "../pages/Login.tsx";
 import About from "../pages/About.tsx";
 import Contact from "../pages/Contact.tsx";
+import HomePage from "../pages/HomePage.tsx";
+import  Production from "../pages/Product.tsx";
 
 // create router
 export const router = createBrowserRouter([
@@ -12,30 +14,38 @@ export const router = createBrowserRouter([
     path: "/",
     element: <App />,
     loader: async () => {
-      console.log('this runing home ')
+      console.log("this runing home ");
       return {
         name: "Huy",
       };
     },
     children: [
       {
+        index: true,
+        element: <HomePage></HomePage>,
+      },
+      {
         element: <ProtectPath auth={true} />,
         children: [
           {
             path: "about",
-            element: <About />,//go here if have auth
+            element: <About />, //go here if have auth
           },
           {
             path: "contact",
-            element: <Contact />,//go here if have auth
+            element: <Contact />, //go here if have auth
+          },
+          {
+            path: "product",
+            element: <Production/>, //go here if have auth
           },
         ],
-      }
+      },
     ],
   },
   {
     path: "Login",
-    element: <Login/>,
+    element: <Login />,
   },
   {
     path: "*",

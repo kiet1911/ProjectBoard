@@ -9,7 +9,7 @@ const tabs = [
   {
     key: "tabs04",
     title: "Product",
-    path: "/",
+    path: "/Product",
     hidden: false,
   },
   {

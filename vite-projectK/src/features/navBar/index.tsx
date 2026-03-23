@@ -10,7 +10,7 @@ function NavBar({ auth = false }: { auth: boolean }) {
 
   return (
     <>
-      <nav className="w-screen sticky top-0 flex justify-between items-center px-5 py-1 bg-white border-b border-black/10 z-40">
+      <nav className="w-full sticky top-0 flex justify-between items-center px-5 py-1 bg-white border-b border-black/10 z-40">
         <button
           onClick={() => setIsOpen(true)}
           className="hidden max-md:block p-2 border border-black/10 rounded"
@@ -19,7 +19,7 @@ function NavBar({ auth = false }: { auth: boolean }) {
         </button>
 
         <div className="w-25 aspect-3/2.5">
-          <img src="./src/assets/logo1.png" alt="logo" />
+          <img src="./src/assets/logoBrand.png" alt="logo" />
         </div>
 
         <NavLinks className="flex flex-row gap-5 max-md:hidden" />

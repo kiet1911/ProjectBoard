@@ -3,6 +3,7 @@
 :root {
   --navbar-bg: skyblue;
   --main-color: #DB3332;
+  --footer-bg-color: #101828;
   /* --text: #6b6375;
   --text-h: #08060d;
   --bg: #fff;
@@ -36,8 +37,12 @@
   font: 14px/145% var(--sans);
   font-weight: 500;
   letter-spacing: 0.18px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  height: 100vh;;
+  width: 100%;
 }
-
 @media (prefers-color-scheme: dark) {
   :root {
     /* --text: #9ca3af;
@@ -73,7 +78,8 @@
 body {
   background-color: whitesmoke;
   margin: 0;
-  width: 100vw;
+  padding: 0;
+  width: 100%;
   height: 100vh;
 }
 /* 

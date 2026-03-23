@@ -8,9 +8,9 @@ export const MobileSidebar = ({
   isOpen: boolean;
   onClose: () => void;
 }) => (
-  <div className={`fixed inset-0 z-50 ${isOpen ? "visible" : "invisible"}`}>
+  <div className={`fixed inset-0 z-50 duration-300 ${isOpen ? "visible" : "invisible"}`}>
     <div
-      className={`absolute inset-0 bg-black/20 transition-opacity ${isOpen ? "opacity-100" : "opacity-0"}`}
+      className={`absolute inset-0 bg-black/20 transition-opacity duration-300 ${isOpen ? "opacity-100" : "opacity-0"}`}
       onClick={onClose}
     />
 
@@ -21,7 +21,7 @@ export const MobileSidebar = ({
         <div className="flex justify-between items-center mb-10">
           <h2 className="text-xl font-bold">Menu</h2>
           <button onClick={onClose}>
-            <X size={20} className=" p-1 rounded-full hover:bg-mist-200 duration-300" />
+            <X size={20} className=" p-1 rounded-full hover:bg-mist-200" />
           </button>
         </div>
 
