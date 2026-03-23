@@ -1,6 +1,9 @@
 @import "tailwindcss";
+@layer theme, base, components, utilities;
 :root {
-  --text: #6b6375;
+  --navbar-bg: skyblue;
+  --main-color: #DB3332;
+  /* --text: #6b6375;
   --text-h: #08060d;
   --bg: #fff;
   --border: #e5e4e7;
@@ -28,12 +31,16 @@
 
   @media (max-width: 1024px) {
     font-size: 16px;
-  }
+  } */
+  --sans: system-ui, "Segoe UI", Roboto, sans-serif;
+  font: 14px/145% var(--sans);
+  font-weight: 500;
+  letter-spacing: 0.18px;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --text: #9ca3af;
+    /* --text: #9ca3af;
     --text-h: #f3f4f6;
     --bg: #16171d;
     --border: #2e303a;
@@ -43,15 +50,15 @@
     --accent-border: rgba(192, 132, 252, 0.5);
     --social-bg: rgba(47, 48, 58, 0.5);
     --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px; */
   }
 
-  #social .button-icon {
+  /* #social .button-icon {
     filter: invert(1) brightness(2);
-  }
+  } */
 }
 
-#root {
+/* #root {
   width: 1126px;
   max-width: 100%;
   margin: 0 auto;
@@ -61,12 +68,15 @@
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-}
+} */
 
 body {
+  background-color: whitesmoke;
   margin: 0;
+  width: 100vw;
+  height: 100vh;
 }
-
+/* 
 h1,
 h2 {
   font-family: var(--heading);
@@ -109,4 +119,16 @@ code {
   line-height: 135%;
   padding: 4px 8px;
   background: var(--code-bg);
+} */
+
+@layer components {
+  .navbar-link  {
+    @apply flex items-center gap-2 bg-mist-100 px-4 py-2 rounded border border-black/10 text-mist-900 duration-75;
+    @apply hover:text-[var(--main-color)];
+    box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.2);
+  }
+  .navbar-link:active {
+    transform: translate(2px, 2px);
+    box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 1);
+  }
 }
