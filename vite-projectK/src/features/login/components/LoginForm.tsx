@@ -6,13 +6,13 @@ export default function LoginForm() {
     <>
       <form
         action=""
-        className="w-full flex flex-col gap-5 max-lg:overflow-y-auto"
+        className="w-full p-2 flex flex-col gap-5 max-lg:overflow-y-auto"
       >
         <div className=" flex flex-col gap-2">
           <label className="text-sm text-mist-600/90" htmlFor="Email">
             Email
           </label>
-          <div className=" flex flex-row justify-center items-center outline-1 outline-mist-300/80 focus-within:outline-black/30 px-2">
+          <div className=" flex flex-row justify-start items-center outline-1 outline-mist-300/80 focus-within:outline-black/30 px-2 overflow-hidden">
             <Mail
               className=" text-(--main-color) stroke-(--main-color) "
               size={15}
@@ -33,7 +33,7 @@ export default function LoginForm() {
           <label className="text-sm text-mist-600/90" htmlFor="password">
             Password
           </label>
-          <div className=" flex flex-row justify-center items-center outline-1 outline-mist-300/80 focus-within:outline-black/30 px-2">
+          <div className=" flex flex-row justify-start items-center outline-1 outline-mist-300/80 focus-within:outline-black/30 px-2 overflow-hidden">
             <ShieldAlert
               className=" text-(--main-color) stroke-(--main-color) "
               size={15}

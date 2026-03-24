@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import LoginForm from "./LoginForm";
 import { data } from "react-router-dom";
-import { useTypewriter } from "../../utilities/useTypewriter";
+import { useTypewriter } from "../../../utilities/useTypewriter";
 
 export default function LoginPage() {
   const [isRegister, setIsRegister] = useState<boolean>(false);
@@ -16,7 +16,7 @@ export default function LoginPage() {
   return (
     <>
       <main className=" h-screen flex flex-row justify-center-safe items-center max-md:flex-col">
-        <section className=" flex-1 w-full h-full flex flex-col justify-start items-start px-20 py-10 gap-5 max-md:order-2">
+        <section className=" flex-1 w-full h-full flex flex-col justify-start items-start px-20 pt-5 gap-5 max-md:order-2  box-border">
           <div>
             <h1 className="text-xl font-bold text-(--main-color)">
               Welcome back, adventurer! Your next epic game night awaits.

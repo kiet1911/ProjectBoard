@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { Navigate, Outlet } from "react-router-dom";
-import NavBar from "./features/navBar";
+import NavBar from "./features/navBar/components";
 import Footer from "./components/Footer";
 // fake component
 export function ProtectPath({ auth = false }: { auth: boolean }) {
