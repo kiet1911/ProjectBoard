@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 
 export const useTypewriter = ({ test, ref }: { test: string[], ref:React.RefObject<HTMLInputElement>|null }) => {
-  const topRef = ref;
+  const topRef = ref?ref:null;
   const dataTopic = test;
 
   const currentDataRef = useRef("");
@@ -11,8 +11,8 @@ export const useTypewriter = ({ test, ref }: { test: string[], ref:React.RefObje
 
   const topicLogin = () => {
     const arrData = arrDataRef.current;
-
-    if (arrData.length > 0) {
+    if(ref === null) return
+    if (arrData.length > 0 && topRef) {
       const draw = arrData.shift();
       if (draw) currentDataRef.current += draw;
 
@@ -26,9 +26,8 @@ export const useTypewriter = ({ test, ref }: { test: string[], ref:React.RefObje
         indexRef.current = (indexRef.current + 1) % dataTopic.length;
         arrDataRef.current = dataTopic[indexRef.current].split("");
       }
-
-      topRef.current!.placeholder = currentDataRef.current;
-
+      if(topRef)
+        topRef.current!.placeholder = currentDataRef.current;
       timeoutRef.current = setTimeout(topicLogin, 40);
     }
   };

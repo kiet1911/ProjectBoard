@@ -1,12 +1,34 @@
-import { Mail, ShieldAlert } from "lucide-react";
+import { Mail, ShieldAlert, User } from "lucide-react";
 
-export default function LoginForm({ toggleForm }: { toggleForm: () => void }) {
+export default function RegisterForm({toggleForm}:{toggleForm:()=>void}) {
+
   return (
     <>
       <form
         action=""
         className="w-full p-2 flex flex-col gap-5 max-lg:overflow-y-auto"
       >
+         <div className=" flex flex-col gap-2">
+          <label className="text-sm text-mist-600/90" htmlFor="userName">
+            User Name
+          </label>
+          <div className=" flex flex-row justify-start items-center outline-1 outline-mist-300/80 focus-within:outline-black/30 px-2 overflow-hidden">
+            <User
+              className=" text-(--main-color) stroke-(--main-color) "
+              size={15}
+            />
+            <input
+              className=" text-sm outline-0 pl-4 py-2 rounded md:w-full"
+              id="userName"
+              name="userName"
+              maxLength={265}
+              type="text"
+              placeholder="User Name"
+              required
+              aria-required
+            />
+          </div>
+        </div>
         <div className=" flex flex-col gap-2">
           <label className="text-sm text-mist-600/90" htmlFor="Email">
             Email
@@ -49,6 +71,27 @@ export default function LoginForm({ toggleForm }: { toggleForm: () => void }) {
             />
           </div>
         </div>
+          <div className=" flex flex-col gap-2">
+          <label className="text-sm text-mist-600/90" htmlFor="RePassword">
+            RePassword
+          </label>
+          <div className=" flex flex-row justify-start items-center outline-1 outline-mist-300/80 focus-within:outline-black/30 px-2 overflow-hidden">
+            <ShieldAlert
+              className=" text-(--main-color) stroke-(--main-color) "
+              size={15}
+            />
+            <input
+              className=" text-sm outline-0 pl-4 py-2 rounded md:w-full"
+              id="RePassword"
+              name="RePassword"
+              maxLength={256}
+              type="Password"
+              placeholder="Password"
+              required
+              aria-required
+            />
+          </div>
+        </div>
         <div className=" text-right text-sm text-(--main-color) underline underline-offset-1 cursor-pointer">
           <p>Forgot password</p>
         </div>
@@ -66,14 +109,9 @@ export default function LoginForm({ toggleForm }: { toggleForm: () => void }) {
           </p>
         </button>
         <div className=" text-center text-sm text-mist-600/90">
-          <span>Don’t have an account yet? </span>
-          <span
-            onClick={() => {
-              toggleForm();
-            }}
-            className="text-(--main-color) underline underline-offset-1 cursor-pointer"
-          >
-            Sign up now
+          <span>Already have an account? </span>
+          <span onClick={()=>{toggleForm()}} className="text-(--main-color) underline underline-offset-1 cursor-pointer">
+            Sign in now
           </span>
         </div>
         <hr />
