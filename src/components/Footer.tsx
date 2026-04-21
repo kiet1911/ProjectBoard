@@ -6,9 +6,9 @@ const Footer = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 justify-items-start content-center">
           <div>
-            <div className="w-25 aspect-3/2.5 ">
+            <div className="w-25 aspect-3/2.5 scale-80">
               <img
-                className="h-full w-full object-fill"
+                className="h-full w-full object-fill "
                 src="./src/assets/logoBrand.png"
                 alt="projectK Brand Logo"
               />

@@ -57,7 +57,7 @@ export default function LoginForm({ toggleForm }: { toggleForm: () => void }) {
             Login
           </p>
         </button>
-        <div className=" text-center text-sm text-mist-500">
+        <div className=" text-center text-sm text-mist-600/90">
           <p>Or login with</p>
         </div>
         <button className=" cursor-pointer">

@@ -10,7 +10,8 @@ function NavBar({ auth = false }: { auth: boolean }) {
 
   return (
     <>
-      <nav className="w-full sticky top-0 flex justify-between items-center px-5 py-1 bg-white border-b border-black/10 z-40">
+      <nav className="w-full sticky top-0 flex justify-between items-center px-8 py-1 bg-white border-b border-black/10 z-40">
+        {/* menu button hidden when screen is bigger than md */}
         <button
           onClick={() => setIsOpen(true)}
           className="hidden max-md:block p-2 border border-black/10 rounded"
@@ -18,14 +19,18 @@ function NavBar({ auth = false }: { auth: boolean }) {
           <Menu />
         </button>
 
+        {/* logo */} 
         <div className="w-25 aspect-3/2.5">
           <img src="./src/assets/logoBrand.png" alt="logo" />
         </div>
 
+        {/* nav links */}
         <NavLinks className="flex flex-row gap-5 max-md:hidden" />
 
+        {/* auth actions */}
         <AuthActions auth={auth} />
 
+        {/* cart in mobile size */}
         <NavLink to="/" className="hidden max-md:block">
           <ShoppingCart size={20} />
         </NavLink>

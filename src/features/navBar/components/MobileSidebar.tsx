@@ -18,10 +18,10 @@ export const MobileSidebar = ({
       className={`fixed top-0 left-0 h-full w-64 bg-white shadow-2xl transform transition-transform duration-300 ${isOpen ? "translate-x-0" : "-translate-x-full"}`}
     >
       <div className="p-5">
-        <div className="flex justify-between items-center mb-10">
+        <div className="flex justify-between items-center mb-5">
           <h2 className="text-xl font-bold">Menu</h2>
           <button onClick={onClose}>
-            <X size={20} className=" p-1 rounded-full hover:bg-mist-200" />
+            <X size={20} className=" p-1.5 rounded-full bg-mist-400/10 hover:bg-mist-200" />
           </button>
         </div>
 
