@@ -1,12 +1,36 @@
 import { Mail, ShieldAlert, User } from "lucide-react";
-
+import { useUserRegisterStore } from "../../../store/authentication/registerForm";
+import { useLayoutEffect } from "react";
 export default function RegisterForm({toggleForm}:{toggleForm:()=>void}) {
+  const {userName,email,password,rePassword}= useUserRegisterStore(state=>state);
+  const setUserName = useUserRegisterStore(state=> state.setUserName);
+  const setEmail = useUserRegisterStore(state=> state.setEmail);
+  const setPassword = useUserRegisterStore(state=> state.setPassword);
+  const setRePassword = useUserRegisterStore(state=> state.setRePassword);
+  const clear = useUserRegisterStore(state=> state.clear);
+  const log = useUserRegisterStore(state=> state.log);
+
+  useLayoutEffect(()=>{clear();},[])
+  //handler
+  const userNameHandler = (e: React.ChangeEvent<HTMLInputElement>)=>{
+    setUserName(e.target.value);
+  };
+  const emailHandler = (e: React.ChangeEvent<HTMLInputElement>)=>{
+    setEmail(e.target.value);
+  };
+  const passwordHandler = (e: React.ChangeEvent<HTMLInputElement>)=>{
+    setPassword(e.target.value);
+  };
+  const rePasswordHandler = (e: React.ChangeEvent<HTMLInputElement>)=>{
+    setRePassword(e.target.value);
+  };
 
   return (
     <>
       <form
         action=""
         className="w-full p-2 flex flex-col gap-5 max-lg:overflow-y-auto"
+        onSubmit={(e)=>{e.preventDefault();log()}}
       >
          <div className=" flex flex-col gap-2">
           <label className="text-sm text-mist-600/90" htmlFor="userName">
@@ -23,9 +47,11 @@ export default function RegisterForm({toggleForm}:{toggleForm:()=>void}) {
               name="userName"
               maxLength={265}
               type="text"
+              value={userName}
               placeholder="User Name"
               required
               aria-required
+              onChange={userNameHandler}
             />
           </div>
         </div>
@@ -43,10 +69,12 @@ export default function RegisterForm({toggleForm}:{toggleForm:()=>void}) {
               id="Email"
               name="Email"
               maxLength={265}
-              type="text"
+              type="email"
+              value={email}
               placeholder="Email"
               required
               aria-required
+              onChange={emailHandler}
             />
           </div>
         </div>
@@ -65,9 +93,11 @@ export default function RegisterForm({toggleForm}:{toggleForm:()=>void}) {
               name="Password"
               maxLength={256}
               type="Password"
+              value={password}
               placeholder="Password"
               required
               aria-required
+              onChange={passwordHandler}
             />
           </div>
         </div>
@@ -86,9 +116,11 @@ export default function RegisterForm({toggleForm}:{toggleForm:()=>void}) {
               name="RePassword"
               maxLength={256}
               type="Password"
+              value={rePassword}
               placeholder="Password"
               required
               aria-required
+              onChange={rePasswordHandler}
             />
           </div>
         </div>
@@ -97,7 +129,7 @@ export default function RegisterForm({toggleForm}:{toggleForm:()=>void}) {
         </div>
         <button className=" cursor-pointer">
           <p className=" text-center text-sm text-white bg-(--main-color) py-2 rounded-md">
-            Login
+            Register
           </p>
         </button>
         <div className=" text-center text-sm text-mist-500">
