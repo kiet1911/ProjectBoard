@@ -1,29 +1,41 @@
 import { Mail, ShieldAlert } from "lucide-react";
 import { useUserLoginStore } from "../../../store/authentication/loginForm";
 import { useLayoutEffect } from "react";
+import { useNavigate } from "react-router-dom";
 export default function LoginForm({ toggleForm }: { toggleForm: () => void }) {
-  const {email,password} = useUserLoginStore(state=>state);
-  const setEmail = useUserLoginStore(state=> state.setEmail);
-  const setPassword = useUserLoginStore(state=> state.setPassword);
-  const clear = useUserLoginStore(state=> state.clear);
-  const log = useUserLoginStore(state=> state.log);
-  useLayoutEffect(()=>{
+  let navigate = useNavigate();
+  const { email, password } = useUserLoginStore((state) => state);
+  const setEmail = useUserLoginStore((state) => state.setEmail);
+  const setPassword = useUserLoginStore((state) => state.setPassword);
+  const clear = useUserLoginStore((state) => state.clear);
+  const log = useUserLoginStore((state) => state.log);
+  useLayoutEffect(() => {
     clear();
-  },[])
+  }, []);
   //handler
   const emailHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
-  }
+  };
   const passwordHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
-  }
+  };
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const status = await log();
+    if (status === "200") {
+      navigate("/");
+    }
+  };
 
   return (
     <>
       <form
         action=""
         className="w-full p-2 flex flex-col gap-5 max-lg:overflow-y-auto"
-        onSubmit={(e)=>{e.preventDefault();log()}}
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit(e);
+        }}
       >
         <div className=" flex flex-col gap-2">
           <label className="text-sm text-mist-600/90" htmlFor="Email">

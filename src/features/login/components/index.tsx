@@ -4,9 +4,14 @@ import RegisterForm from "./RegisterForm";
 import { useTypewriter } from "../../../hook/useTypewriter";
 import { ArrowLeftCircleIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import LoadingSpin from "../../../components/LoadingSpin";
+import { useUserLoginStore } from "../../../store/authentication/loginForm";
+import { useUserRegisterStore } from "../../../store/authentication/registerForm";
 
 export default function LoginPage() {
   const [isRegister, setIsRegister] = useState<boolean>(false);
+  const loginLoading = useUserLoginStore((state) => state.isLoading);
+  const registerLoading = useUserRegisterStore((state)=> state.isLoading);
   let navigator = useNavigate();
   const typeWriter = useRef<HTMLInputElement>(null);
   const handleToggleForm = () => {
@@ -25,6 +30,7 @@ export default function LoginPage() {
   return (
     <>
       <main className=" h-screen flex flex-row justify-center-safe items-center max-md:flex-col">
+       <LoadingSpin isLoading={loginLoading===registerLoading?false:true}></LoadingSpin>
         <ArrowLeftCircleIcon
           onClick={goBack}
           size={25}

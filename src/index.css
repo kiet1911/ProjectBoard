@@ -131,7 +131,7 @@ code {
 @layer components {
   .navbar-link  {
     @apply flex items-center gap-2 bg-mist-100 px-4 py-2 rounded border border-black/10 text-mist-900 duration-75;
-    @apply hover:text-[var(--main-color)];
+    @apply hover:text-[--main-color];
     box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.2);
   }
   .navbar-link:active {

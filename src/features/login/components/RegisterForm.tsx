@@ -1,28 +1,43 @@
 import { Mail, ShieldAlert, User } from "lucide-react";
 import { useUserRegisterStore } from "../../../store/authentication/registerForm";
-import { useLayoutEffect } from "react";
-export default function RegisterForm({toggleForm}:{toggleForm:()=>void}) {
-  const {userName,email,password,rePassword}= useUserRegisterStore(state=>state);
-  const setUserName = useUserRegisterStore(state=> state.setUserName);
-  const setEmail = useUserRegisterStore(state=> state.setEmail);
-  const setPassword = useUserRegisterStore(state=> state.setPassword);
-  const setRePassword = useUserRegisterStore(state=> state.setRePassword);
-  const clear = useUserRegisterStore(state=> state.clear);
-  const log = useUserRegisterStore(state=> state.log);
+import React, { useLayoutEffect } from "react";
+import { useNavigate } from "react-router-dom";
+export default function RegisterForm({
+  toggleForm,
+}: {
+  toggleForm: () => void;
+}) {
+  let navigate = useNavigate();
+  const { userName, email, password, rePassword } = useUserRegisterStore(
+    (state) => state,
+  );
+  const action = useUserRegisterStore((state) => state.action);
 
-  useLayoutEffect(()=>{clear();},[])
-  //handler
-  const userNameHandler = (e: React.ChangeEvent<HTMLInputElement>)=>{
-    setUserName(e.target.value);
+  useLayoutEffect(() => {
+    action.clear();
+  }, []);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    const nameAction = `set${name.charAt(0).toUpperCase()}${name.slice(1)}`;
+
+    const actions = useUserRegisterStore.getState().action;
+
+    if (nameAction in actions) {
+      const key = nameAction as keyof typeof actions;
+      const actionFn = actions[key] as any;
+      if (typeof actionFn === "function") {
+        actionFn(value);
+      }
+    }
   };
-  const emailHandler = (e: React.ChangeEvent<HTMLInputElement>)=>{
-    setEmail(e.target.value);
-  };
-  const passwordHandler = (e: React.ChangeEvent<HTMLInputElement>)=>{
-    setPassword(e.target.value);
-  };
-  const rePasswordHandler = (e: React.ChangeEvent<HTMLInputElement>)=>{
-    setRePassword(e.target.value);
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const status = await action.log();
+    if (status === "200") {
+      alert("create successful");
+      navigate("/");
+    }
   };
 
   return (
@@ -30,9 +45,12 @@ export default function RegisterForm({toggleForm}:{toggleForm:()=>void}) {
       <form
         action=""
         className="w-full p-2 flex flex-col gap-5 max-lg:overflow-y-auto"
-        onSubmit={(e)=>{e.preventDefault();log()}}
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit(e);
+        }}
       >
-         <div className=" flex flex-col gap-2">
+        <div className=" flex flex-col gap-2">
           <label className="text-sm text-mist-600/90" htmlFor="userName">
             User Name
           </label>
@@ -51,7 +69,7 @@ export default function RegisterForm({toggleForm}:{toggleForm:()=>void}) {
               placeholder="User Name"
               required
               aria-required
-              onChange={userNameHandler}
+              onChange={handleChange}
             />
           </div>
         </div>
@@ -74,7 +92,7 @@ export default function RegisterForm({toggleForm}:{toggleForm:()=>void}) {
               placeholder="Email"
               required
               aria-required
-              onChange={emailHandler}
+              onChange={handleChange}
             />
           </div>
         </div>
@@ -97,11 +115,11 @@ export default function RegisterForm({toggleForm}:{toggleForm:()=>void}) {
               placeholder="Password"
               required
               aria-required
-              onChange={passwordHandler}
+              onChange={handleChange}
             />
           </div>
         </div>
-          <div className=" flex flex-col gap-2">
+        <div className=" flex flex-col gap-2">
           <label className="text-sm text-mist-600/90" htmlFor="RePassword">
             RePassword
           </label>
@@ -120,7 +138,7 @@ export default function RegisterForm({toggleForm}:{toggleForm:()=>void}) {
               placeholder="Password"
               required
               aria-required
-              onChange={rePasswordHandler}
+              onChange={handleChange}
             />
           </div>
         </div>
@@ -142,7 +160,12 @@ export default function RegisterForm({toggleForm}:{toggleForm:()=>void}) {
         </button>
         <div className=" text-center text-sm text-mist-600/90">
           <span>Already have an account? </span>
-          <span onClick={()=>{toggleForm()}} className="text-(--main-color) underline underline-offset-1 cursor-pointer">
+          <span
+            onClick={() => {
+              toggleForm();
+            }}
+            className="text-(--main-color) underline underline-offset-1 cursor-pointer"
+          >
             Sign in now
           </span>
         </div>
