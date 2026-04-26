@@ -2,9 +2,13 @@ import { Mail, ShieldAlert } from "lucide-react";
 import { useUserLoginStore } from "../../../store/authentication/loginForm";
 import { useLayoutEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import useAuthStore from "../../../store/authentication/authState";
 export default function LoginForm({ toggleForm }: { toggleForm: () => void }) {
   let navigate = useNavigate();
-  const { email, password } = useUserLoginStore((state) => state);
+  const setAuth = useAuthStore((state) => state.setAuth);
+  const { email, password, errorEmail, errorPassword } = useUserLoginStore(
+    (state) => state,
+  );
   const setEmail = useUserLoginStore((state) => state.setEmail);
   const setPassword = useUserLoginStore((state) => state.setPassword);
   const clear = useUserLoginStore((state) => state.clear);
@@ -19,14 +23,14 @@ export default function LoginForm({ toggleForm }: { toggleForm: () => void }) {
   const passwordHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const status = await log();
-    if (status === "200") {
+    const response = await log();
+    if (response.status === "200" && response.data) {
+      setAuth(response.data.publicid, response.data.fullname);
       navigate("/");
     }
   };
-
   return (
     <>
       <form
@@ -41,7 +45,9 @@ export default function LoginForm({ toggleForm }: { toggleForm: () => void }) {
           <label className="text-sm text-mist-600/90" htmlFor="Email">
             Email
           </label>
-          <div className=" flex flex-row justify-start items-center outline-1 outline-mist-300/80 focus-within:outline-black/30 px-2 overflow-hidden">
+          <div
+            className={` ${errorEmail != "" ? "outline-red-500" : ""} flex flex-row justify-start items-center outline-1 outline-mist-300/80 focus-within:outline-black/30 px-2 overflow-hidden`}
+          >
             <Mail
               className=" text-(--main-color) stroke-(--main-color) "
               size={15}
@@ -59,12 +65,19 @@ export default function LoginForm({ toggleForm }: { toggleForm: () => void }) {
               onChange={emailHandler}
             />
           </div>
+          {errorEmail != "" && (
+            <span className="text-[10px] text-red-500 font-medium ml-1 animate-in fade-in slide-in-from-top-1">
+              {errorEmail}
+            </span>
+          )}
         </div>
         <div className=" flex flex-col gap-2">
           <label className="text-sm text-mist-600/90" htmlFor="password">
             Password
           </label>
-          <div className=" flex flex-row justify-start items-center outline-1 outline-mist-300/80 focus-within:outline-black/30 px-2 overflow-hidden">
+          <div
+            className={` ${errorPassword != "" ? "outline-red-500" : ""} flex flex-row justify-start items-center outline-1 outline-mist-300/80 focus-within:outline-black/30 px-2 overflow-hidden`}
+          >
             <ShieldAlert
               className=" text-(--main-color) stroke-(--main-color) "
               size={15}
@@ -82,6 +95,11 @@ export default function LoginForm({ toggleForm }: { toggleForm: () => void }) {
               onChange={passwordHandler}
             />
           </div>
+          {errorPassword != "" && (
+            <span className="text-[10px] text-red-500 font-medium ml-1 animate-in fade-in slide-in-from-top-1">
+              {errorPassword}
+            </span>
+          )}
         </div>
         <div className=" text-right text-sm text-(--main-color) underline underline-offset-1 cursor-pointer">
           <p>Forgot password</p>

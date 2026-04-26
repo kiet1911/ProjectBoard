@@ -1,16 +1,35 @@
-import { useEffect, useState } from "react";
-import { Menu, ShoppingCart } from "lucide-react";
-import { Link, NavLink } from "react-router-dom";
+import { useEffect , useRef, useState } from "react";
+import { Menu } from "lucide-react";
 import { MobileSidebar } from "./MobileSidebar";
-import { AuthActions } from "./AuthActions";
-import { NavLinks } from "./NavLinks";
+import NavbarBrand from "../../../components/NavbarBrand";
+import NavBarActionaAndMenu from "./NavBarActionaAndMenu";
 
 function NavBar({ auth = false }: { auth: boolean }) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const navRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    if(!navRef.current){
+       return
+    }
+    const resizeObserver = new ResizeObserver((entries)=>{
+      for(let i of entries){
+        if(i && i.contentRect.width > 768){
+          //action 
+          setIsOpen(false);
+        }
 
+      }
+    })
+    resizeObserver.observe(navRef.current);
+
+    return () =>{
+      resizeObserver.disconnect();
+    }
+  },[])
+  
   return (
     <>
-      <nav className="w-full sticky top-0 flex justify-between items-center px-8 py-1 bg-white border-b border-black/10 z-40">
+      <nav ref={navRef} className="w-full sticky top-0 flex justify-between items-center px-8 py-1 bg-white border-b border-black/10 z-40">
         {/* menu button hidden when screen is bigger than md */}
         <button
           onClick={() => setIsOpen(true)}
@@ -19,21 +38,15 @@ function NavBar({ auth = false }: { auth: boolean }) {
           <Menu />
         </button>
 
-        {/* logo */} 
-        <div className="w-25 aspect-3/2.5">
-          <img src="./src/assets/logoBrand.png" alt="logo" />
-        </div>
+        {/* logo */}
+        <NavbarBrand></NavbarBrand>
 
-        {/* nav links */}
-        <NavLinks className="flex flex-row gap-5 max-md:hidden" />
-
-        {/* auth actions */}
-        <AuthActions auth={auth} />
+        <NavBarActionaAndMenu></NavBarActionaAndMenu> 
 
         {/* cart in mobile size */}
-        <NavLink to="/" className="hidden max-md:block">
+        {/* <NavLink to="/" className="hidden max-md:block">
           <ShoppingCart size={20} />
-        </NavLink>
+        </NavLink> */}
       </nav>
 
       <MobileSidebar isOpen={isOpen} onClose={() => setIsOpen(false)} />

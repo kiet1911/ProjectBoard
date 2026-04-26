@@ -1,3 +1,4 @@
+import { AuthActions } from "./AuthActions.tsx";
 import { NavLinks } from "./NavLinks.tsx";
 import { X } from "lucide-react";
 
@@ -17,7 +18,7 @@ export const MobileSidebar = ({
     <div
       className={`fixed top-0 left-0 h-full w-64 bg-white shadow-2xl transform transition-transform duration-300 ${isOpen ? "translate-x-0" : "-translate-x-full"}`}
     >
-      <div className="p-5">
+      <div className="p-5 space-y-5">
         <div className="flex justify-between items-center mb-5">
           <h2 className="text-xl font-bold">Menu</h2>
           <button onClick={onClose}>
@@ -26,6 +27,7 @@ export const MobileSidebar = ({
         </div>
 
         <NavLinks className="flex flex-col gap-4" onClick={onClose} />
+        <AuthActions isMobile={true}></AuthActions>
       </div>
     </div>
   </div>

@@ -11,7 +11,7 @@ export function ProtectPath({ auth = false }: { auth: boolean }) {
 
 function App() {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col min-h-screen">
       <NavBar auth={true}></NavBar>
       <main className="grow">
         <Outlet />

@@ -7,6 +7,7 @@ import About from "../pages/About.tsx";
 import Contact from "../pages/Contact.tsx";
 import HomePage from "../pages/HomePage.tsx";
 import  Production from "../pages/Product.tsx";
+import PublicRoute from "./PublicRoute.tsx";
 
 // create router
 export const router = createBrowserRouter([
@@ -44,8 +45,13 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: "Login",
-    element: <Login />,
+    element: <PublicRoute></PublicRoute>,
+    children: [
+      {
+        path: "login",
+        element: <Login />,
+      },
+    ],
   },
   {
     path: "*",
