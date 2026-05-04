@@ -43,10 +43,6 @@ function NavBar({ auth = false }: { auth: boolean }) {
 
         <NavBarActionaAndMenu></NavBarActionaAndMenu> 
 
-        {/* cart in mobile size */}
-        {/* <NavLink to="/" className="hidden max-md:block">
-          <ShoppingCart size={20} />
-        </NavLink> */}
       </nav>
 
       <MobileSidebar isOpen={isOpen} onClose={() => setIsOpen(false)} />

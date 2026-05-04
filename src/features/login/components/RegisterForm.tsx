@@ -8,13 +8,13 @@ export default function RegisterForm({
   toggleForm: () => void;
 }) {
   let navigate = useNavigate();
-  const { userName, email, password, rePassword } = useUserRegisterStore(
-    (state) => state,
-  );
+  const { userName, email, password, rePassword, errorRePassword , errorAction , errorEmail } =
+    useUserRegisterStore((state) => state);
   const action = useUserRegisterStore((state) => state.action);
 
   useLayoutEffect(() => {
     action.clear();
+    errorAction.setErrorReset();
   }, []);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -63,10 +63,12 @@ export default function RegisterForm({
               className=" text-sm outline-0 pl-4 py-2 rounded md:w-full"
               id="userName"
               name="userName"
+              minLength={10}
               maxLength={265}
               type="text"
               value={userName}
               placeholder="User Name"
+              title="Username must be at least 10 characters long"
               required
               aria-required
               onChange={handleChange}
@@ -77,7 +79,7 @@ export default function RegisterForm({
           <label className="text-sm text-mist-600/90" htmlFor="Email">
             Email
           </label>
-          <div className=" flex flex-row justify-start items-center outline-1 outline-mist-300/80 focus-within:outline-black/30 px-2 overflow-hidden">
+          <div className={`flex flex-row justify-start items-center outline-1 outline-mist-300/80 focus-within:outline-black/30 px-2 overflow-hidden ${errorEmail!=""&&"outline-red-500"}`}>
             <Mail
               className=" text-(--main-color) stroke-(--main-color) "
               size={15}
@@ -90,11 +92,18 @@ export default function RegisterForm({
               type="email"
               value={email}
               placeholder="Email"
+              pattern=".+@gmail\.com"
+              title="Gmail only allows letters (a-z), numbers (0-9) and full stops (.)"
               required
               aria-required
               onChange={handleChange}
             />
           </div>
+           {errorEmail != "" && (
+            <span className="text-[10px] text-red-500 font-medium ml-1 animate-in fade-in slide-in-from-top-1">
+              {errorEmail}
+            </span>
+          )}
         </div>
         <div className=" flex flex-col gap-2">
           <label className="text-sm text-mist-600/90" htmlFor="password">
@@ -113,6 +122,8 @@ export default function RegisterForm({
               type="Password"
               value={password}
               placeholder="Password"
+              pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+              title="A password must be at least 8 characters long and include uppercase letters, lowercase letters, numbers and special characters"
               required
               aria-required
               onChange={handleChange}
@@ -123,7 +134,9 @@ export default function RegisterForm({
           <label className="text-sm text-mist-600/90" htmlFor="RePassword">
             RePassword
           </label>
-          <div className=" flex flex-row justify-start items-center outline-1 outline-mist-300/80 focus-within:outline-black/30 px-2 overflow-hidden">
+          <div
+            className={`flex flex-row justify-start items-center outline-1 outline-mist-300/80 focus-within:outline-black/30 px-2 overflow-hidden ${errorRePassword != "" && "outline-red-500"}`}
+          >
             <ShieldAlert
               className=" text-(--main-color) stroke-(--main-color) "
               size={15}
@@ -136,11 +149,18 @@ export default function RegisterForm({
               type="Password"
               value={rePassword}
               placeholder="Password"
+              pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+              title="A password must be at least 8 characters long and include uppercase letters, lowercase letters, numbers and special characters"
               required
               aria-required
               onChange={handleChange}
             />
           </div>
+          {errorRePassword != "" && (
+            <span className="text-[10px] text-red-500 font-medium ml-1 animate-in fade-in slide-in-from-top-1">
+              {errorRePassword}
+            </span>
+          )}
         </div>
         <div className=" text-right text-sm text-(--main-color) underline underline-offset-1 cursor-pointer">
           <p>Forgot password</p>
