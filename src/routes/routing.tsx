@@ -6,7 +6,7 @@ import Login from "../pages/Login.tsx";
 import About from "../pages/About.tsx";
 import Contact from "../pages/Contact.tsx";
 import HomePage from "../pages/HomePage.tsx";
-import  Production from "../pages/Product.tsx";
+import Production from "../pages/Product.tsx";
 import PublicRoute from "./PublicRoute.tsx";
 
 // create router
@@ -38,7 +38,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "product",
-            element: <Production/>, //go here if have auth
+            element: <Production />, //go here if have auth
           },
         ],
       },

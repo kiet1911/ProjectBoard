@@ -1,79 +1,10 @@
-import React from "react";
+import CarouselEvent from "../features/carouselEvent/components";
 
 export default function HomePage() {
   return (
     <>
       <div className=" border">
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
-        <h1>Home Page</h1>
+        <CarouselEvent></CarouselEvent>
         <h1>Home Page</h1>
       </div>
     </>
