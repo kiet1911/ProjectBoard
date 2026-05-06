@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import "./App.css";
 import { Navigate, Outlet } from "react-router-dom";
 import NavBar from "./features/navBar/components";

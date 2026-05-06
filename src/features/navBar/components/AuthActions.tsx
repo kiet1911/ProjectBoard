@@ -1,5 +1,12 @@
 import { Link } from "react-router-dom";
-import { ChevronDown, ChevronUp, CircleUser, Heart, LogOut, ShoppingCart } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronUp,
+  CircleUser,
+  Heart,
+  LogOut,
+  ShoppingCart,
+} from "lucide-react";
 import useAuthStore from "../../../store/authentication/authState";
 
 export const AuthActions = ({ isMobile = false }: { isMobile?: boolean }) => {
@@ -44,7 +51,10 @@ export const AuthActions = ({ isMobile = false }: { isMobile?: boolean }) => {
               <div className="flex flex-row items-center hover:text-(--main-color)">
                 <CircleUser className="pointer-events-none " size={20} />
               </div>
-              <ChevronDown size={12} className="peer-checked/userprofile:rotate-180 duration-300"></ChevronDown>
+              <ChevronDown
+                size={12}
+                className="peer-checked/userprofile:rotate-180 duration-300"
+              ></ChevronDown>
               <div className="max-md:left-0 hidden bg-white border border-mist-400 rounded-xl absolute top-8 right-0 py-2 px-3 peer-checked/userprofile:block">
                 <ul className="text-[10px] space-y-2 last:mb-2">
                   <li className=" text-center">{fullName ?? "NaN"}</li>
