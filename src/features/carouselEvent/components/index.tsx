@@ -56,19 +56,19 @@ export default function CarouselEvent() {
 
   return (
     <>
-      <div className=" w-full h-100 border border-mist-500 relative">
+      <div className=" w-full h-100 border border-mist-500/50 relative rounded">
         {/* image */}
         <Suspense
           fallback={
             <img
-              className=" w-full h-full object-cover"
+              className=" w-full h-full object-cover rounded"
               src="./Suspense/SuspenseImage.png"
               alt="test"
             ></img>
           }
         >
           <img
-            className=" w-full h-full object-cover max-md:object-fill cursor-zoom-in"
+            className=" w-full h-full object-cover max-md:object-fill cursor-zoom-in rounded"
             src={events[eventIndex].name ?? "./Suspense/SuspenseImage.png"}
             alt={events[eventIndex].alt ?? "errorImage"}
             loading="lazy"

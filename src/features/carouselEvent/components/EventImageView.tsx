@@ -18,7 +18,7 @@ export default function EventImageView({
   }, [isView]);
   return (
     isView && (
-      <div className="w-full h-full backdrop-blur-2xl absolute flex flex-col justify-center items-center top-0 z-50 overflow-hidden duration-500">
+      <div className="w-full h-full backdrop-blur-2xl absolute flex flex-col justify-center items-center bottom-0 left-0 z-50 overflow-hidden duration-500">
         <div className=" w-full h-full relative border flex justify-center p-1">
           <img
             className=" h-full object-contain"
