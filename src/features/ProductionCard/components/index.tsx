@@ -1,31 +1,38 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 import { CurrencyConvert } from "../utilities/currencyConverter";
 import { Dot, Heart, ShoppingBasket, Star } from "lucide-react";
-import { createPortal } from "react-dom";
-import CateogoryBoxDetail from "./CategoryBoxDetail";
 export default function ProductionCard() {
-  const [mouseXY, setMouseXY] = React.useState<
-    { x: number; y: number } | undefined
-  >(undefined);
-  const handleCategoryFull = (e: React.MouseEvent) => {
-    setTimeout(() => {
-      console.log(e.clientX, e.clientY);
-      setMouseXY({ x: e.screenX, y: e.screenY });
+  const divref = useRef<HTMLDivElement>(null);
+  const isExpanding = useRef(false);
+  const timeofRef = useRef(0);
+  const [isHover, setIsHover] = useState(false);
+  useEffect(() => {
+    const node = divref.current;
+    if (node) {
+      node.addEventListener("mouseenter", handleCategoryFull);
+      node.addEventListener("mouseleave", handleRemoveCategory);
+    }
+    return () => {
+      node?.removeEventListener("mouseenter", handleCategoryFull);
+      node?.removeEventListener("mouseleave", handleRemoveCategory);
+    };
+  }, [isHover]);
+  const handleCategoryFull = () => {
+    isExpanding.current = true;
+    timeofRef.current = setTimeout(() => {
+      if (isExpanding.current) {
+        setIsHover(true);
+      }
     }, 1000);
   };
-//   const handleRemoveCategory = () => {
-//     const data = document.getElementById("categoryboxdetail");
-    
-//     setMouseXY(undefined);
-//   };
+  const handleRemoveCategory = () => {
+    isExpanding.current = false;
+    clearTimeout(timeofRef.current);
+    setIsHover(false);
+  };
 
   return (
     <>
-      {/* {mouseXY &&
-        createPortal(
-          <CateogoryBoxDetail x={mouseXY.x} y={mouseXY.y} />,
-          document.getElementById("app")!,
-        )} */}
       <div className="border border-mist-500/50 rounded-xl max-md:w-40 w-50 h-full flex flex-col justify-start items-center gap-1 shrink-0 p-2 shadow-md/40 shadow-mist-400 relative group cursor-pointer">
         {/* badge */}
         <div className="absolute -top-3 left-2.5 text-xs rounded flex flex-row gap-2 bg-white">
@@ -59,15 +66,9 @@ export default function ProductionCard() {
         </div>
         {/* tag category */}
         <div
+          ref={divref}
           id="category"
-        //   onMouseEnter={(e) => {
-        //     e.stopPropagation();
-        //     handleCategoryFull(e);
-        //   }}
-        //   onMouseLeave={() => {
-        //     handleRemoveCategory();
-        //   }}
-          className="w-full border text-xs font-medium flex flex-row gap-1 flex-wrap text-mist-500"
+          className={`w-full text-xs font-medium flex flex-row gap-1 flex-wrap text-mist-500 relative ${isHover ? "" : "cursor-progress"} `}
         >
           <p className="category-boxshadow text-[8px] max-md:text-[8px] border rounded p-0.5 text-center text-white bg-mist-500">
             #Stragety
@@ -81,10 +82,39 @@ export default function ProductionCard() {
           <p className="category-boxshadow text-[8px] max-md:text-[8px] border rounded p-0.5 text-center text-white bg-mist-500">
             #Cooperatives
           </p>
-          <p className="text-[10px] max-md:text-[8px] border rounded p-0.5 text-center text-white bg-mist-500">
+          {/* active tag */}
+          <p
+            className="navbar-link category-boxshadow text-[8px] max-md:text-[8px] border rounded p-0.5 text-center text-white bg-mist-500"
+            onClick={() => {
+              setIsHover((state) => {
+                return !state;
+              });
+            }}
+          >
             +3
           </p>
+          <div
+            className={`w-full max-h-30 p-1 pb-4 rounded backdrop-blur-md absolute -top-20 left-0 text-xs font-medium flex flex-row flex-wrap gap-1 overflow-auto text-mist-500 shirk-0 transition-all duration-500 ease-out ${isHover == true ? "opacity-100 -top-25 pointer-events-auto" : "opacity-0 translate-y-0 pointer-events-none"} `}
+          >
+            <div className=" w-full h-20 overflow-auto flex flex-row border-r flex-wrap gap-1">
+              {Array(19)
+              .fill("demotag")
+              .map((item, index) => {
+                return (
+                  <>
+                    <p
+                      key={index}
+                      className="category-boxshadow text-[8px] max-md:text-[8px] border rounded p-0.5 text-center text-white bg-mist-500 shirk-0"
+                    >
+                      #Stragety
+                    </p>
+                  </>
+                );
+              })}
+            </div>
+          </div>
         </div>
+        {/* full tag category */}
 
         {/* final price */}
         <div className="w-full text-xl font-bold overflow-hidden line-clamp-1 text-(--main-color) hover:underline">

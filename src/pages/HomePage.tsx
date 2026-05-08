@@ -6,13 +6,10 @@ export default function HomePage() {
     <>
       <div
         id="homePage"
-        className="px-[10%] pt-[1rem] bg-[url(./BackgroundContent/bghomepage.png)] bg-center bg-auto bg-origin-border flex flex-col gap-y-[1rem]"
+        className="px-[10%] pt-[1rem] bg-[url(./BackgroundContent/bghomepage.png)] bg-center bg-auto bg-origin-border flex flex-col gap-y-[2rem] pb-[2rem]"
       >
         {/* static slider */}
         <CarouselEvent></CarouselEvent>
-
-        {/* test section */}
-        <ProductSection contentSection="mua online chuan hang gia re"></ProductSection>
         {/* best seller */}
         <ProductSection contentSection="Best Seller"></ProductSection>
         {/* top new game */}
@@ -20,7 +17,6 @@ export default function HomePage() {
         {/* top rating */}
         <ProductSection contentSection="Top Rating"></ProductSection>
         {/* ranking 3 most favorite type of game */}
-        <h1>Home Page</h1>
       </div>
     </>
   );
