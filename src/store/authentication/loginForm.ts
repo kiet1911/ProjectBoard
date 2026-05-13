@@ -64,7 +64,7 @@ export const useUserLoginStore = create<UserLoginStore>()((set, get) => ({
     //test axios
     await axios
       .post(
-        `${apiUrl}Authentication/login`,
+        `${apiUrl}/Authentication/login`,
         {
           Email: email,
           Password: password,

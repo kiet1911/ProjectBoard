@@ -130,7 +130,7 @@ export default function CarouselEvent() {
         </div>
       </div>
       {/* view image event */}
-      {isView.isView && <EventImageView src={isView.src} isView={isView.isView} closeView={handleCloseView}></EventImageView>}
+      {isView.isView && <EventImageView src={isView.src} isView={isView.isView} closeView={handleCloseView} topValue={window.screenY}></EventImageView>}
     </>
   );
 }

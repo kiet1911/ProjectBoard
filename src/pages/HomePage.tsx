@@ -1,6 +1,7 @@
+import { Suspense } from "react";
 import CarouselEvent from "../features/carouselEvent/components";
 import ProductSection from "../features/ProductSection/components";
-
+import { productionSectionUri } from "../store/productionSection/productionSection";
 export default function HomePage() {
   return (
     <>
@@ -10,12 +11,20 @@ export default function HomePage() {
       >
         {/* static slider */}
         <CarouselEvent></CarouselEvent>
-        {/* best seller */}
-        <ProductSection contentSection="Best Seller"></ProductSection>
-        {/* top new game */}
-        <ProductSection contentSection="Top New Game"></ProductSection>
-        {/* top rating */}
-        <ProductSection contentSection="Top Rating"></ProductSection>
+
+        {Object.keys(productionSectionUri).map((key) => {
+          return (
+            <Suspense key={key} fallback={<div>Loading...</div>}>
+              <ProductSection
+                contentSection={
+                  productionSectionUri[Number(key)].contentSection
+                }
+                apiUrl={productionSectionUri[Number(key)].uriSection}
+                keys={key}
+              ></ProductSection>
+            </Suspense>
+          );
+        })}
         {/* ranking 3 most favorite type of game */}
       </div>
     </>
