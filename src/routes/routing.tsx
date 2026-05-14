@@ -8,6 +8,7 @@ import Contact from "../pages/Contact.tsx";
 import HomePage from "../pages/HomePage.tsx";
 import Production from "../pages/Product.tsx";
 import PublicRoute from "./PublicRoute.tsx";
+import ProductionDetail from "../pages/ProductionDetail.tsx";
 
 // create router
 export const router = createBrowserRouter([
@@ -38,7 +39,17 @@ export const router = createBrowserRouter([
           },
           {
             path: "product",
-            element: <Production />, //go here if have auth
+            children: [
+              {
+                index: true,
+                element: <Production></Production>
+              }
+              ,
+              {
+                path: ":id",
+                element: <ProductionDetail></ProductionDetail>
+              }
+            ]
           },
         ],
       },

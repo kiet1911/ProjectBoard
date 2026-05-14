@@ -5,7 +5,6 @@ const apiClient = axios.create({
     withCredentials: true,
     timeout:5000,
     headers:{
-        
     }
 })
 

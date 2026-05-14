@@ -1,9 +1,9 @@
 import apiClient from "./apiClient";
 
 export const boardgamesService = {
-    get : async (uri:string)=>{
+    get : async (uri:string,databody?:object)=>{
         try{
-            const data = await apiClient.get(`${uri}`,{});
+            const data = await apiClient.get(`${uri}`,{ params : databody });
             return data.data;
         }
         catch(error){

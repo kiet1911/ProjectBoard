@@ -2,11 +2,13 @@ import React, { Suspense, useEffect, useRef, useState } from "react";
 import { CurrencyConvert } from "../utilities/currencyConverter";
 import { Dot, Heart, ShoppingBasket, Star } from "lucide-react";
 import type { BoardGames } from "../../../types";
+import { useNavigate } from "react-router-dom";
 export default function ProductionCard({ data }: { data?: BoardGames }) {
   const divref = useRef<HTMLDivElement>(null);
   const isExpanding = useRef(false);
   const timeofRef = useRef(0);
   const [isHover, setIsHover] = useState(false);
+  const navgation = useNavigate();
   useEffect(() => {
     const node = divref.current;
 
@@ -38,6 +40,12 @@ export default function ProductionCard({ data }: { data?: BoardGames }) {
       <div
         key={data?.id ?? "default".concat((Math.random() * 100).toString())}
         className="border border-mist-500/50 rounded-xl max-md:w-40 w-50 h-full flex flex-col justify-start items-center gap-1 shrink-0 p-2 shadow-md/40 shadow-mist-400 relative group cursor-pointer"
+        title={data?.id}
+        onClick={ () =>{
+          if(data?.id){
+            navgation(`/product/${data?.id}`,{state:{data:data}})
+          }
+        }}
       >
         {/* badge */}
         <div className="absolute -top-3 left-2.5 text-xs rounded flex flex-row gap-2 bg-white">

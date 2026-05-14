@@ -1,8 +1,7 @@
-import React from "react";
 
 export default function Contact() {
   return (
-    <div className="bg-slate-50 text-slate-900 font-sans">
+    <div className="bg-slate-50 text-slate-900">
       <section className="bg-slate-900 text-white py-24 text-center">
         <h1 className="text-5xl font-black mb-4">
           Visit Our <span className="text-[#db3332]">Game Hub</span>

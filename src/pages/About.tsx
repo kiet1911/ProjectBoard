@@ -1,8 +1,7 @@
-import React from "react";
 
 export default function About() {
   return (
-    <div className="bg-slate-50 text-slate-900 font-sans">
+    <div className="bg-slate-50 text-slate-900 ">
 
       <section className="bg-slate-900 text-white py-24">
         <div className="container mx-auto px-6 grid md:grid-cols-2 gap-10 items-center">

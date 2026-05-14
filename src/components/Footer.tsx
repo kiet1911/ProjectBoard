@@ -9,7 +9,7 @@ const Footer = () => {
             <div className="w-25 aspect-3/2.5 scale-80">
               <img
                 className="h-full w-full object-fill "
-                src="./src/assets/logoBrand.png"
+                src="/src/assets/logoBrand.png"
                 alt="projectK Brand Logo"
               />
             </div>
