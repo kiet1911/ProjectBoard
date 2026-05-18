@@ -1,5 +1,9 @@
+import { useEffect } from "react";
 
 export default function Contact() {
+    useEffect(() => {
+      window.scrollTo(0,0);
+    })
   return (
     <div className="bg-slate-50 text-slate-900">
       <section className="bg-slate-900 text-white py-24 text-center">

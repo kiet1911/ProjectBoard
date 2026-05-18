@@ -33,4 +33,5 @@ type BoardGamesGamePlay = {
 };
 type BoardGamesReference = {
   categories: [{ category_Id: number; name: string }];
+  creators: [{id:string,name:string,type:number}]
 };

@@ -1,14 +1,23 @@
 import { useLayoutEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { boardgamesService } from "../services/boardgames.service";
 import type { BoardGames } from "../types";
-import { Heart, Hexagon, ShoppingCart } from "lucide-react";
+import {
+  Heart,
+  Hexagon,
+  Info,
+  Package,
+  PenLineIcon,
+  Ruler,
+  ShoppingCart,
+} from "lucide-react";
 import { CurrencyConvert } from "../features/ProductionCard/utilities/currencyConverter";
 import ProductionDetailSkeleton from "../components/ProductionDetailSkeleton";
 export default function ProductionDetail() {
   const id = useParams();
   const [detailBoardGame, setdetailBoardGame] = useState<BoardGames>();
   const [loading, setLoading] = useState(false);
+  const navigation = useNavigate();
   useLayoutEffect(() => {
     // scoll to top
     window.scrollTo(0, 0);
@@ -17,15 +26,22 @@ export default function ProductionDetail() {
       //call api
       const fetch = async () => {
         try {
+          //loading
           setLoading(true);
           const res = await boardgamesService.get("v1/BoardGames/Id", {
             guid: id.id,
           });
+          // if res have data
           if (res) {
             setdetailBoardGame(res);
           }
+          // else navigation to error page 404
+          else {
+            navigation("/404");
+          }
           console.log(res);
         } catch (error) {
+          navigation("/404");
           setLoading(false);
           console.log(error);
         }
@@ -37,11 +53,11 @@ export default function ProductionDetail() {
   return (
     <>
       {loading ? (
-       <ProductionDetailSkeleton></ProductionDetailSkeleton>
+        <ProductionDetailSkeleton></ProductionDetailSkeleton>
       ) : (
         <div
           id="productionDetail"
-          className="min-h-screen px-[10%] pt-[1rem] bg-[url(/BackgroundContent/bghomepage.png)] bg-center bg-auto bg-origin-border flex flex-col gap-y-[2rem] pb-[2rem] opacity-100 duration-500"
+          className="min-h-screen px-[10%] pt-[1rem] bg-[url(/BackgroundContent/bghomepage.png)] bg-auto bg-origin-border flex flex-col gap-y-[1rem] pb-[2rem] opacity-100 duration-500"
         >
           {/* path */}
           <h1 className="text-(--main-color) underline">
@@ -126,51 +142,88 @@ export default function ProductionDetail() {
                       Playing Time
                     </p>
                   </span>
-                  <span className="max-md:border wrap-break-word line-clamp-3">
+                  <span className="max-md:border wrap-break-word line-clamp-3 flex justify-center items-center">
                     <p>Age: {detailBoardGame?.age_Requirement ?? "NaN"}+</p>
                   </span>
-                  <span className="max-md:border wrap-break-word line-clamp-3">
+                  <span className="max-md:border wrap-break-word line-clamp-3 flex justify-center items-center">
                     <p>Weight: {detailBoardGame?.weight ?? "NaN"}/5</p>
                   </span>
                 </div>
-                <div className="text-xs font-medium w-full flex flex-col gap-0 overflow-hidden">
+                <div className="text-xs font-medium w-full flex flex-col gap-1 overflow-hidden">
                   <span>
                     Designer: <p></p>
                   </span>
                   <span>
-                    Artits: <p></p>
+                    Artits:{" "}
+                    {detailBoardGame?.creators
+                      ? detailBoardGame.creators
+                          .filter((data) => data.type == 1)
+                          .slice(0, 3)
+                          .map((data, index) => {
+                            return (
+                              <span className="underline" key={index}>
+                                {data.name}
+                              </span>
+                            );
+                          })
+                      : "NaN"}
                   </span>
                   <span>
-                    Author: <p></p>
+                    Author:{" "}
+                    {detailBoardGame?.creators
+                      ? detailBoardGame.creators
+                          .filter((data) => data.type == 0)
+                          .slice(0, 3)
+                          .map((data, index) => {
+                            return (
+                              <span className="underline" key={index}>
+                                {data.name}
+                              </span>
+                            );
+                          })
+                      : "NaN"}
                   </span>
                   <span>
                     Publisher: <p></p>
                   </span>
                 </div>
-                <div className="flex flex-row overflow-hidden gap-2 font-bold text-sm text-center">
-                  <span className="border flex-3 wrap-break-word line-clamp-3">
+                <div className="flex flex-row overflow-hidden gap-1 p-1 font-bold text-sm text-center border navbar-link">
+                  <div
+                    className={`flex-3 wrap-break-word line-clamp-3 flex items-center justify-center `}
+                  >
                     <p
-                      className="text-xs font-medium underline"
+                      className={`text-sm rounded-lg font-bold px-2 py-1 gap-1 flex flex-row justify-center items-center bg-white border border-mist-200 w-full`}
                       title="Weight x Height x Length"
                     >
+                      <Ruler size={18}></Ruler> : {""}
                       {detailBoardGame?.size_X ?? "NaN"} x{" "}
                       {detailBoardGame?.size_Y ?? "NaN"} x{" "}
                       {detailBoardGame?.size_Z ?? "NaN"}
+                      {" cm"}
                     </p>
-                  </span>
-                  <span className="border flex-1 wrap-break-word line-clamp-3">
-                    <p className="text-xs font-medium underline">
-                      Quantity: {detailBoardGame?.stock_Quantity ?? "NaN"}
-                    </p>
-                  </span>
-                  <span
-                    className={`border flex-1 wrap-break-word line-clamp-3 ${detailBoardGame?.status == "0" && "bg-green-700 text-white"} ${detailBoardGame?.status == "1" && "bg-green-700"}`}
+                  </div>
+                  <div
+                    className={`flex-1 wrap-break-word line-clamp-3 flex items-center justify-center `}
                   >
-                    <p className="text-xs font-medium underline">
+                    <p
+                      className={`text-sm w-full relative rounded-lg font-bold p-1 gap-1 flex flex-row justify-center items-center bg-white border border-mist-200 ${detailBoardGame?.stock_Quantity == 0 ? "text-red-800 line-through" : "  "} `}
+                      title="Stock"
+                    >
+                      <Package size={18}></Package>:{" "}
+                      {detailBoardGame?.stock_Quantity ?? "NaN"}
+                    </p>
+                  </div>
+                  <div
+                    className={`flex-1 wrap-break-word line-clamp-3 flex items-center justify-center `}
+                  >
+                    <p
+                      className={`text-sm w-full relative rounded-lg font-bold p-1 gap-1 flex flex-row justify-center items-center ${detailBoardGame?.status == "0" && " border border-green-900 bg-green-100 text-green-800"} ${detailBoardGame?.status == "1" && "border border-red-900 bg-red-100 text-red-800"}`}
+                    >
+                      <Info size={18}></Info>
                       {detailBoardGame?.status == "0" ? <>Available</> : ""}
                       {detailBoardGame?.status == "1" ? <>InAvailable</> : ""}
                     </p>
-                  </span>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-row items-center gap-2 font-bold mt-auto ">
@@ -178,7 +231,7 @@ export default function ProductionDetail() {
                   {" "}
                   <span className=" text-(--main-color) font-bold">
                     {CurrencyConvert({
-                      value: detailBoardGame?.base_Price ?? 10000,
+                      value: detailBoardGame?.base_Price ?? 0,
                     })}
                     đ
                   </span>
@@ -203,15 +256,38 @@ export default function ProductionDetail() {
               </div>
             </div>
           </div>
-          <textarea
-          className="h-20 w-full border text-black"
-          readOnly
-          value={
-            detailBoardGame
-              ? JSON.stringify(detailBoardGame, null, 2)
-              : "No data available"
-          }
-        />
+
+          <div className="w-full min-h-100 border-2 border-mist-800/20 bg-white flex flex-row gap-1 p-1 cursor-pointer ">
+            <div className="flex-3">
+              <div className="border-b-3 border-b-mist-200 text-sm font-bold p-1 flex flex-row gap-2 [&>span]:hover:text-(--main-color)">
+                <span className="">Description</span>
+                <span>Full Credit</span>
+              </div>
+              {/* tabs content */}
+            </div>
+            <div className=" flex-1 bg-mist-100 text-sm font-bold p-1">
+              <span className="flex gap-1 items-center mb-1 ">
+                Category <PenLineIcon size={10}></PenLineIcon>
+              </span>
+              <div className=" grid grid-cols-2">
+                {detailBoardGame?.categories ? (
+                  detailBoardGame.categories.map((items) => {
+                    return (
+                      <p
+                        key={items.category_Id + items.name}
+                        className="category-boxshadow text-xs border rounded p-0.5 text-center text-white bg-mist-500 shirk-0 mb-1 overflow-hidden text-ellipsis whitespace-nowrap"
+                        title={items.name}
+                      >
+                        #{items.name}
+                      </p>
+                    );
+                  })
+                ) : (
+                  <span className="font-bold">NaN</span>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </>
