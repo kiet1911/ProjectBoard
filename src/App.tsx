@@ -2,6 +2,8 @@ import "./App.css";
 import { Navigate, Outlet } from "react-router-dom";
 import NavBar from "./features/navBar/components";
 import Footer from "./components/Footer";
+import AlertNotification from "./components/AlertNotification";
+
 // fake component
 export function ProtectPath({ auth = false }: { auth: boolean }) {
   // console.log("ProtectPath render", auth);
@@ -9,14 +11,18 @@ export function ProtectPath({ auth = false }: { auth: boolean }) {
 }
 
 function App() {
+
   return (
-    <div id="app" className="flex flex-col min-h-full">
-      <NavBar auth={true}></NavBar>
-      <main className="grow">
-        <Outlet />
-      </main>
-      <Footer />
-    </div>
+    <>
+      <div id="app" className="flex flex-col min-h-full">
+        <NavBar auth={true}></NavBar>
+        <main className="grow">
+          <Outlet />
+        </main>
+        <Footer />
+      </div>
+      <AlertNotification></AlertNotification>
+    </>
   );
 }
 

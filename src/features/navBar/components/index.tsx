@@ -1,35 +1,38 @@
-import { useEffect , useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Menu } from "lucide-react";
 import { MobileSidebar } from "./MobileSidebar";
 import NavbarBrand from "../../../components/NavbarBrand";
 import NavBarActionaAndMenu from "./NavBarActionaAndMenu";
+import ToastNotification from "../../../components/ToastNotification";
 
 function NavBar({ auth = false }: { auth: boolean }) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const navRef = useRef<HTMLElement>(null);
   useEffect(() => {
-    if(!navRef.current){
-       return
+    if (!navRef.current) {
+      return;
     }
-    const resizeObserver = new ResizeObserver((entries)=>{
-      for(let i of entries){
-        if(i && i.contentRect.width > 768){
-          //action 
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (let i of entries) {
+        if (i && i.contentRect.width > 768) {
+          //action
           setIsOpen(false);
         }
-
       }
-    })
+    });
     resizeObserver.observe(navRef.current);
 
-    return () =>{
+    return () => {
       resizeObserver.disconnect();
-    }
-  },[])
-  
+    };
+  }, []);
+
   return (
     <>
-      <nav ref={navRef} className="w-full sticky top-0 flex justify-between items-center px-8 py-1 bg-white border-b border-black/10 z-40">
+      <nav
+        ref={navRef}
+        className="w-full sticky top-0 flex justify-between items-center px-8 py-1 bg-white border-b border-black/10 z-40"
+      >
         {/* menu button hidden when screen is bigger than md */}
         <button
           onClick={() => setIsOpen(true)}
@@ -41,8 +44,8 @@ function NavBar({ auth = false }: { auth: boolean }) {
         {/* logo */}
         <NavbarBrand></NavbarBrand>
 
-        <NavBarActionaAndMenu></NavBarActionaAndMenu> 
-
+        <NavBarActionaAndMenu></NavBarActionaAndMenu>
+        <ToastNotification></ToastNotification>
       </nav>
 
       <MobileSidebar isOpen={isOpen} onClose={() => setIsOpen(false)} />

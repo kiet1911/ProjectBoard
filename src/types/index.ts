@@ -33,5 +33,18 @@ type BoardGamesGamePlay = {
 };
 type BoardGamesReference = {
   categories: [{ category_Id: number; name: string }];
-  creators: [{id:string,name:string,type:number}]
+  creators: [{ id: string; name: string; type: number }];
+  description: Pick<BoardGamesDescription,"short_Description"|"full_Description">
 };
+type BoardGamesDescription = {
+  boardGame_Id: string;
+  created_at: string;
+  full_Description: string;
+  id: number;
+  short_Description: string;
+  updated_at: string;
+};
+export type BoardGameCreators = Record<
+  string,
+  { id: string; name: string; type: string; bio?: string }[]
+>;

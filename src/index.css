@@ -151,5 +151,16 @@ code {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-}
 
+  .animation-slide-in {
+    animation: slideIn 3000ms 700ms ease-in-out forwards;
+  }
+}
+@keyframes slideIn {
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}

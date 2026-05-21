@@ -41,7 +41,9 @@ export default function ProductionCard({ data }: { data?: BoardGames }) {
         key={data?.id ?? "default".concat((Math.random() * 100).toString())}
         className="border border-mist-500/50 rounded-xl max-md:w-40 w-50 h-full flex flex-col justify-start items-center gap-1 shrink-0 p-2 shadow-md/40 shadow-mist-400 relative group cursor-pointer"
         title={data?.id}
-        onClick={ () =>{
+        onClick={ (e) =>{
+          e.preventDefault();
+          e.stopPropagation();
           if(data?.id){
             navgation(`/product/${data?.id}`,{state:{data:data}})
           }
@@ -172,7 +174,7 @@ export default function ProductionCard({ data }: { data?: BoardGames }) {
           <div className=" navbar-link w-auto p-1 hover:bg-(--main-color) hover:text-white duration-100">
             <ShoppingBasket size={12}></ShoppingBasket>
           </div>
-          <div className=" navbar-link w-auto p-1 hover:bg-(--main-color) hover:text-white duration-100">
+          <div className=" navbar-link w-auto p-1 hover:bg-(--main-color) hover:text-white duration-100" onClick={(e)=>{e.stopPropagation(); console.log("like")}}>
             <Heart size={12}></Heart>
           </div>
         </div>

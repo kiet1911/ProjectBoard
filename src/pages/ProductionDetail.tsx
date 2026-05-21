@@ -1,7 +1,7 @@
-import { useLayoutEffect, useState } from "react";
+import { use, useLayoutEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { boardgamesService } from "../services/boardgames.service";
-import type { BoardGames } from "../types";
+import type { BoardGameCreators, BoardGames } from "../types";
 import {
   Heart,
   Hexagon,
@@ -13,11 +13,55 @@ import {
 } from "lucide-react";
 import { CurrencyConvert } from "../features/ProductionCard/utilities/currencyConverter";
 import ProductionDetailSkeleton from "../components/ProductionDetailSkeleton";
+import { favoriteService } from "../services/favorite.service";
+import useAuthStore from "../store/authentication/authState";
+import { useAlertNotification, useToastNotification } from "../store/notification/notification";
 export default function ProductionDetail() {
   const id = useParams();
   const [detailBoardGame, setdetailBoardGame] = useState<BoardGames>();
   const [loading, setLoading] = useState(false);
+  const [creators, setCreators] = useState<BoardGameCreators>({});
+  const [tabs, setTabs] = useState([
+    { name: "Description", isActive: true },
+    { name: "Full Credit", isActive: false },
+  ]);
+  const tabContent = useRef<HTMLDivElement>(null);
   const navigation = useNavigate();
+  const handleTabClick = (index: number) => {
+    if (tabContent.current?.offsetTop)
+      window.scrollTo({
+        top: tabContent.current?.offsetTop - 100,
+        behavior: "smooth",
+      });
+    setTabs((prev) => {
+      return prev.map((tab, i) => {
+        if (i === index) {
+          return { ...tab, isActive: true };
+        } else {
+          return { ...tab, isActive: false };
+        }
+      });
+    });
+  };
+  const handleFavoriteClick = () => {
+    if (detailBoardGame?.id && useAuthStore.getState().isAuthentication && useAuthStore.getState().publicId != null) {
+      const fetch = async () => {
+        try {
+          const res = await favoriteService.Add("v1/Favorite/Add",detailBoardGame.id);
+          // useAlertNotification.getState().setText("success");
+          // console.log(res);
+           useToastNotification.getState().add({text: !res.isdelete?"Add success":"Remove success" ,type:"success"})
+        } catch (error) {
+          // console.log(error);
+        }
+      };
+      fetch();
+    }else{
+      useToastNotification.getState().add({text: "You must be login!" ,type:"error"})
+      // useAlertNotification.getState().setText("You must be login!");
+      // console.log("You must be login!");
+    }
+  };
   useLayoutEffect(() => {
     // scoll to top
     window.scrollTo(0, 0);
@@ -39,17 +83,40 @@ export default function ProductionDetail() {
           else {
             navigation("/404");
           }
-          console.log(res);
+          // console.log(res);
         } catch (error) {
           navigation("/404");
           setLoading(false);
-          console.log(error);
+          // console.log(error);
         }
         setLoading(false);
       };
       fetch();
     }
   }, [id.id]);
+  useLayoutEffect(() => {
+    if (!detailBoardGame?.creators || !detailBoardGame.creators.length) return;
+
+    setCreators((prev) => {
+      const updated: Record<string, any[]> = { ...prev };
+
+      detailBoardGame.creators.forEach((data) => {
+        if (data.type === undefined) return;
+
+        if (!updated[data.type]) {
+          updated[data.type] = [];
+        }
+
+        const exists = updated[data.type].some((item) => item.id === data.id);
+
+        if (!exists) {
+          updated[data.type].push(data);
+        }
+      });
+
+      return updated;
+    });
+  }, [detailBoardGame?.creators]);
   return (
     <>
       {loading ? (
@@ -102,12 +169,12 @@ export default function ProductionDetail() {
 
             <div className=" flex-3 shrink-0 min-w-0 p-2 flex flex-col md:rounded-tr-xl gap-2 bg-white">
               <div className=" w-full flex flex-row gap-2">
-                <div className=" relative inline-block">
+                <div className=" relative flex flex-col justify-center items-center ">
                   <Hexagon
                     size={50}
                     className=" stroke-1 fill-(--footer-bg-color)/90"
                   ></Hexagon>
-                  <span className=" max-w-10 overflow-hidden text-ellipsis whitespace-nowrap absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-bold text-sm text-white">
+                  <span className="max-w-10 overflow-hidden text-ellipsis whitespace-nowrap absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-bold text-sm text-white">
                     {detailBoardGame?.rating ?? "NaN"}
                   </span>
                 </div>
@@ -117,7 +184,10 @@ export default function ProductionDetail() {
                     {detailBoardGame?.name ?? "NaN"}
                   </span>
                   <span className="text-sm line-clamp-2 wrap-break-word">
-                    {detailBoardGame?.name ?? "Short detail NaN"}
+                    {detailBoardGame?.description &&
+                    detailBoardGame?.description.short_Description
+                      ? detailBoardGame?.description.short_Description
+                      : "no description"}
                   </span>
                 </div>
               </div>
@@ -150,42 +220,45 @@ export default function ProductionDetail() {
                   </span>
                 </div>
                 <div className="text-xs font-medium w-full flex flex-col gap-1 overflow-hidden">
-                  <span>
-                    Designer: <p></p>
-                  </span>
-                  <span>
-                    Artits:{" "}
-                    {detailBoardGame?.creators
-                      ? detailBoardGame.creators
-                          .filter((data) => data.type == 1)
-                          .slice(0, 3)
-                          .map((data, index) => {
-                            return (
-                              <span className="underline" key={index}>
-                                {data.name}
-                              </span>
-                            );
-                          })
-                      : "NaN"}
-                  </span>
-                  <span>
-                    Author:{" "}
-                    {detailBoardGame?.creators
-                      ? detailBoardGame.creators
-                          .filter((data) => data.type == 0)
-                          .slice(0, 3)
-                          .map((data, index) => {
-                            return (
-                              <span className="underline" key={index}>
-                                {data.name}
-                              </span>
-                            );
-                          })
-                      : "NaN"}
-                  </span>
-                  <span>
-                    Publisher: <p></p>
-                  </span>
+                  {["Author", "Artits", "Designer", "Publisher"].map(
+                    (items, index) => {
+                      return (
+                        <span key={items + index}>
+                          {items}:{" "}
+                          {creators[index] && creators[index].length > 0 ? (
+                            <>
+                              {creators[index].map((data, index) => {
+                                if (index === 1)
+                                  return (
+                                    <span
+                                      className="underline cursor-pointer font-bold"
+                                      key={index}
+                                      onClick={() => {
+                                        handleTabClick(1);
+                                      }}
+                                    >
+                                      more+
+                                    </span>
+                                  );
+                                else if (index < 1) {
+                                  return (
+                                    <span
+                                      className="underline mr-1"
+                                      key={index}
+                                    >
+                                      {data.name}
+                                    </span>
+                                  );
+                                }
+                              })}
+                            </>
+                          ) : (
+                            <></>
+                          )}
+                        </span>
+                      );
+                    },
+                  )}
                 </div>
                 <div className="flex flex-row overflow-hidden gap-1 p-1 font-bold text-sm text-center border navbar-link">
                   <div
@@ -250,32 +323,100 @@ export default function ProductionDetail() {
                 <div className=" navbar-link w-auto  hover:bg-(--main-color) hover:text-white duration-100">
                   <ShoppingCart size={20}></ShoppingCart>
                 </div>
-                <div className=" navbar-link w-auto  hover:bg-(--main-color) hover:text-white duration-100">
+                <div className=" navbar-link w-auto  hover:bg-(--main-color) hover:text-white duration-100" onClick={()=>{ handleFavoriteClick();}}>
                   <Heart size={20}></Heart>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="w-full min-h-100 border-2 border-mist-800/20 bg-white flex flex-row gap-1 p-1 cursor-pointer ">
-            <div className="flex-3">
-              <div className="border-b-3 border-b-mist-200 text-sm font-bold p-1 flex flex-row gap-2 [&>span]:hover:text-(--main-color)">
-                <span className="">Description</span>
-                <span>Full Credit</span>
+          <div
+            ref={tabContent}
+            className="w-full min-h-200 border-2 border-mist-800/20 bg-white flex flex-row gap-1 p-1 cursor-pointer "
+          >
+            <div className="flex-3 flex flex-col gap-1 ">
+              <div className="border-b-3 border-b-mist-200 text-sm font-bold pb-1 flex flex-row gap-2 [&>span]:hover:text-(--main-color)">
+                {tabs.map((tab, index) => (
+                  <span
+                    key={tab.name}
+                    className={`cursor-pointer ${tab.isActive === true ? "text-(--main-color)" : ""}`}
+                    onClick={() => {
+                      handleTabClick(index);
+                    }}
+                  >
+                    {tab.name}
+                  </span>
+                ))}
               </div>
               {/* tabs content */}
+              <div className=" h-full w-fulloverflow-auto ">
+                {tabs[0].isActive && (
+                  <>
+                    <div
+                      className="font-bold text-sm"
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          detailBoardGame?.description &&
+                          detailBoardGame?.description.full_Description
+                            ? detailBoardGame?.description.full_Description
+                            : "No Description",
+                      }}
+                    ></div>
+                  </>
+                )}
+                {tabs[1].isActive && (
+                  <>
+                    <h1 className=" font-bold text-sm border-b w-full">
+                      Full Credit
+                    </h1>
+                    <div className=" flex flex-col gap-2 mt-2">
+                      {["Author", "Artits", "Designer", "Publisher"].map(
+                        (items, index) => {
+                          return (
+                            <div
+                              key={items + index}
+                              className="flex flex-row text-xs font-medium border-b border-b-mist-800/20"
+                            >
+                              <span className="flex-1">{items}:</span>
+                              <div className="flex-3 flex flex-col w-full">
+                                {creators[index] &&
+                                creators[index].length > 0 ? (
+                                  <>
+                                    {creators[index].map((data, index) => {
+                                      return (
+                                        <span
+                                          className="text-blue-500 mr-1"
+                                          key={index}
+                                        >
+                                          {data.name}
+                                        </span>
+                                      );
+                                    })}
+                                  </>
+                                ) : (
+                                  <></>
+                                )}
+                              </div>
+                            </div>
+                          );
+                        },
+                      )}
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
             <div className=" flex-1 bg-mist-100 text-sm font-bold p-1">
               <span className="flex gap-1 items-center mb-1 ">
                 Category <PenLineIcon size={10}></PenLineIcon>
               </span>
-              <div className=" grid grid-cols-2">
+              <div className=" grid grid-cols-2 ">
                 {detailBoardGame?.categories ? (
                   detailBoardGame.categories.map((items) => {
                     return (
                       <p
                         key={items.category_Id + items.name}
-                        className="category-boxshadow text-xs border rounded p-0.5 text-center text-white bg-mist-500 shirk-0 mb-1 overflow-hidden text-ellipsis whitespace-nowrap"
+                        className="category-boxshadow text-xs max-md:text-[8px] border rounded p-0.5 text-center text-white bg-mist-500 shirk-0 mb-1 overflow-hidden text-ellipsis whitespace-nowrap"
                         title={items.name}
                       >
                         #{items.name}
