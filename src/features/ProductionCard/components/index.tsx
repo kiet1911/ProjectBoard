@@ -83,7 +83,7 @@ export default function ProductionCard({ data }: { data?: BoardGames }) {
           id="category"
           className={`w-full text-xs font-medium flex flex-row gap-1 flex-wrap text-mist-500 relative ${isHover ? "" : "cursor-progress"} `}
         >
-          {data?.categories.slice(0, 3).map((items, index) => {
+          {data?.categories?.slice(0, 3).map((items, index) => {
             return (
               <p
                 key={items.category_Id}
@@ -109,7 +109,7 @@ export default function ProductionCard({ data }: { data?: BoardGames }) {
             className={`w-full max-h-30 p-1 pb-4 rounded backdrop-blur-md absolute -top-20 left-0 text-xs font-medium flex flex-row flex-wrap gap-1 overflow-auto text-mist-500 shirk-0 transition-all duration-500 ease-out ${isHover == true ? "opacity-100 -top-25 pointer-events-auto" : "opacity-0 translate-y-0 pointer-events-none"} `}
           >
             <div className=" w-full h-20 overflow-auto flex flex-row border-r flex-wrap gap-1">
-              {data?.categories.map((items, index) => {
+              {data?.categories?.map((items, index) => {
                 return (
                   <p
                     key={items.category_Id}

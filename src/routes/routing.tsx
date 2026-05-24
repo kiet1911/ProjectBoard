@@ -9,6 +9,8 @@ import HomePage from "../pages/HomePage.tsx";
 import Production from "../pages/Product.tsx";
 import PublicRoute from "./PublicRoute.tsx";
 import ProductionDetail from "../pages/ProductionDetail.tsx";
+import FavoriteRoute from "./FavoriteRoute.tsx";
+import Favorite from "../pages/Favorite.tsx";
 
 // create router
 export const router = createBrowserRouter([
@@ -51,6 +53,14 @@ export const router = createBrowserRouter([
               }
             ]
           },
+          {
+            loader: () =>{} ,
+            element: <FavoriteRoute></FavoriteRoute>,
+            children: [{
+              path: "favorites",
+              element: <Favorite></Favorite>
+            }]
+          }
         ],
       },
     ],
