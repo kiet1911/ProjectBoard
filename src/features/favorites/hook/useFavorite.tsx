@@ -7,6 +7,7 @@ export const useFavorite = () => {
   const publicId = useAuthStore((state) => state.publicId);
   const [loading, setLoading] = useState(true);
   const [dataFav, setDataFav] = useState<any|[]>();
+  const [error,setError] = useState<string|undefined>(undefined);
   useEffect(() => {
     if (!publicId) {
       setLoading(false);
@@ -26,6 +27,7 @@ export const useFavorite = () => {
       } catch (error) {
         console.error(error);
         setDataFav([]);
+        setError(error as string);
       } finally {
         setLoading(false);
       }
@@ -33,5 +35,5 @@ export const useFavorite = () => {
     fetch();
   }, [publicId]);
 
-  return { loading, dataFav };
+  return { loading, dataFav , error };
 };

@@ -54,7 +54,6 @@ export const router = createBrowserRouter([
             ]
           },
           {
-            loader: () =>{} ,
             element: <FavoriteRoute></FavoriteRoute>,
             children: [{
               path: "favorites",

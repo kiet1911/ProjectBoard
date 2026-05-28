@@ -5,7 +5,7 @@ import type { BoardGames } from "../../../types";
 import FavoritesList from "./FavoritesList";
 
 export default function FavoritesPage() {
-  const { loading, dataFav } = useFavorite();
+  const { loading, dataFav, error } = useFavorite();
   const [data, setData] = useState<BoardGames[] | null>();
   useLayoutEffect(() => {
     if (!loading) {
@@ -15,8 +15,8 @@ export default function FavoritesPage() {
   }, [dataFav]);
   return (
     <>
-      <PageContainer url="./BackgroundContent/bghomepage.png">
-          <FavoritesList listFav={data}></FavoritesList>
+      <PageContainer url="../BackgroundContent/bghomepage.png">
+          <FavoritesList listFav={data} error={error} ></FavoritesList>
       </PageContainer>
     </>
   );

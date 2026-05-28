@@ -40,7 +40,7 @@ export default function ProductionCard({ data }: { data?: BoardGames }) {
       <div
         key={data?.id ?? "default".concat((Math.random() * 100).toString())}
         className="border border-mist-500/50 rounded-xl max-md:w-40 w-50 h-full flex flex-col justify-start items-center gap-1 shrink-0 p-2 shadow-md/40 shadow-mist-400 relative group cursor-pointer"
-        title={data?.id}
+        title={data?.name}
         onClick={ (e) =>{
           e.preventDefault();
           e.stopPropagation();

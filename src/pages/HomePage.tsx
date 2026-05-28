@@ -7,7 +7,7 @@ export default function HomePage() {
     <>
       <div
         id="homePage"
-        className="px-[10%] pt-[1rem] bg-[url(./BackgroundContent/bghomepage.png)] bg-center bg-auto bg-origin-border flex flex-col gap-y-[2rem] pb-[2rem]"
+        className="px-[10%] pt-[1rem] bg-[url(../BackgroundContent/bghomepage.png)] bg-center bg-auto bg-origin-border flex flex-col gap-y-[2rem] pb-[2rem]"
       >
         {/* static slider */}
         <CarouselEvent></CarouselEvent>
