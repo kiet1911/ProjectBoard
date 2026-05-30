@@ -1,12 +1,12 @@
 import { Outlet } from "react-router-dom";
+import ProductionPage from "../features/production/components";
 
 export default function Production() {
   return (
     <>
-      <div className="">
-        <h1>Production</h1>
+      <ProductionPage>
         <Outlet></Outlet>
-      </div>
+      </ProductionPage>
     </>
   );
 }
