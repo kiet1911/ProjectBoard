@@ -8,7 +8,7 @@ interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
 }
 
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: import.meta.env.VITE_API_URL || 'https://localhost:7001',
   withCredentials: true,
   timeout: 5000,
   headers: {

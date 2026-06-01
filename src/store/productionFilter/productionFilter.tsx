@@ -15,6 +15,8 @@ interface productionFilter {
   config: {
     [key: string]: filteField;
   };
+  setFilters:(key:string,newValue:number | string)=>void;
+  resetFilters:()=>void
 }
 
 const initialDefaultValues = {
@@ -28,17 +30,17 @@ const initialDefaultValues = {
 export const useProductionFilter = create<productionFilter>()((set, get) => ({
   config: {
     Price: {
-      displayName: "Giá tối đa",
+      displayName: "Maximum price",
       baseInput: "range",
       min: 0,
-      max: 5000000,
+      max: 15000000,
       step: 50000,
       queryName: "maxPrice",
       defaultValue: initialDefaultValues.Price,
       value: initialDefaultValues.Price,
     },
     PlayTime: {
-      displayName: "Thời gian chơi tối đa",
+      displayName: "Maximum playtime",
       baseInput: "range",
       min: 15,
       max: 360,
@@ -48,7 +50,7 @@ export const useProductionFilter = create<productionFilter>()((set, get) => ({
       value: initialDefaultValues.PlayTime,
     },
     Rating: {
-      displayName: "Đánh giá tối thiểu",
+      displayName: "Minimum rating",
       baseInput: "range",
       min: 0,
       max: 10,
@@ -58,7 +60,7 @@ export const useProductionFilter = create<productionFilter>()((set, get) => ({
       value: initialDefaultValues.Rating,
     },
     Complexity: {
-      displayName: "Độ phức tạp tối đa",
+      displayName: "Maximum complexity",
       baseInput: "range",
       min: 1,
       max: 5,
@@ -68,7 +70,7 @@ export const useProductionFilter = create<productionFilter>()((set, get) => ({
       value: initialDefaultValues.Complexity,
     },
     Age: {
-      displayName: "Độ tuổi tối thiểu",
+      displayName: "Minimum age",
       baseInput: "range",
       min: 0,
       max: 21,

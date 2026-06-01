@@ -71,12 +71,12 @@ export default function ProductSection({
         </div>
       </div>
       <div className="w-full h-100 relative flex">
-        {/* production list */}
+       
         <div
           ref={productionlst}
           className={`w-full h-full flex overflow-x-auto no-scrollbar gap-x-4 pt-4 pl-2 transition-all duration-1000 ${list.length === 0 ? "opacity-0" : "opacity-100"}`}
         >
-          {list.map((item) => {
+          {list && list.map((item) => {
             return (
               <div key={item.id}>
                 <ProductionCard data={item}></ProductionCard>

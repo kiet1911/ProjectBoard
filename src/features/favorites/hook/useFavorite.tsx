@@ -11,9 +11,9 @@ export const useFavorite = () => {
   useEffect(() => {
     if (!publicId) {
       setLoading(false);
-      useToastNotification
-        .getState()
-        .add({ text: "You must be login!", type: "error" });
+      // useToastNotification
+      //   .getState()
+      //   .add({ text: "You must be login!", type: "error" });
       return;
     }
     const fetch = async () => {
