@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import type { BoardGames } from "../../types";
+import { Search } from "lucide-react";
 
 interface filterField {
   displayName: string;
@@ -21,13 +22,19 @@ interface productionFilter {
     pageSize: number;
     isMaxRecord: boolean;
   };
-  gameLists: BoardGames[] | [];
+  gameLists: BoardGames[] | [] | undefined;
+  searchBar: {
+    search: string | undefined;
+    isSearch: boolean;
+  };
   setFilters: (key: string, newValue: number | string) => void;
-  setGameLists: (games: BoardGames[] | []) => void;
+  setGameLists: (games: BoardGames[] | [] | undefined) => void;
   addGamesLists: (games: BoardGames[] | []) => void;
-  setPagination: (isMax:boolean)=>void
+  setPagination: (isMax: boolean) => void;
+  setSearchBar: (text: string) => void;
   resetFilters: () => void;
   resetPagination: () => void;
+  resetSearchBar: () => void;
   initialQuery: () => object;
 }
 
@@ -39,6 +46,7 @@ const initialDefaultValues = {
   Age: 10,
   Page: 0,
   PageSize: 5,
+  Search: undefined,
 };
 
 export const useProductionFilter = create<productionFilter>()((set, get) => ({
@@ -94,6 +102,10 @@ export const useProductionFilter = create<productionFilter>()((set, get) => ({
       value: initialDefaultValues.Age,
     },
   },
+  searchBar: {
+    search: initialDefaultValues.Search,
+    isSearch: false,
+  },
   gameLists: [],
   pagination: {
     page: initialDefaultValues.Page,
@@ -114,28 +126,47 @@ export const useProductionFilter = create<productionFilter>()((set, get) => ({
   },
 
   setGameLists: (games) => {
-    set(()=>({
-      gameLists: games
-    }))
+    set(() => ({
+      gameLists: games,
+    }));
   },
 
   addGamesLists: (games) => {
     const currentGame = get().gameLists;
-    const newGames = [...currentGame,...games];
-    set(()=>({
-      gameLists: newGames
-    }))
+
+    const newGames = currentGame ? [...currentGame, ...games] : [...games];
+    set(() => ({
+      gameLists: newGames,
+    }));
   },
 
-  setPagination:(isMax)=>{
-    const p = get().pagination.page + 1;
-    set((state)=>({
-      pagination:{
+  setPagination: (isMax) => {
+    let p
+    if(isMax){
+      p = get().pagination.page;
+    }
+    else{
+      p = get().pagination.page + 1;
+    }
+    
+    set((state) => ({
+      pagination: {
         ...state.pagination,
-        page : p,
-        isMaxRecord: isMax
-      }
-    }))
+        page: p,
+        isMaxRecord: isMax,
+      },
+    }));
+  },
+
+  setSearchBar: (text) => {
+    set((state) => {
+     const check = state.searchBar.isSearch || true;
+     return {
+      searchBar: {
+        isSearch: check,
+        search: text, 
+      },
+    }});
   },
 
   resetFilters: () => {
@@ -153,13 +184,22 @@ export const useProductionFilter = create<productionFilter>()((set, get) => ({
   },
 
   resetPagination: () => {
-    set(()=>({
-      pagination:{
+    set(() => ({
+      pagination: {
         page: 0,
         pageSize: initialDefaultValues.PageSize,
-        isMaxRecord: false
-      }
-    }))
+        isMaxRecord: false,
+      },
+    }));
+  },
+
+  resetSearchBar() {
+    set(() => ({
+      searchBar: {
+        search: initialDefaultValues.Search,
+        isSearch: false,
+      },
+    }));
   },
 
   initialQuery: () => {
@@ -177,4 +217,3 @@ export const useProductionFilter = create<productionFilter>()((set, get) => ({
     return jsonQuery;
   },
 }));
-

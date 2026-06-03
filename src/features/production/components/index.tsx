@@ -4,6 +4,7 @@ import { useProduction } from "../hook/useProduction";
 import FilterLayout from "./FilterLayout";
 import SearchBar from "./SearchBar";
 import GameLists from "./GameLists";
+import { ResizeObserverLargerUtility } from "../../../utility/ResizeObserverUtility";
 
 export default function ProductionPage({ children }: { children?: ReactNode }) {
   // const { dataPro } = useProduction();
@@ -13,34 +14,40 @@ export default function ProductionPage({ children }: { children?: ReactNode }) {
     if (!navRef.current) {
       return;
     }
-    const resizeObserver = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        if (entry) {
-          const width = entry.contentRect.width;
-          if (width > 768) {
-            setToggle((prev) => {
-              if (prev === true) {
-                return false;
-              }
-              return prev;
-            });
-          }
+    const resizeObserver = ResizeObserverLargerUtility(
+      768,
+      setToggle((prev) => {
+        if (prev === true) {
+          return false;
         }
-      }
-    });
+        return prev;
+      }),
+    );
+    //   for (const entry of entries) {
+    //     if (entry) {
+    //       const width = entry.contentRect.width;
+    //       if (width > 768) {
+    //         setToggle((prev) => {
+    //           if (prev === true) {
+    //             return false;
+    //           }
+    //           return prev;
+    //         });
+    //       }
+    //     }
+    //   }
+    // });
     resizeObserver.observe(navRef.current);
     return () => {
       resizeObserver.disconnect();
     };
   }, []);
-  // useEffect(() => {
-  //   if (dataPro) {
-  //     console.log(dataPro);
-  //   }
-  // }, [dataPro]);
-  const handleToggle = () =>{
+  useEffect(() => {
+    window.scrollTo(0,0);
+  }, []);
+  const handleToggle = () => {
     setToggle(!toggle);
-  }
+  };
   return (
     <>
       <PageContainer url="../BackgroundContent/bghomepage.png">

@@ -3,6 +3,7 @@ import { useDebounce } from "../../../hook/useDebounce";
 import { useProductionFilter } from "../../../store/productionFilter/productionFilter";
 import { boardgamesService } from "../../../services/boardgames.service";
 import axios from "axios";
+import { useShallow } from "zustand/shallow";
 export const FilterSlider = React.memo(
   ({
     keyFilter,
@@ -14,46 +15,75 @@ export const FilterSlider = React.memo(
     setFilter: (keys: string, value: string | number) => void;
   }) => {
     const [filterValue, setFilterValue] = useState(dataFilter.value);
-    const debounceFilter = useDebounce(filterValue, 500);
+    const debounceFilter = useDebounce(filterValue, 350);
     const [firstRender, setFirstRender] = useState<boolean>(false);
-    const apiCall = useProductionFilter(state=>state.initialQuery);
-    const handleGameList = useProductionFilter(state=>state.setGameLists);
-    const resetPagination = useProductionFilter(state=>state.resetPagination);
-    const handleFilter = React.useCallback(() => {
-      if (debounceFilter) {
-        // api here
-        const fetch = async() =>{
-          try {
-            resetPagination();
-            const apiQuery = axios.getUri({
-              baseURL: import.meta.env.VITE_API_URL,
-              url: "/v1/BoardGames/BoardGamesFilter",
-              params: apiCall(),
-            })
-            const data = await boardgamesService.queryFilter(apiQuery,apiCall())
-            handleGameList(data.gameLists||[])
-            //reset pagination
-          } catch (error) {
-            console.log(error);
-          }
-        }
-        fetch();
-        // console.log("call api" + debounceFilter , apiCall());
 
-      }
-    }, [debounceFilter]);
+    const { apiCall, handleGameList, resetSearchBar, resetPagination } =
+      useProductionFilter(
+        useShallow((state) => ({
+          apiCall: state.initialQuery,
+          handleGameList: state.setGameLists,
+          resetSearchBar: state.resetSearchBar,
+          resetPagination: state.resetPagination,
+        })),
+      );
+
+    useEffect(() => {
+      setFilter(keyFilter, Number(filterValue));
+    }, [filterValue, keyFilter, setFilter]);
+
+    useEffect(() => {
+      setFilterValue(dataFilter.value);
+    }, [dataFilter.value]);
 
     useEffect(() => {
       if (!firstRender) {
         setFirstRender(true);
         return;
       }
-      if (debounceFilter && firstRender) handleFilter();
-    }, [debounceFilter]);
 
-    useEffect(() => {
-      setFilter(keyFilter, Number(filterValue));
-    }, [filterValue]);
+      let isCurrentRequest = true;
+
+      if (debounceFilter && firstRender) {
+        const fetch = async () => {
+          try {
+            resetPagination();
+
+            const apiQuery = axios.getUri({
+              baseURL: import.meta.env.VITE_API_URL,
+              url: "/v1/BoardGames/BoardGamesFilter",
+              params: apiCall(),
+            });
+
+            const data = await boardgamesService.queryFilter(
+              apiQuery,
+              apiCall(),
+            );
+
+            if (isCurrentRequest) {
+              handleGameList(data.gameLists || []);
+              resetSearchBar();
+              resetPagination();
+            }
+          } catch (error) {
+            console.log(error);
+          }
+        };
+
+        fetch();
+      }
+
+      return () => {
+        isCurrentRequest = false;
+      };
+    }, [
+      debounceFilter,
+      firstRender,
+      apiCall,
+      handleGameList,
+      resetSearchBar,
+      resetPagination,
+    ]);
 
     return (
       <>
@@ -61,10 +91,12 @@ export const FilterSlider = React.memo(
           <label className="text-sm font-medium flex justify-between">
             <span>{dataFilter.displayName} :</span>
             <span className="text-xs text-emerald-600 font-bold">
-              {keyFilter==='Price'?Number(dataFilter.value).toLocaleString('vi-VN',{
-                style:'currency',
-                currency: 'VND'
-              }):dataFilter.value}
+              {keyFilter === "Price"
+                ? Number(filterValue).toLocaleString("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                  })
+                : filterValue}
             </span>
           </label>
           <input
@@ -72,13 +104,10 @@ export const FilterSlider = React.memo(
             min={dataFilter.min}
             max={dataFilter.max}
             step={dataFilter.step}
-            value={dataFilter.value}
+            value={filterValue}
             onChange={(e) => {
-              // setFilter(keyFilter, Number(e.target.value));
               setFilterValue(String(e.target.value));
             }}
-            // onMouseUp={handleFilter}
-            // onTouchEnd={handleFilter}
             className="w-full accent-(--main-color,##db3332)"
           />
         </div>

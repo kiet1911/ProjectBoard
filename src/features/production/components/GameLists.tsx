@@ -1,7 +1,6 @@
 import {
   useCallback,
   useEffect,
-  useLayoutEffect,
   useRef,
   useState,
 } from "react";
@@ -41,6 +40,7 @@ export default function GameLists() {
         url: "/v1/BoardGames/BoardGamesFilter",
         params: apiCall(),
       });
+      
       const data = await boardgamesService.queryFilter(apiQuery, apiCall());
       setGames(data.gameLists ?? []);
       setGameLists(data.gameLists ?? []);
@@ -49,19 +49,26 @@ export default function GameLists() {
     } finally {
       setIsLoading(false);
     }
-  }, [apiCall, setGames]);
+  }, [apiCall, games]);
 
   const fetchAdd = useCallback(async () => {
     try {
       setIsMoreLoading(true);
+      pagination(false);
       const apiQuery = axios.getUri({
         baseURL: import.meta.env.VITE_API_URL,
         url: "/v1/BoardGames/BoardGamesFilter",
         params: apiCall(),
       });
-      const data = await boardgamesService.queryFilter(apiQuery, apiCall());
+      const data = !useProductionFilter.getState().searchBar.isSearch
+        ? await boardgamesService.queryFilter(apiQuery, apiCall())
+        : await boardgamesService.get("/v1/BoardGames/BoardGamesSearch", {
+            Search: useProductionFilter.getState().searchBar.search,
+            Page: useProductionFilter.getState().pagination.page,
+            PageSize: useProductionFilter.getState().pagination.pageSize,
+          });
       addGamesLists(data.gameLists);
-      pagination(data.isMax);
+      data.isMax && pagination(data.isMax);
     } catch (error) {
       console.log(error);
     } finally {
@@ -69,10 +76,15 @@ export default function GameLists() {
     }
   }, [apiCall, addGamesLists, pagination]);
 
-  useLayoutEffect(() => {
-    if (gameLists === undefined) {
+  useEffect(() => {
+    if (gameLists === undefined || games === undefined) {
+      console.log("trigger");
       fetch();
     } else {
+      divRef.current?.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
       setGameLists(games);
     }
   }, [games]);
@@ -94,7 +106,6 @@ export default function GameLists() {
 
   const handleMoreGame = () => {
     if (isMoreLoading) return;
-    pagination(false);
     fetchAdd();
   };
 
@@ -103,7 +114,7 @@ export default function GameLists() {
       <div className="bg-white border border-mist-200 rounded-2xl p-6 shadow-sm max-h-125 relative flex flex-col justify-between">
         {isLoading ? (
           <div className=" w-full h-full flex justify-center items-center absolute inset-0">
-            <div className="animate-spin border-4 border-slate-200 border-t-mist-500 h-10 w-10 rounded-full" />
+            <div className="animate-spin border-4 border-mist-200 border-t-mist-500 h-10 w-10 rounded-full" />
           </div>
         ) : gameLists && gameLists.length > 0 ? (
           <>
@@ -125,15 +136,15 @@ export default function GameLists() {
               <></>
             ) : (
               <>
-                <div className="w-full flex justify-center pt-5 mt-2 border-t border-slate-100">
+                <div className="w-full flex justify-center pt-5 mt-2 border-t border-mist-300">
                   <button
                     onClick={handleMoreGame}
                     disabled={isMoreLoading}
-                    className="px-6 py-2.5 bg-(--footer-bg-color) hover:bg-slate-800 disabled:bg-slate-100 text-white disabled:text-slate-400 text-sm font-medium rounded-xl shadow-sm transition-all duration-200 flex items-center gap-2 cursor-pointer disabled:cursor-not-allowed border border-transparent disabled:border-slate-200"
+                    className="px-6 py-2.5 bg-(--footer-bg-color) hover:bg-mist-800 disabled:bg-mist-100 text-white disabled:text-mist-400 text-sm font-medium rounded-xl shadow-sm transition-all duration-200 flex items-center gap-2 cursor-pointer disabled:cursor-not-allowed border border-transparent disabled:border-mist-200"
                   >
                     {isMoreLoading ? (
                       <>
-                        <div className="animate-spin border-2 border-slate-300 border-t-slate-600 h-4 w-4 rounded-full" />
+                        <div className="animate-spin border-2 border-mist-300 border-t-mist-600 h-4 w-4 rounded-full" />
                         <span>Loading...</span>
                       </>
                     ) : (
@@ -146,7 +157,7 @@ export default function GameLists() {
           </>
         ) : (
           <>
-            <div className="w-full flex justify-center items-center text-slate-400 text-sm">
+            <div className="w-full flex justify-center items-center text-mist-400 text-sm">
               <span>No boardgames found matching your search.</span>
             </div>
           </>

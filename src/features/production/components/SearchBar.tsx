@@ -2,21 +2,48 @@ import { Menu } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useProductionFilter } from "../../../store/productionFilter/productionFilter";
 import { useDebounce } from "../../../hook/useDebounce";
+import { boardgamesService } from "../../../services/boardgames.service";
+import { useShallow } from "zustand/shallow";
 
 export default function SearchBar({ toggle }: { toggle: () => void }) {
   const [isActive, setActive] = useState<boolean>(false);
   const gameLists = useProductionFilter((state) => state.gameLists);
-  const [search, setSearch] = useState<string>('');
-  const debounceFilter = useDebounce(search,500);
-  useEffect(()=>{
-    if(debounceFilter){
-      //api
-      //reset filter
-      //don`t use filter 
-      
+  const searchBar = useProductionFilter(useShallow((state) => state.searchBar));
+  const [search, setSearch] = useState<string>("");
+  const debounceFilter = useDebounce(search, 500);
+  useEffect(() => {
+    if (debounceFilter) {
+      try {
+        //api
+        const fetch = async () => {
+          const data = await boardgamesService.get(
+            "/v1/BoardGames/BoardGamesSearch",
+            {
+              Search: debounceFilter,
+              Page: 0,
+              PageSize:
+                useProductionFilter.getInitialState().pagination.pageSize,
+            },
+          );
+          //set search , game
+          useProductionFilter.getInitialState().setSearchBar(debounceFilter);
+          useProductionFilter.getInitialState().setGameLists(data?.gameLists);
+        };
+        fetch();
+        //reset filter
+        useProductionFilter.getInitialState().resetFilters();
+        useProductionFilter.getInitialState().resetPagination();
+      } catch (error) {
+        console.log(error);
+      }
     }
+  }, [debounceFilter]);
 
-  },[debounceFilter])
+  useEffect(() => {
+    if (!searchBar.search || searchBar.search === "") {
+      setSearch("");
+    }
+  }, [searchBar]);
 
   return (
     <>
@@ -32,7 +59,21 @@ export default function SearchBar({ toggle }: { toggle: () => void }) {
             {" "}
             <Menu size={15}></Menu>Filter
           </button>
-          <span> Show <span className="font-bold text-mist-900">{gameLists.length}</span> products </span>
+          {gameLists ? (
+            <>
+              <span>
+                Show{" "}
+                <span className="font-bold text-mist-900">
+                  {gameLists.length}
+                </span>{" "}
+                products{" "}
+              </span>
+            </>
+          ) : (
+            <>
+              <div className="animate-spin border-2 border-slate-300 border-t-slate-600 h-4 w-4 rounded-full" />
+            </>
+          )}
         </div>
         <div className="flex gap-2 w-1/3 max-md:w-1/2 max-sm:w-full justify-end">
           <input
