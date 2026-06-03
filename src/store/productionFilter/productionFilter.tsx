@@ -1,6 +1,7 @@
 import { create } from "zustand";
+import type { BoardGames } from "../../types";
 
-interface filteField {
+interface filterField {
   displayName: string;
   baseInput: "range" | "number" | "select";
   min: number;
@@ -13,10 +14,21 @@ interface filteField {
 
 interface productionFilter {
   config: {
-    [key: string]: filteField;
+    [key: string]: filterField;
   };
-  setFilters:(key:string,newValue:number | string)=>void;
-  resetFilters:()=>void
+  pagination: {
+    page: number;
+    pageSize: number;
+    isMaxRecord: boolean;
+  };
+  gameLists: BoardGames[] | [];
+  setFilters: (key: string, newValue: number | string) => void;
+  setGameLists: (games: BoardGames[] | []) => void;
+  addGamesLists: (games: BoardGames[] | []) => void;
+  setPagination: (isMax:boolean)=>void
+  resetFilters: () => void;
+  resetPagination: () => void;
+  initialQuery: () => object;
 }
 
 const initialDefaultValues = {
@@ -25,6 +37,8 @@ const initialDefaultValues = {
   Rating: 7.0,
   Complexity: 3.5,
   Age: 10,
+  Page: 0,
+  PageSize: 5,
 };
 
 export const useProductionFilter = create<productionFilter>()((set, get) => ({
@@ -50,7 +64,7 @@ export const useProductionFilter = create<productionFilter>()((set, get) => ({
       value: initialDefaultValues.PlayTime,
     },
     Rating: {
-      displayName: "Minimum rating",
+      displayName: "Maximum rating",
       baseInput: "range",
       min: 0,
       max: 10,
@@ -70,7 +84,7 @@ export const useProductionFilter = create<productionFilter>()((set, get) => ({
       value: initialDefaultValues.Complexity,
     },
     Age: {
-      displayName: "Minimum age",
+      displayName: "Maximum age",
       baseInput: "range",
       min: 0,
       max: 21,
@@ -80,7 +94,12 @@ export const useProductionFilter = create<productionFilter>()((set, get) => ({
       value: initialDefaultValues.Age,
     },
   },
-
+  gameLists: [],
+  pagination: {
+    page: initialDefaultValues.Page,
+    pageSize: initialDefaultValues.PageSize,
+    isMaxRecord: false,
+  },
   values: { ...initialDefaultValues },
   setFilters: (key: string, newValue: number | string) => {
     set((state) => ({
@@ -92,6 +111,31 @@ export const useProductionFilter = create<productionFilter>()((set, get) => ({
         },
       },
     }));
+  },
+
+  setGameLists: (games) => {
+    set(()=>({
+      gameLists: games
+    }))
+  },
+
+  addGamesLists: (games) => {
+    const currentGame = get().gameLists;
+    const newGames = [...currentGame,...games];
+    set(()=>({
+      gameLists: newGames
+    }))
+  },
+
+  setPagination:(isMax)=>{
+    const p = get().pagination.page + 1;
+    set((state)=>({
+      pagination:{
+        ...state.pagination,
+        page : p,
+        isMaxRecord: isMax
+      }
+    }))
   },
 
   resetFilters: () => {
@@ -107,4 +151,30 @@ export const useProductionFilter = create<productionFilter>()((set, get) => ({
       return { config: updateConfig };
     });
   },
+
+  resetPagination: () => {
+    set(()=>({
+      pagination:{
+        page: 0,
+        pageSize: initialDefaultValues.PageSize,
+        isMaxRecord: false
+      }
+    }))
+  },
+
+  initialQuery: () => {
+    const Config = get().config;
+    const Page = get().pagination;
+    const jsonQuery = {
+      Price: Config["Price"]?.value ?? 0,
+      PlayTime: Config["PlayTime"]?.value ?? 0,
+      Rating: Config["Rating"]?.value ?? 0,
+      Complexity: Config["Complexity"]?.value ?? 0,
+      Age: Config["Age"]?.value ?? 0,
+      Page: Page["page"] ?? 0,
+      PageSize: Page["pageSize"] ?? 0,
+    };
+    return jsonQuery;
+  },
 }));
+

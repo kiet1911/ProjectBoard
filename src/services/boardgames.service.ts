@@ -10,6 +10,15 @@ export const boardgamesService = {
             console.log(error);
             throw error;
         }
+    },
+    queryFilter: async (uri:string, databody?:object)=>{
+        try {
+            const data = await apiClient.post(`${uri}`, { params : databody});
+            return data.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
     }
 
 }

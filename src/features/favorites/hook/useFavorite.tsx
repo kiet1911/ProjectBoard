@@ -1,6 +1,6 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import useAuthStore from "../../../store/authentication/authState";
-import { useToastNotification } from "../../../store/notification/notification";
+// import { useToastNotification } from "../../../store/notification/notification";
 import { favoriteService } from "../../../services/favorite.service";
 
 export const useFavorite = () => {

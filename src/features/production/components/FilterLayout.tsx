@@ -1,9 +1,15 @@
+import { useEffect } from "react";
 import { useProductionFilter } from "../../../store/productionFilter/productionFilter";
 import { FilterSlider } from "./FilterSlider";
 
 export default function FilterLayout({isHidden=true}:{isHidden?:boolean}) {
   const config = useProductionFilter((state) => state);
   const setFilter = useProductionFilter((state) => state.setFilters);
+  useEffect(()=>{
+    useProductionFilter.getInitialState().resetFilters();
+    useProductionFilter.getInitialState().resetPagination();
+  },[])
+
   return (
     <>
       <aside className={`w-60 ${isHidden?"max-md:hidden":""} bg-white rounded-2xl border border-mist-200 p-5 shadow-sm flex flex-col gap-6 h-fit sticky top-30`}>

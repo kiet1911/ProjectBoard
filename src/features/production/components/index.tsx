@@ -6,7 +6,7 @@ import SearchBar from "./SearchBar";
 import GameLists from "./GameLists";
 
 export default function ProductionPage({ children }: { children?: ReactNode }) {
-  const { dataPro } = useProduction();
+  // const { dataPro } = useProduction();
   const navRef = useRef<HTMLElement>(null);
   const [toggle, setToggle] = useState<boolean>(false);
   useEffect(() => {
@@ -33,11 +33,11 @@ export default function ProductionPage({ children }: { children?: ReactNode }) {
       resizeObserver.disconnect();
     };
   }, []);
-  useEffect(() => {
-    if (dataPro) {
-      console.log(dataPro);
-    }
-  }, [dataPro]);
+  // useEffect(() => {
+  //   if (dataPro) {
+  //     console.log(dataPro);
+  //   }
+  // }, [dataPro]);
   const handleToggle = () =>{
     setToggle(!toggle);
   }
@@ -50,7 +50,7 @@ export default function ProductionPage({ children }: { children?: ReactNode }) {
           <main className="flex-1 flex flex-col gap-4">
             <SearchBar toggle={handleToggle}></SearchBar>
 
-            <GameLists gameLists={[]}></GameLists>
+            <GameLists></GameLists>
           </main>
         </div>
 

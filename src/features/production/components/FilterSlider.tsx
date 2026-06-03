@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useDebounce } from "../../../hook/useDebounce";
+import { useProductionFilter } from "../../../store/productionFilter/productionFilter";
+import { boardgamesService } from "../../../services/boardgames.service";
+import axios from "axios";
 export const FilterSlider = React.memo(
   ({
     keyFilter,
@@ -13,11 +16,30 @@ export const FilterSlider = React.memo(
     const [filterValue, setFilterValue] = useState(dataFilter.value);
     const debounceFilter = useDebounce(filterValue, 500);
     const [firstRender, setFirstRender] = useState<boolean>(false);
-
+    const apiCall = useProductionFilter(state=>state.initialQuery);
+    const handleGameList = useProductionFilter(state=>state.setGameLists);
+    const resetPagination = useProductionFilter(state=>state.resetPagination);
     const handleFilter = React.useCallback(() => {
       if (debounceFilter) {
         // api here
-        console.log("call api" + debounceFilter);
+        const fetch = async() =>{
+          try {
+            resetPagination();
+            const apiQuery = axios.getUri({
+              baseURL: import.meta.env.VITE_API_URL,
+              url: "/v1/BoardGames/BoardGamesFilter",
+              params: apiCall(),
+            })
+            const data = await boardgamesService.queryFilter(apiQuery,apiCall())
+            handleGameList(data.gameLists||[])
+            //reset pagination
+          } catch (error) {
+            console.log(error);
+          }
+        }
+        fetch();
+        // console.log("call api" + debounceFilter , apiCall());
+
       }
     }, [debounceFilter]);
 
