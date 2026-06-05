@@ -16,6 +16,7 @@ import ProductionDetailSkeleton from "../components/ProductionDetailSkeleton";
 import { favoriteService } from "../services/favorite.service";
 import useAuthStore from "../store/authentication/authState";
 import { useAlertNotification, useToastNotification } from "../store/notification/notification";
+import { FavoriteButton } from "../features/favoriteButton/components";
 export default function ProductionDetail() {
   const id = useParams();
   const [detailBoardGame, setdetailBoardGame] = useState<BoardGames>();
@@ -220,7 +221,7 @@ export default function ProductionDetail() {
                   </span>
                 </div>
                 <div className="text-xs font-medium w-full flex flex-col gap-1 overflow-hidden">
-                  {["Author", "Artits", "Designer", "Publisher"].map(
+                  {["Author", "Artist", "Designer", "Publisher"].map(
                     (items, index) => {
                       return (
                         <span key={items + index}>
@@ -260,12 +261,12 @@ export default function ProductionDetail() {
                     },
                   )}
                 </div>
-                <div className="flex flex-row overflow-hidden gap-1 p-1 font-bold text-sm text-center border navbar-link">
+                <div className="flex flex-row overflow-hidden gap-1 p-1 font-bold text-center border navbar-link text-sm max-md:text-xs">
                   <div
                     className={`flex-3 wrap-break-word line-clamp-3 flex items-center justify-center `}
                   >
                     <p
-                      className={`text-sm rounded-lg font-bold px-2 py-1 gap-1 flex flex-row justify-center items-center bg-white border border-mist-200 w-full`}
+                      className={` max-md:text-xs rounded-lg font-bold px-2 py-1 gap-1 flex flex-row justify-center items-center bg-white border border-mist-200 w-full`}
                       title="Weight x Height x Length"
                     >
                       <Ruler size={18}></Ruler> : {""}
@@ -276,10 +277,10 @@ export default function ProductionDetail() {
                     </p>
                   </div>
                   <div
-                    className={`flex-1 wrap-break-word line-clamp-3 flex items-center justify-center `}
+                    className={`flex-1 wrap-break-word line-clamp-3 flex items-center justify-center`}
                   >
                     <p
-                      className={`text-sm w-full relative rounded-lg font-bold p-1 gap-1 flex flex-row justify-center items-center bg-white border border-mist-200 ${detailBoardGame?.stock_Quantity == 0 ? "text-red-800 line-through" : "  "} `}
+                      className={` w-full relative rounded-lg font-bold p-1 gap-1 flex flex-row justify-center items-center bg-white border border-mist-200 ${detailBoardGame?.stock_Quantity == 0 ? "text-red-800 line-through" : "  "} `}
                       title="Stock"
                     >
                       <Package size={18}></Package>:{" "}
@@ -290,7 +291,7 @@ export default function ProductionDetail() {
                     className={`flex-1 wrap-break-word line-clamp-3 flex items-center justify-center `}
                   >
                     <p
-                      className={`text-sm w-full relative rounded-lg font-bold p-1 gap-1 flex flex-row justify-center items-center ${detailBoardGame?.status == "0" && " border border-green-900 bg-green-100 text-green-800"} ${detailBoardGame?.status == "1" && "border border-red-900 bg-red-100 text-red-800"}`}
+                      className={` w-full relative rounded-lg font-bold p-1 gap-1 flex flex-row justify-center items-center ${detailBoardGame?.status == "0" && " border border-green-900 bg-green-100 text-green-800"} ${detailBoardGame?.status == "1" && "border border-red-900 bg-red-100 text-red-800"}`}
                     >
                       <Info size={18}></Info>
                       {detailBoardGame?.status == "0" ? <>Available</> : ""}
@@ -323,9 +324,12 @@ export default function ProductionDetail() {
                 <div className=" navbar-link w-auto  hover:bg-(--main-color) hover:text-white duration-100">
                   <ShoppingCart size={20}></ShoppingCart>
                 </div>
-                <div className=" navbar-link w-auto  hover:bg-(--main-color) hover:text-white duration-100" onClick={()=>{ handleFavoriteClick();}}>
+                <FavoriteButton boardGameId={detailBoardGame?.id} heartSize={20}>
+
+                </FavoriteButton>
+                {/* <div className=" navbar-link w-auto  hover:bg-(--main-color) hover:text-white duration-100" onClick={()=>{ handleFavoriteClick();}}>
                   <Heart size={20}></Heart>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -349,7 +353,7 @@ export default function ProductionDetail() {
                 ))}
               </div>
               {/* tabs content */}
-              <div className=" h-full w-fulloverflow-auto ">
+              <div className=" h-full w-full overflow-auto ">
                 {tabs[0].isActive && (
                   <>
                     <div
@@ -370,7 +374,7 @@ export default function ProductionDetail() {
                       Full Credit
                     </h1>
                     <div className=" flex flex-col gap-2 mt-2">
-                      {["Author", "Artits", "Designer", "Publisher"].map(
+                      {["Author", "Artist", "Designer", "Publisher"].map(
                         (items, index) => {
                           return (
                             <div
@@ -416,7 +420,7 @@ export default function ProductionDetail() {
                     return (
                       <p
                         key={items.category_Id + items.name}
-                        className="category-boxshadow text-xs max-md:text-[8px] border rounded p-0.5 text-center text-white bg-mist-500 shirk-0 mb-1 overflow-hidden text-ellipsis whitespace-nowrap"
+                        className="category-box shadow text-xs max-md:text-[8px] border rounded p-0.5 text-center text-white bg-mist-500 shirk-0 mb-1 overflow-hidden text-ellipsis whitespace-nowrap"
                         title={items.name}
                       >
                         #{items.name}

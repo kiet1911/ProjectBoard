@@ -78,7 +78,6 @@ export default function GameLists() {
 
   useEffect(() => {
     if (gameLists === undefined || games === undefined) {
-      console.log("trigger");
       fetch();
     } else {
       divRef.current?.scrollTo({
@@ -111,7 +110,7 @@ export default function GameLists() {
 
   return (
     <>
-      <div className="bg-white border border-mist-200 rounded-2xl p-6 shadow-sm max-h-125 relative flex flex-col justify-between">
+      <div className="bg-white border border-mist-200 rounded-2xl p-6 shadow-sm max-h-175 relative flex flex-col justify-between">
         {isLoading ? (
           <div className=" w-full h-full flex justify-center items-center absolute inset-0">
             <div className="animate-spin border-4 border-mist-200 border-t-mist-500 h-10 w-10 rounded-full" />

@@ -1,7 +1,13 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import type { BoardGames } from "../../../types";
 import ProductionCard from "../../ProductionCard/components";
-import { useEffect, useLayoutEffect, useState, type ChangeEvent } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
+  type ChangeEvent,
+} from "react";
 import { useDebounce } from "../../../hook/useDebounce";
 import SearchLoading from "../../../components/SearchLoading";
 
@@ -18,30 +24,20 @@ export default function FavoritesList({
   const [search, setSearch] = useState<string>("");
   const [searchLoading, setSearchLoading] = useState<boolean>(false);
   const debounceSearchItem = useDebounce(search, 300);
-  const searchList = listView?.filter((data) => {
-    if (!debounceSearchItem) return true;
-    const searchKey = debounceSearchItem.trim().toLowerCase();
-    const matchName = data.name.trim().toLowerCase().includes(searchKey);
-    const matchCategory = data?.categories.some((data) =>
-      data.name.trim().toLowerCase().includes(searchKey),
-    );
-    return matchName || matchCategory;
-  });
-
-  // const [searchParams, setSearchParams] = useSearchParams();
-  // const navigate = useNavigate();
-  // let currentPage = parseInt(searchParams.get("page") || "1");
-  // useLayoutEffect(() => {
-  //   //check filter url
-  //   if (searchParams.size == 0) {
-  //     console.log("current page 1");
-  //     currentPage = 1;
-  //   } else if (searchParams.size != 1 || !searchParams.get("page")) {
-  //     navigate("/favorites", { replace: true });
-  //   } else {
-  //     console.log(searchParams.get("page"));
-  //   }
-  // }, []);
+  const location = useLocation();
+  const searchList = useMemo(() => {
+    const data = listView?.filter((data) => {
+      if (!debounceSearchItem) return true;
+      const searchKey = debounceSearchItem.trim().toLowerCase();
+      const matchName = data.name.trim().toLowerCase().includes(searchKey);
+      const matchCategory = data?.categories.some((data) =>
+        data.name.trim().toLowerCase().includes(searchKey),
+      );
+      return matchName || matchCategory;
+    });
+    return data;
+  }, [listView, debounceSearchItem]);
+  
   useEffect(() => {
     setListView(listFav);
   }, [listFav]);
@@ -50,6 +46,17 @@ export default function FavoritesList({
       setSearchLoading(false);
     }
   }, [debounceSearchItem]);
+
+  useEffect(() => {
+    if (!location.state || !listView) return;
+    //
+    const data = listView?.filter((data) => {
+      return data.id != location.state;
+    });
+    location.state = null;
+    setListView(data);
+  }, [location.state]);
+
   const handleSearchItem = (e: string) => {
     setSearch(e);
     if (e === "") {
@@ -58,6 +65,7 @@ export default function FavoritesList({
       setSearchLoading(true);
     }
   };
+
   return (
     <>
       <section className="bg-white/90 border-4 border-double border-mist-500/50 space-y-5 w-2/3 max-sm:w-full rounded-2xl overflow-hidden shadow-sm">
@@ -70,7 +78,7 @@ export default function FavoritesList({
               placeholder="Search by name or category..."
               onChange={(e) => {
                 e.stopPropagation();
-                handleSearchItem(e.target.value); 
+                handleSearchItem(e.target.value);
               }}
             />
           </label>
@@ -92,19 +100,15 @@ export default function FavoritesList({
                   {error.toString().replace("AxiosError:", "Api Error:")}
                 </p>
               ) : !listView ? (
-             
                 <div className="animate-spin border-4 border-slate-200 border-t-mist-500 h-10 w-10 rounded-full" />
               ) : (
-             
                 <p className="text-slate-400 text-sm">
                   No boardgames found matching your search.
                 </p>
               )}
             </div>
           )}
-          {searchLoading && (
-           <SearchLoading></SearchLoading>
-          )}
+          {searchLoading && <SearchLoading></SearchLoading>}
         </div>
       </section>
     </>
