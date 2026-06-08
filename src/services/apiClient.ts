@@ -1,6 +1,5 @@
 import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
 import useAuthStore from "../store/authentication/authState";
-import { router } from "../routes/routing";
 import { useToastNotification } from "../store/notification/notification";
 
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {

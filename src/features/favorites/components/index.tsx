@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import PageContainer from "../../../components/PageContainer";
 import { useFavorite } from "../hook/useFavorite";
 import type { BoardGames } from "../../../types";

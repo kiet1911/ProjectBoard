@@ -1,5 +1,5 @@
 import { Heart } from "lucide-react";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useState } from "react";
 import useAuthStore from "../../../store/authentication/authState";
 import { useShallow } from "zustand/shallow";
 import { favoriteService } from "../../../services/favorite.service";

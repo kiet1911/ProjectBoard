@@ -11,6 +11,8 @@ import PublicRoute from "./PublicRoute.tsx";
 import ProductionDetail from "../pages/ProductionDetail.tsx";
 import FavoriteRoute from "./FavoriteRoute.tsx";
 import Favorite from "../pages/Favorite.tsx";
+import CartRoute from "./CartRoute.tsx";
+import CartPage from "../pages/Cart.tsx";
 
 // create router
 export const router = createBrowserRouter([
@@ -59,6 +61,14 @@ export const router = createBrowserRouter([
               path: "favorites",
               element: <Favorite></Favorite>
             }]
+          },
+          {
+            element: <CartRoute></CartRoute>,
+            children:[{
+              path: "cart",
+              element: <CartPage></CartPage>
+            }]
+            
           }
         ],
       },

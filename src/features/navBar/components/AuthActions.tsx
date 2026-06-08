@@ -25,22 +25,25 @@ export const AuthActions = ({ isMobile = false }: { isMobile?: boolean }) => {
         <>
           <Link
             to="/favorites"
-            className={`hover:text-(--main-color)  ${isMobile ? "max-md:block" : "max-md:hidden"}`}
+            className={`hover:text-(--main-color) group ${isMobile ? "max-md:block" : "max-md:hidden"}`}
           >
-            <Heart size={20} />
+            <Heart size={20} className="group-hover:fill-(--main-color)" />
           </Link>
           <Link
             to="/cart"
-            className={`hover:text-(--main-color) ${isMobile ? "max-md:hidden" : "max-md:block"}`}
+            className={`hover:text-(--main-color) group ${isMobile ? "max-md:hidden" : "max-md:block"}`}
           >
-            <ShoppingCart size={20} />
+            <ShoppingCart
+              size={20}
+              className="group-hover:fill-(--main-color)"
+            />
           </Link>
           {/* dropdown menu for user */}
           <div
             className={` relative flex items-center gap-1 ${isMobile ? "block" : "max-md:hidden"}`}
           >
             <label
-              className={`cursor-pointer  relative flex items-center p-0 w-full`}
+              className={`cursor-pointer relative flex items-center p-0 w-full`}
             >
               <input
                 name="profile"
@@ -48,7 +51,7 @@ export const AuthActions = ({ isMobile = false }: { isMobile?: boolean }) => {
                 type="checkbox"
                 className="sr-only peer/userprofile"
               />
-              <div className="flex flex-row items-center hover:text-(--main-color)">
+              <div className="flex flex-row items-center hover:text-(--main-color) group">
                 <CircleUser className="pointer-events-none " size={20} />
               </div>
               <ChevronDown

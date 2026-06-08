@@ -1,12 +1,10 @@
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import type { BoardGames } from "../../../types";
 import ProductionCard from "../../ProductionCard/components";
 import {
   useEffect,
-  useLayoutEffect,
   useMemo,
   useState,
-  type ChangeEvent,
 } from "react";
 import { useDebounce } from "../../../hook/useDebounce";
 import SearchLoading from "../../../components/SearchLoading";
@@ -37,7 +35,7 @@ export default function FavoritesList({
     });
     return data;
   }, [listView, debounceSearchItem]);
-  
+
   useEffect(() => {
     setListView(listFav);
   }, [listFav]);
