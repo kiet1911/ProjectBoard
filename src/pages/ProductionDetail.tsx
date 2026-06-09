@@ -15,8 +15,12 @@ import { CurrencyConvert } from "../features/ProductionCard/utilities/currencyCo
 import ProductionDetailSkeleton from "../components/ProductionDetailSkeleton";
 import { favoriteService } from "../services/favorite.service";
 import useAuthStore from "../store/authentication/authState";
-import { useAlertNotification, useToastNotification } from "../store/notification/notification";
+import {
+  useAlertNotification,
+  useToastNotification,
+} from "../store/notification/notification";
 import { FavoriteButton } from "../features/favoriteButton/components";
+import { CartButton } from "../features/cartButton/components";
 export default function ProductionDetail() {
   const id = useParams();
   const [detailBoardGame, setdetailBoardGame] = useState<BoardGames>();
@@ -45,20 +49,34 @@ export default function ProductionDetail() {
     });
   };
   const handleFavoriteClick = () => {
-    if (detailBoardGame?.id && useAuthStore.getState().isAuthentication && useAuthStore.getState().publicId != null) {
+    if (
+      detailBoardGame?.id &&
+      useAuthStore.getState().isAuthentication &&
+      useAuthStore.getState().publicId != null
+    ) {
       const fetch = async () => {
         try {
-          const res = await favoriteService.Add("v1/Favorite/Add",detailBoardGame.id);
+          const res = await favoriteService.Add(
+            "v1/Favorite/Add",
+            detailBoardGame.id,
+          );
           // useAlertNotification.getState().setText("success");
           // console.log(res);
-           useToastNotification.getState().add({text: !res.isdelete?"Add success":"Remove success" ,type:"success"})
+          useToastNotification
+            .getState()
+            .add({
+              text: !res.isdelete ? "Add success" : "Remove success",
+              type: "success",
+            });
         } catch (error) {
           // console.log(error);
         }
       };
       fetch();
-    }else{
-      useToastNotification.getState().add({text: "You must be login!" ,type:"error"})
+    } else {
+      useToastNotification
+        .getState()
+        .add({ text: "You must be login!", type: "error" });
       // useAlertNotification.getState().setText("You must be login!");
       // console.log("You must be login!");
     }
@@ -321,15 +339,14 @@ export default function ProductionDetail() {
                     </del>
                   </div>
                 )}
-                <div className=" navbar-link w-auto  hover:bg-(--main-color) hover:text-white duration-100">
-                  <ShoppingCart size={20}></ShoppingCart>
-                </div>
-                <FavoriteButton boardGameId={detailBoardGame?.id} heartSize={20}>
-
-                </FavoriteButton>
-                {/* <div className=" navbar-link w-auto  hover:bg-(--main-color) hover:text-white duration-100" onClick={()=>{ handleFavoriteClick();}}>
-                  <Heart size={20}></Heart>
-                </div> */}
+                <CartButton
+                  boardGameId={detailBoardGame?.id}
+                  cartSize={20}
+                ></CartButton>
+                <FavoriteButton
+                  boardGameId={detailBoardGame?.id}
+                  heartSize={20}
+                ></FavoriteButton>
               </div>
             </div>
           </div>
