@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import PageContainer from "../../../components/PageContainer";
-import { useProduction } from "../hook/useProduction";
+// import { useProduction } from "../hook/useProduction";
 import FilterLayout from "./FilterLayout";
 import SearchBar from "./SearchBar";
 import GameLists from "./GameLists";
@@ -23,20 +23,6 @@ export default function ProductionPage({ children }: { children?: ReactNode }) {
         return prev;
       }),
     );
-    //   for (const entry of entries) {
-    //     if (entry) {
-    //       const width = entry.contentRect.width;
-    //       if (width > 768) {
-    //         setToggle((prev) => {
-    //           if (prev === true) {
-    //             return false;
-    //           }
-    //           return prev;
-    //         });
-    //       }
-    //     }
-    //   }
-    // });
     resizeObserver.observe(navRef.current);
     return () => {
       resizeObserver.disconnect();

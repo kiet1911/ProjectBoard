@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import type { BoardGames } from "../../types";
-import { Search } from "lucide-react";
 
 interface filterField {
   displayName: string;

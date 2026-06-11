@@ -2,9 +2,7 @@ import { ShoppingCart } from "lucide-react";
 import React, { useCallback, useState } from "react";
 import useAuthStore from "../../../store/authentication/authState";
 import { useShallow } from "zustand/shallow";
-import { favoriteService } from "../../../services/favorite.service";
 import { useToastNotification } from "../../../store/notification/notification";
-import { useLocation, useNavigate } from "react-router-dom";
 import { cartService } from "../../../services/cart.service";
 
 export const CartButton = React.memo(
@@ -22,8 +20,6 @@ export const CartButton = React.memo(
       })),
     );
     const [loading, setLoading] = useState<boolean>(false);
-    const navigate = useNavigate();
-    const location = useLocation();
     const handleClick = useCallback(() => {
       if (loading) return;
       if (

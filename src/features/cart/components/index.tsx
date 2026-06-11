@@ -2,13 +2,18 @@ import { useQuery } from "@tanstack/react-query";
 import { Trash2 } from "lucide-react";
 import { cartService } from "../../../services/cart.service";
 import useAuthStore from "../../../store/authentication/authState";
-import { Suspense, useEffect } from "react";
+import { Suspense, useCallback, useEffect } from "react";
 import { CurrencyConvert } from "../../ProductionCard/utilities/currencyConverter";
+import { useNavigate } from "react-router-dom";
+import type {
+  ResponseCartItems,
+  ResponseGetByUserId,
+} from "../../../types/responseCustomType";
 
 export default function CartList() {
   const publicId = useAuthStore((state) => state.publicId);
-
-  const { data, isPending, error, isStale } = useQuery({
+  const navigation = useNavigate();
+  const { data, isFetching, error } = useQuery({
     queryKey: ["users_cart"],
     queryFn: async () => {
       const data = await cartService.GetByUserId("v1/Cart/id", publicId!);
@@ -16,12 +21,19 @@ export default function CartList() {
     },
     staleTime: 5000,
   });
+  const isResponseCartItems = useCallback(
+    (input: any): input is ResponseGetByUserId =>
+      input && input.status !== undefined && input.cartItems !== undefined,
+    [],
+  );
 
   useEffect(() => {
-    if (data) {
-      console.log(data);
-      console.log(isStale);
+    const res = isResponseCartItems(data);
+
+    if (res) {
+      // console.log(res);
     }
+    
   }, [data]);
 
   return (
@@ -64,17 +76,21 @@ export default function CartList() {
             </li>
           </ul>
           <div className="w-full py-0 space-y-1 flex flex-col justify-center-safe items-center min-h-50 max-h-200 overflow-y-auto">
-            {isPending ? (
+            {isFetching ? (
               <div className="animate-spin border-4 border-slate-200 border-t-mist-500 h-10 w-10 rounded-full" />
             ) : (
               <>
-                {data && data.cartItems && data.cartItems.length > 0 ? (
+                {isResponseCartItems(data) &&
+                data &&
+                data.cartItems &&
+                data.cartItems.length > 0 ? (
                   <>
                     {data.cartItems &&
-                      data.cartItems.map((data) => {
+                      data.cartItems.map((data: ResponseCartItems) => {
                         return (
                           <ul
                             className={`first:rounded-tl-2xl first:rounded-tr-2xl last:rounded-bl-2xl last:rounded-br-2xl border border-mist-900/10 bg-mist-100 w-full min-h-20 flex items-center px-0.5 py-2 text-sm max-md:text-xs`}
+                            key={data.id}
                           >
                             <li className="flex items-center px-2">
                               <input
@@ -85,7 +101,18 @@ export default function CartList() {
                               />
                             </li>
 
-                            <li className="flex flex-1 items-center gap-3 min-w-0">
+                            <li
+                              className="flex flex-1 items-center gap-3 min-w-0"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                if (data?.id) {
+                                  navigation(`/product/${data?.id}`, {
+                                    state: { data: data },
+                                  });
+                                }
+                              }}
+                            >
                               <Suspense
                                 fallback={
                                   <div className="w-16 h-16 shrink-0">
@@ -134,7 +161,7 @@ export default function CartList() {
                               <div className="flex items-center gap-3 border rounded-lg px-2 py-1">
                                 <button
                                   type="button"
-                                  className="w-6 h-6 flex items-center justify-center hover:bg-mist-300 duration-300 rounded-md"
+                                  className="w-6 h-6 flex items-center justify-center pb-0.5 hover:bg-mist-300 duration-300 rounded-md"
                                 >
                                   -
                                 </button>
@@ -143,7 +170,7 @@ export default function CartList() {
 
                                 <button
                                   type="button"
-                                  className="w-6 h-6 flex items-center justify-center hover:bg-mist-300 duration-300 rounded-md"
+                                  className="w-6 h-6 flex items-center justify-center pb-0.5 hover:bg-mist-300 duration-300 rounded-md"
                                 >
                                   +
                                 </button>
@@ -154,8 +181,8 @@ export default function CartList() {
                               <span>
                                 {CurrencyConvert({
                                   value:
-                                    (data?.base_Price ?? 0) *
-                                    (data?.quantity ?? 0),
+                                    Number(data?.base_Price ?? 0) *
+                                    Number(data?.quantity ?? 0),
                                 })}
                                 đ
                               </span>
@@ -177,7 +204,9 @@ export default function CartList() {
                   <>
                     {!error ? (
                       <p className="text-slate-400 text-sm">No items found.</p>
-                    ):<></>}
+                    ) : (
+                      <></>
+                    )}
                   </>
                 )}
               </>

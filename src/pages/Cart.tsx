@@ -7,19 +7,9 @@ type tabType = { name: string; component: React.ComponentType };
 
 const tab: tabType[] = [
   {
-    name: "Your cart ()",
-    component: CartList ,
+    name: "Your Cart",
+    component: CartList,
   },
-  // {
-  //   name: "Save For Later",
-  //   component: () => {
-  //     return (
-  //       <>
-  //         <h1>Save For Later</h1>
-  //       </>
-  //     );
-  //   },
-  // },
   {
     name: "Your Orders",
     component: () => {
@@ -36,6 +26,11 @@ export default function CartPage() {
   const [currentTab, setCurrentTab] = useState<number>(0);
   const [render, setRender] = useState<boolean>(false);
   const ActiveComponent = tab[currentTab].component;
+  useEffect(() => { 
+    window.scrollTo({
+    top:0,
+    behavior: "smooth"
+  }) }, []);
   useEffect(() => {
     const timeOut = setTimeout(() => {
       if (!render) setRender(true);
@@ -77,9 +72,7 @@ export default function CartPage() {
             </div>
           </div>
         ) : (
-          <>
-          
-          </>
+          <></>
         )}
       </PageContainer>
     </>
