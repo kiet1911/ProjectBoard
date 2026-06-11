@@ -56,6 +56,29 @@ export default function CartItems({
     },
     [data, publicId, loading],
   );
+  const handleDeleteItem = useCallback(() => {
+    if (data && publicId) {
+      const fetch = async () => {
+        try {
+          const res = await cartService.Remove("v1/Cart/Id", {
+            publicId: publicId,
+            boardgameId: data.id,
+          });
+          // console.log(res);
+          if (res && res.message && String(res.status) == "200") {
+            notification({ text: res.message, type: "success" });
+            //trigger rerender cache parent cart
+            clientQuery.invalidateQueries({ queryKey: ["users_cart"] });
+          }
+        } catch (error) {
+          useToastNotification
+            .getState()
+            .add({ text: String(error), type: "error" });
+        }
+      };
+      fetch();
+    }
+  }, [data]);
 
   if (!data) {
     return <></>;
@@ -173,6 +196,7 @@ export default function CartItems({
         <button
           type="button"
           className="p-2 hover:bg-mist-300 hover:cursor-pointer rounded-xl transition-colors duration-300"
+          onClick={(e)=>{e.stopPropagation();e.preventDefault();handleDeleteItem();}}
         >
           <Trash2 size={18} />
         </button>
