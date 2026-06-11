@@ -2,18 +2,16 @@ import { useQuery } from "@tanstack/react-query";
 import { Trash2 } from "lucide-react";
 import { cartService } from "../../../services/cart.service";
 import useAuthStore from "../../../store/authentication/authState";
-import { Suspense, useCallback, useEffect } from "react";
-import { CurrencyConvert } from "../../ProductionCard/utilities/currencyConverter";
-import { useNavigate } from "react-router-dom";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type {
   ResponseCartItems,
   ResponseGetByUserId,
 } from "../../../types/responseCustomType";
+import CartItems from "./cartItems";
 
 export default function CartList() {
   const publicId = useAuthStore((state) => state.publicId);
-  const navigation = useNavigate();
-  const { data, isFetching, error } = useQuery({
+  const { data, error, isLoading } = useQuery({
     queryKey: ["users_cart"],
     queryFn: async () => {
       const data = await cartService.GetByUserId("v1/Cart/id", publicId!);
@@ -24,203 +22,121 @@ export default function CartList() {
   const isResponseCartItems = useCallback(
     (input: any): input is ResponseGetByUserId =>
       input && input.status !== undefined && input.cartItems !== undefined,
-    [],
+    [data],
   );
-
+  const [marginRight, setMarginRight] = useState<boolean>(false);
+  const divRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const res = isResponseCartItems(data);
 
     if (res) {
       // console.log(res);
     }
-    
   }, [data]);
+
+  useEffect(() => {
+    if (!divRef || !divRef.current) return;
+
+    //
+    const observation = new ResizeObserver(([entry]) => {
+      if (!entry) return;
+      const hasScrollBar =
+        entry.target.scrollHeight > entry.target.clientHeight;
+      setMarginRight(hasScrollBar);
+      console.log(divRef.current!.offsetWidth - divRef.current!.clientWidth);
+    });
+    observation.observe(divRef.current);
+
+    return () => {
+      observation.disconnect();
+    };
+  }, []);
 
   return (
     <>
-      <div className="w-full flex md:flex-row max-md:flex-col p-2 gap-2">
-        <div className="flex-4 shrink-0 h-full flex flex-col gap-1">
-          <ul className="border border-mist-900/10 bg-mist-100 rounded-xl w-full min-h-12 flex items-center px-3 gap-3 text-sm max-md:text-xs font-medium">
-            <li className="w-6 shrink-0">
+      <div className="w-full flex md:flex-row flex-col p-2 gap-4 box-border overflow-hidden">
+        <div className="flex-3 w-full min-w-0 flex flex-col gap-2">
+          <ul
+            className={`border border-mist-900/10 bg-mist-100 rounded-xl w-full min-h-12 flex items-center px-3 gap-2 text-sm max-md:text-xs font-medium box-border ${
+              marginRight ? "pr-7" : ""
+            }`}
+          >
+            <li className="w-6 shrink-0 flex items-center">
               <input
                 type="checkbox"
                 name="checkAll"
                 id="checkAll"
-                className="w-4 h-4"
+                className="w-4 h-4 cursor-pointer"
               />
             </li>
 
-            <li className="flex-1 min-w-0">
+            <li className="flex-2 md:flex-1 min-w-0 truncate">
               <span>Product</span>
             </li>
 
-            <li className="hidden md:flex flex-1 justify-center">
+            <li className="hidden md:flex flex-1 justify-center truncate">
               <span>Price</span>
             </li>
 
-            <li className="hidden md:flex flex-1 justify-center">
+            <li className="hidden md:flex flex-1 justify-center truncate">
               <span>Quantity</span>
             </li>
 
-            <li className="hidden md:flex flex-1 justify-center">
+            <li className="hidden md:flex flex-1 justify-center truncate">
               <span>Total</span>
             </li>
 
-            <li className="w-8 shrink-0 flex justify-center">
+            <li className="w-10 shrink-0 flex justify-center">
               <button
                 type="button"
-                className="p-2 hover:bg-mist-300 hover:cursor-pointer rounded-xl transition-colors duration-300"
+                className="p-2 hover:bg-mist-300 hover:cursor-pointer rounded-xl transition-colors duration-300 flex items-center justify-center"
               >
-                <Trash2 size={18} />
+                <Trash2 size={16} />
               </button>
             </li>
           </ul>
-          <div className="w-full py-0 space-y-1 flex flex-col justify-center-safe items-center min-h-50 max-h-200 overflow-y-auto">
-            {isFetching ? (
-              <div className="animate-spin border-4 border-slate-200 border-t-mist-500 h-10 w-10 rounded-full" />
+
+          <div
+            ref={divRef}
+            className="w-full py-0 space-y-2 flex flex-col justify-start items-center min-h-50 max-h-125 overflow-y-auto box-border"
+          >
+            {isLoading ? (
+              <div className="flex items-center justify-center py-10 w-full">
+                <div className="animate-spin border-4 border-slate-200 border-t-mist-500 h-10 w-10 rounded-full" />
+              </div>
             ) : (
               <>
                 {isResponseCartItems(data) &&
-                data &&
-                data.cartItems &&
+                data?.cartItems &&
                 data.cartItems.length > 0 ? (
-                  <>
-                    {data.cartItems &&
-                      data.cartItems.map((data: ResponseCartItems) => {
-                        return (
-                          <ul
-                            className={`first:rounded-tl-2xl first:rounded-tr-2xl last:rounded-bl-2xl last:rounded-br-2xl border border-mist-900/10 bg-mist-100 w-full min-h-20 flex items-center px-0.5 py-2 text-sm max-md:text-xs`}
-                            key={data.id}
-                          >
-                            <li className="flex items-center px-2">
-                              <input
-                                type="checkbox"
-                                name="checkAll"
-                                id={`check-${data.id}`}
-                                className="w-4 h-4"
-                              />
-                            </li>
-
-                            <li
-                              className="flex flex-1 items-center gap-3 min-w-0"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                if (data?.id) {
-                                  navigation(`/product/${data?.id}`, {
-                                    state: { data: data },
-                                  });
-                                }
-                              }}
-                            >
-                              <Suspense
-                                fallback={
-                                  <div className="w-16 h-16 shrink-0">
-                                    <img
-                                      src="./Suspense/SuspenseImage.png"
-                                      alt="loading"
-                                      className="w-full h-full object-cover rounded-lg"
-                                    />
-                                  </div>
-                                }
-                              >
-                                <div className="w-16 h-16 shrink-0">
-                                  <img
-                                    src="./Suspense/SuspenseImage.png"
-                                    alt={data.name}
-                                    loading="lazy"
-                                    className="w-full h-full object-cover rounded-lg"
-                                  />
-                                </div>
-                              </Suspense>
-
-                              <span
-                                className="flex-1 truncate font-medium text-left max-md:flex max-md:flex-col max-md:justify-between gap-5"
-                                title={data.name}
-                              >
-                                <span>{data.name}</span>
-                                <span className=" md:hidden">
-                                  {CurrencyConvert({
-                                    value: data?.base_Price ?? 0,
-                                  })}
-                                  đ
-                                </span>
-                              </span>
-                            </li>
-
-                            <li className="hidden md:flex flex-1 justify-center">
-                              <span>
-                                {CurrencyConvert({
-                                  value: data?.base_Price ?? 0,
-                                })}
-                                đ
-                              </span>
-                            </li>
-
-                            <li className="flex flex-1 justify-center">
-                              <div className="flex items-center gap-3 border rounded-lg px-2 py-1">
-                                <button
-                                  type="button"
-                                  className="w-6 h-6 flex items-center justify-center pb-0.5 hover:bg-mist-300 duration-300 rounded-md"
-                                >
-                                  -
-                                </button>
-
-                                <span>{data.quantity}</span>
-
-                                <button
-                                  type="button"
-                                  className="w-6 h-6 flex items-center justify-center pb-0.5 hover:bg-mist-300 duration-300 rounded-md"
-                                >
-                                  +
-                                </button>
-                              </div>
-                            </li>
-
-                            <li className="hidden md:flex flex-1 justify-center text-(--main-color)">
-                              <span>
-                                {CurrencyConvert({
-                                  value:
-                                    Number(data?.base_Price ?? 0) *
-                                    Number(data?.quantity ?? 0),
-                                })}
-                                đ
-                              </span>
-                            </li>
-
-                            <li className="flex justify-end px-2">
-                              <button
-                                type="button"
-                                className="p-2 hover:bg-mist-300 hover:cursor-pointer rounded-xl transition-colors duration-300"
-                              >
-                                <Trash2 size={18} />
-                              </button>
-                            </li>
-                          </ul>
-                        );
-                      })}
-                  </>
+                  <div className="w-full flex flex-col gap-2 box-border">
+                    {data.cartItems.map((item: ResponseCartItems) => (
+                      <CartItems
+                        key={item.id}
+                        data={item}
+                        publicId={publicId}
+                      />
+                    ))}
+                  </div>
                 ) : (
-                  <>
-                    {!error ? (
-                      <p className="text-slate-400 text-sm">No items found.</p>
-                    ) : (
-                      <></>
-                    )}
-                  </>
+                  <div className="flex items-center justify-center py-10 w-full text-slate-400 text-sm">
+                    {!error && <p>No items found.</p>}
+                  </div>
                 )}
               </>
             )}
+
             {error && (
-              <>
-                <span className="text-(--main-color)">
-                  {"Api Error: Network Error"}
+              <div className="w-full text-center py-4">
+                <span className="text-(--main-color) text-sm font-medium">
+                  Api Error: Network Error
                 </span>
-              </>
+              </div>
             )}
           </div>
         </div>
-        <div className="border border-mist-900/10 bg-mist-100 rounded-xl flex-1 shrink-0 min-h-50"></div>
+
+        <div className="border border-mist-900/10 bg-mist-100 rounded-xl p-4 box-border min-w-50 min-h-50"></div>
       </div>
     </>
   );

@@ -4,6 +4,7 @@ import { Dot, Heart, ShoppingBasket, Star } from "lucide-react";
 import type { BoardGames } from "../../../types";
 import { useNavigate } from "react-router-dom";
 import { FavoriteButton } from "../../favoriteButton/components";
+import { CartButton } from "../../cartButton/components";
 export default function ProductionCard({ data }: { data?: BoardGames }) {
   const divref = useRef<HTMLDivElement>(null);
   const isExpanding = useRef(false);
@@ -172,9 +173,10 @@ export default function ProductionCard({ data }: { data?: BoardGames }) {
         </div>
         {/* action button */}
         <div className="mr-1 w-full flex flex-row gap-2 self-end mt-auto justify-end">
-          <div className=" navbar-link w-auto p-1 hover:bg-(--main-color) hover:text-white duration-100">
+          {/* <div className=" navbar-link w-auto p-1 hover:bg-(--main-color) hover:text-white duration-100">
             <ShoppingBasket size={12}></ShoppingBasket>
-          </div>
+          </div> */}
+          <CartButton boardGameId={data?.id}></CartButton>
           <FavoriteButton boardGameId={data?.id}></FavoriteButton>
         </div>
       </div>

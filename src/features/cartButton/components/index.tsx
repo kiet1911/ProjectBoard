@@ -1,4 +1,4 @@
-import { ShoppingCart } from "lucide-react";
+import { ShoppingBasketIcon } from "lucide-react";
 import React, { useCallback, useState } from "react";
 import useAuthStore from "../../../store/authentication/authState";
 import { useShallow } from "zustand/shallow";
@@ -77,7 +77,7 @@ export const CartButton = React.memo(
             </>
           ) : (
             <>
-              <ShoppingCart size={cartSize}></ShoppingCart>
+              <ShoppingBasketIcon size={cartSize}></ShoppingBasketIcon>
             </>
           )}
         </div>

@@ -44,7 +44,7 @@ export default function CartPage() {
       <PageContainer url="../BackgroundContent/bghomepage.png">
         {tab && tab.length > 0 ? (
           <div className="min-w-full flex flex-col gap-2">
-            <div className="min-w-full flex flex-row gap-2">
+            <div className="min-w-full flex flex-row gap-2 max-sm:pl-5">
               {tab.map((data, index) => {
                 return (
                   <aside
