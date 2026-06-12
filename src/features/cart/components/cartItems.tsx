@@ -200,7 +200,7 @@ export default function CartItems({
         <button
           type="button"
           className="p-2 hover:bg-mist-300 hover:cursor-pointer rounded-xl transition-colors duration-300"
-          onClick={(e)=>{e.stopPropagation();e.preventDefault();handleDeleteItem();}}
+          onClick={(e)=>{e.stopPropagation();e.preventDefault(); const promise = window.confirm("Are you sure to delete this item");if(promise){handleDeleteItem();}}}
         >
           <Trash2 size={18} />
         </button>

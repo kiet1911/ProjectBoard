@@ -18,13 +18,14 @@ export const FilterSlider = React.memo(
     const debounceFilter = useDebounce(filterValue, 350);
     const [firstRender, setFirstRender] = useState<boolean>(false);
 
-    const { apiCall, handleGameList, resetSearchBar, resetPagination } =
+    const { apiCall, handleGameList, resetSearchBar, resetPagination ,isSearch } =
       useProductionFilter(
         useShallow((state) => ({
           apiCall: state.initialQuery,
           handleGameList: state.setGameLists,
           resetSearchBar: state.resetSearchBar,
           resetPagination: state.resetPagination,
+          isSearch : state.searchBar.isSearch,
         })),
       );
 
@@ -34,9 +35,13 @@ export const FilterSlider = React.memo(
 
     useEffect(() => {
       setFilterValue(dataFilter.value);
+      if(isSearch){
+         resetSearchBar();
+      }
     }, [dataFilter.value]);
 
     useEffect(() => {
+      
       if (!firstRender) {
         setFirstRender(true);
         return;
@@ -60,7 +65,7 @@ export const FilterSlider = React.memo(
               apiCall(),
             );
 
-            if (isCurrentRequest) {
+            if (isCurrentRequest && !isSearch) {
               handleGameList(data.gameLists || []);
               resetSearchBar();
               resetPagination();
@@ -83,6 +88,7 @@ export const FilterSlider = React.memo(
       handleGameList,
       resetSearchBar,
       resetPagination,
+      isSearch 
     ]);
 
     return (

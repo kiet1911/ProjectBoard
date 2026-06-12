@@ -14,6 +14,9 @@ export default function SearchBar({ toggle }: { toggle: () => void }) {
   useEffect(() => {
     if (debounceFilter) {
       try {
+        //reset filter
+        useProductionFilter.getInitialState().resetFilters();
+        useProductionFilter.getInitialState().resetPagination();
         //api
         const fetch = async () => {
           const data = await boardgamesService.get(
@@ -30,9 +33,6 @@ export default function SearchBar({ toggle }: { toggle: () => void }) {
           useProductionFilter.getInitialState().setGameLists(data?.gameLists);
         };
         fetch();
-        //reset filter
-        useProductionFilter.getInitialState().resetFilters();
-        useProductionFilter.getInitialState().resetPagination();
       } catch (error) {
         console.log(error);
       }

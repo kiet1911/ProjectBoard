@@ -8,11 +8,12 @@ import type {
   ResponseGetByUserId,
 } from "../../../types/responseCustomType";
 import CartItems from "./cartItems";
-import { CurrencyConvert } from "../../ProductionCard/utilities/currencyConverter";
 
 export default function CartList() {
   const publicId = useAuthStore((state) => state.publicId);
   const [orderSummary, setOrderSummary] = useState<OrderSummary[]>();
+  const [marginRight, setMarginRight] = useState<boolean>(false);
+  const divRef = useRef<HTMLDivElement>(null);
   const { data, error, isLoading } = useQuery({
     queryKey: ["users_cart"],
     queryFn: async () => {
@@ -26,18 +27,14 @@ export default function CartList() {
       input && input.status !== undefined && input.cartItems !== undefined,
     [data],
   );
-  const [marginRight, setMarginRight] = useState<boolean>(false);
-  const divRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!divRef || !divRef.current) return;
-
     //
     const observation = new ResizeObserver(([entry]) => {
       if (!entry) return;
       const hasScrollBar =
         entry.target.scrollHeight > entry.target.clientHeight;
       setMarginRight(hasScrollBar);
-      // console.log(divRef.current!.offsetWidth - divRef.current!.clientWidth);
     });
     observation.observe(divRef.current);
 
@@ -46,8 +43,8 @@ export default function CartList() {
     };
   }, []);
   useEffect(() => {
+    console.table(data);
     if (!data?.cartItems) return;
-
     setOrderSummary((prev) =>
       data.cartItems.map((item: ResponseCartItems) => ({
         ...item,
@@ -164,7 +161,9 @@ export default function CartList() {
         </div>
 
         <div className="border border-mist-900/10 bg-mist-100 rounded-xl p-2 py-3 box-border min-w-50 min-h-50 flex flex-col gap-2">
-          <span className="text-xl font-medium">Order summary</span>
+          <span className="text-2xl font-medium text-shadow-2xs/50 text-shadow-mist-500">
+            Order summary
+          </span>
 
           <div className="w-full border-b-2 border-b-mist-900/10 text-sm text-mist-900/50">
             <span className="">
@@ -174,7 +173,7 @@ export default function CartList() {
               Recording Sessions{" "}
             </span>
           </div>
-          <div className="w-full bg-(--main-color)/30 p-2 rounded flex flex-row justify-evenly text-mist-900/50 text-sm font-medium">
+          <div className="w-full bg-(--main-color)/30 p-2 rounded flex flex-row justify-between items-center px-2 text-mist-900/50 text-sm font-bold">
             <span>subtotal </span>
 
             {(orderSummary ?? [])

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useProductionFilter } from "../../../store/productionFilter/productionFilter";
 import { FilterSlider } from "./FilterSlider";
 import { useShallow } from "zustand/shallow";
@@ -15,12 +15,12 @@ export default function FilterLayout({
     useProductionFilter.getState().resetPagination();
     useProductionFilter.getState().resetSearchBar();
   }, []);
-  const handleDeleteAllFilter = () => {
+  const handleDeleteAllFilter = useCallback(() => {
     useProductionFilter.getState().resetFilters();
     useProductionFilter.getState().resetPagination();
     useProductionFilter.getState().resetSearchBar();
     useProductionFilter.getState().setGameLists(undefined);
-  };
+  }, []);
 
   return (
     <>
@@ -62,7 +62,7 @@ const FilterNote = React.memo(() => {
   return (
     <div className="flex items-center justify-between border-t border-mist-300 pt-3">
       <h2 className="text-xs font-medium text-mist-900">
-        {isSearch?"Using Search Bar":"Using Filter"}
+        {isSearch ? "Using Search Bar" : "Using Filter"}
       </h2>
     </div>
   );
