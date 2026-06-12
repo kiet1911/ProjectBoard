@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import type { ResponseCartItems } from "../../../types/responseCustomType";
+import type { OrderSummary, ResponseCartItems } from "../../../types/responseCustomType";
 import { Suspense, useCallback, useState } from "react";
 import { CurrencyConvert } from "../../ProductionCard/utilities/currencyConverter";
 import { Trash2 } from "lucide-react";
@@ -9,9 +9,11 @@ import { useQueryClient } from "@tanstack/react-query";
 export default function CartItems({
   data,
   publicId,
+  handleCheckBox
 }: {
-  data: ResponseCartItems;
+  data: OrderSummary;
   publicId: string | null;
+  handleCheckBox: (id:string)=>void
 }) {
   const navigation = useNavigate();
   const notification = useToastNotification((state) => state.add);
@@ -91,9 +93,11 @@ export default function CartItems({
       <li className="flex items-center px-2">
         <input
           type="checkbox"
-          name="checkAll"
+          name={`check-${data.id}`}
           id={`check-${data.id}`}
           className="w-4 h-4"
+          checked={data.checkBox}
+          onChange={()=>{handleCheckBox(data.id)}}
         />
       </li>
 
@@ -187,8 +191,8 @@ export default function CartItems({
         <span>
           {CurrencyConvert({
             value: Number(data?.base_Price ?? 0) * Number(data?.quantity ?? 0),
-          })}
-          đ
+          })+" đ"}
+          
         </span>
       </li>
 

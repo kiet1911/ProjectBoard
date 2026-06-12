@@ -1,16 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
-import { Trash2 } from "lucide-react";
 import { cartService } from "../../../services/cart.service";
 import useAuthStore from "../../../store/authentication/authState";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type {
+  OrderSummary,
   ResponseCartItems,
   ResponseGetByUserId,
 } from "../../../types/responseCustomType";
 import CartItems from "./cartItems";
+import { CurrencyConvert } from "../../ProductionCard/utilities/currencyConverter";
 
 export default function CartList() {
   const publicId = useAuthStore((state) => state.publicId);
+  const [orderSummary, setOrderSummary] = useState<OrderSummary[]>();
   const { data, error, isLoading } = useQuery({
     queryKey: ["users_cart"],
     queryFn: async () => {
@@ -27,14 +29,6 @@ export default function CartList() {
   const [marginRight, setMarginRight] = useState<boolean>(false);
   const divRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const res = isResponseCartItems(data);
-
-    if (res) {
-      // console.log(res);
-    }
-  }, [data]);
-
-  useEffect(() => {
     if (!divRef || !divRef.current) return;
 
     //
@@ -43,7 +37,7 @@ export default function CartList() {
       const hasScrollBar =
         entry.target.scrollHeight > entry.target.clientHeight;
       setMarginRight(hasScrollBar);
-      console.log(divRef.current!.offsetWidth - divRef.current!.clientWidth);
+      // console.log(divRef.current!.offsetWidth - divRef.current!.clientWidth);
     });
     observation.observe(divRef.current);
 
@@ -51,6 +45,34 @@ export default function CartList() {
       observation.disconnect();
     };
   }, []);
+  useEffect(() => {
+    if (!data?.cartItems) return;
+
+    setOrderSummary((prev) =>
+      data.cartItems.map((item: ResponseCartItems) => ({
+        ...item,
+        checkBox: prev?.find((x) => x.id === item.id)?.checkBox ?? false,
+      })),
+    );
+  }, [data]);
+
+  const handleCheckItems = useCallback(
+    (id: string) => {
+      // console.log(id);
+      if (!id || !orderSummary) return;
+      const reCheck = orderSummary?.map((t) => {
+        if (t.id === id) {
+          return {
+            ...t,
+            checkBox: !t.checkBox,
+          };
+        }
+        return t;
+      });
+      setOrderSummary(reCheck);
+    },
+    [data, orderSummary],
+  );
 
   return (
     <>
@@ -67,6 +89,14 @@ export default function CartList() {
                 name="checkAll"
                 id="checkAll"
                 className="w-4 h-4 cursor-pointer"
+                onChange={(e) => {
+                  setOrderSummary((state) => {
+                    return state?.map((item) => ({
+                      ...item,
+                      checkBox: e.target.checked,
+                    }));
+                  });
+                }}
               />
             </li>
 
@@ -75,7 +105,7 @@ export default function CartList() {
             </li>
 
             <li className="hidden md:flex flex-1 justify-center truncate">
-              <span>Price</span>
+              <span>Unit Price</span>
             </li>
 
             <li className="hidden md:flex flex-1 justify-center truncate">
@@ -83,16 +113,11 @@ export default function CartList() {
             </li>
 
             <li className="hidden md:flex flex-1 justify-center truncate">
-              <span>Total</span>
+              <span>Subtotal</span>
             </li>
 
             <li className="w-10 shrink-0 flex justify-center">
-              <button
-                type="button"
-                className="p-2 hover:bg-mist-300 hover:cursor-pointer rounded-xl transition-colors duration-300 flex items-center justify-center"
-              >
-                <Trash2 size={16} />
-              </button>
+              <span>Actions</span>
             </li>
           </ul>
 
@@ -108,13 +133,15 @@ export default function CartList() {
               <>
                 {isResponseCartItems(data) &&
                 data?.cartItems &&
-                data.cartItems.length > 0 ? (
+                data.cartItems.length > 0 &&
+                orderSummary ? (
                   <div className="w-full flex flex-col gap-2 box-border">
-                    {data.cartItems.map((item: ResponseCartItems) => (
+                    {orderSummary.map((item: OrderSummary) => (
                       <CartItems
                         key={item.id}
                         data={item}
                         publicId={publicId}
+                        handleCheckBox={handleCheckItems}
                       />
                     ))}
                   </div>
@@ -136,7 +163,37 @@ export default function CartList() {
           </div>
         </div>
 
-        <div className="border border-mist-900/10 bg-mist-100 rounded-xl p-4 box-border min-w-50 min-h-50"></div>
+        <div className="border border-mist-900/10 bg-mist-100 rounded-xl p-2 py-3 box-border min-w-50 min-h-50 flex flex-col gap-2">
+          <span className="text-xl font-medium">Order summary</span>
+
+          <div className="w-full border-b-2 border-b-mist-900/10 text-sm text-mist-900/50">
+            <span className="">
+              <span>
+                ({orderSummary?.filter((data) => data.checkBox).length})
+              </span>{" "}
+              Recording Sessions{" "}
+            </span>
+          </div>
+          <div className="w-full bg-(--main-color)/30 p-2 rounded flex flex-row justify-evenly text-mist-900/50 text-sm font-medium">
+            <span>subtotal </span>
+
+            {(orderSummary ?? [])
+              .filter((i) => i.checkBox)
+              .reduce(
+                (sum, i) =>
+                  sum + Number(i.base_Price ?? 0) * Number(i.quantity ?? 0),
+                0,
+              )
+              .toLocaleString("vi-VN", {
+                style: "currency",
+                currency: "VND",
+              })}
+          </div>
+
+          <button className="w-full border p-2 navbar-link flex justify-center bg-(--main-color) text-white text-sm font-medium">
+            <span>Prepare for CheckOut</span>
+          </button>
+        </div>
       </div>
     </>
   );

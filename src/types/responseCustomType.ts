@@ -11,3 +11,9 @@ export type ResponseGetByUserId = {
     cartItems: ResponseCartItems[],
     status:number
 }
+
+export type OrderSummary = {
+    [k in keyof ResponseCartItems] : ResponseCartItems[k] ;
+} & {
+    checkBox: boolean;
+}
