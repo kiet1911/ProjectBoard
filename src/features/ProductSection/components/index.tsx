@@ -58,7 +58,7 @@ export default function ProductSection({
     >
       <div
         className="h-28 flex flex-col items-center justify-center absolute -top-12 left-[50%] -translate-x-[50%]"
-        title={contentSection ?? "untitle"}
+        title={contentSection ?? "unTitle"}
       >
         <div className="z-10 text-[10px] uppercase tracking-wider text-white font-black bg-(--main-color) px-3 py-0.5 -skew-x-12 shadow-md mb-[-8px]">
           {contentSection?.split(" ")[0]}

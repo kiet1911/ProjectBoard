@@ -48,3 +48,14 @@ export type BoardGameCreators = Record<
   string,
   { id: string; name: string; type: string; bio?: string }[]
 >;
+
+export type RecipientInfo = {
+  fullName: string;
+  phone: string;
+  address: string;
+  note: string;
+};
+
+export type VnPayRecipientInfo = RecipientInfo & {
+  JWT:string,
+}

@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import {
-  Check,
   CircleAlert,
   CircleCheck,
   CircleX,
@@ -12,7 +11,7 @@ interface AlertContent {
   setText: (x: string) => void;
 }
 
-export const useAlertNotification = create<AlertContent>()((set, get) => ({
+export const useAlertNotification = create<AlertContent>()((set) => ({
   content: null,
   reset: () => {
     set({ content: null });
@@ -56,7 +55,7 @@ export const ToastIcon = {
   },
 };
 
-export const useToastNotification = create<ToastContent>()((set, get) => ({
+export const useToastNotification = create<ToastContent>()((set) => ({
   content: [],
   add: (x: { text: string; type: ToastType }) => {
     const data = { id: window.crypto.randomUUID(), text: x.text, type: x.type };
@@ -64,9 +63,64 @@ export const useToastNotification = create<ToastContent>()((set, get) => ({
   },
   remove: (x: { id: string }) => {
     set((state) => ({
-      content: state.content.filter((v, i) => {
+      content: state.content.filter((v) => {
         if (v.id !== x.id) return true;
       }),
     }));
   },
 }));
+
+interface ConfirmContent{
+  content:{
+    text:string,
+    isContent:boolean
+  },
+  resolver?: (value:boolean) => void,
+  active: (x:string)=> Promise<boolean>,
+  close: () => void,
+  accept: () => void,
+  reject: () => void
+}
+
+export const useConfirmContent= create<ConfirmContent>()((set,get)=>({
+  content:{
+    text: '',
+    isContent: false
+  },
+  resolver:undefined,
+  active: (x:string)=>{
+    set((state)=>({...state,content:{text:x,isContent:true}}))
+    return new Promise<boolean>((resolve)=>{    
+      // gán func resolve vào resolver
+      set({
+        resolver:resolve,
+      })
+    }) 
+  },
+  close:()=>{
+    //reset
+    set(()=>({content:{text:'',isContent:false},resolver: undefined,}))
+  },
+  accept: ()=>{
+    const resolver = get().resolver;
+    resolver?.(true);
+    set({
+      content: {
+        text: "",
+        isContent: false,
+      },
+      resolver: undefined,
+    });
+  },
+  reject: ()=>{
+    const resolver = get().resolver;
+    resolver?.(false);
+    set({
+      content: {
+        text: "",
+        isContent: false,
+      },
+      resolver: undefined,
+    });
+  }
+}))

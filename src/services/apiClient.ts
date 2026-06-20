@@ -49,6 +49,7 @@ apiClient.interceptors.response.use(
       } catch (error) {
         //loi khi refresh 
         // console.error("Refresh token failed, user must re-authenticate.");
+        // console.log(error)
         useAuthStore.getState().logout();
         useToastNotification.getState().add({text: "Refresh token failed, user must re-authenticate." ,type:"error"})
         return Promise.reject(error);

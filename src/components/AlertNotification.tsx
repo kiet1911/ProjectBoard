@@ -20,7 +20,6 @@ export default function AlertNotification() {
       {alertNotification.content && (
         <div className="fixed w-full h-full top-0 bg-transparent z-50 flex justify-center-safe items-center-safe backdrop-blur-xs">
           <div className=" min-w-1/3 max-w-1/2 min-h-20 border-2 border-mist-800/20 px-1 pt-1 pb-3 rounded-2xl bg-white flex flex-col gap-2">
-            {/* close button */}
             <div className=" flex justify-end-safe">
               <X
                 size={20}
@@ -28,11 +27,11 @@ export default function AlertNotification() {
                 onClick={alertNotification.reset}
               ></X>
             </div>
-            {/* icon */}
+
             <div className=" flex justify-center">
               <BadgeAlert size={30} className=" text-blue-400"></BadgeAlert>
             </div>
-            {/* text */}
+
             <div className="text-sm font-bold text-mist-500 text-center wrap-break-word">
               <span>{alertNotification.content}</span>
             </div>

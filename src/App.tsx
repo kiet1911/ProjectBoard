@@ -4,6 +4,7 @@ import NavBar from "./features/navBar/components";
 import Footer from "./components/Footer";
 import AlertNotification from "./components/AlertNotification";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import ConfirmNotification from "./components/ConfirmNotification";
 
 // fake component
 export function ProtectPath({ auth = false }: { auth: boolean }) {
@@ -25,6 +26,7 @@ function App() {
           <Footer />
         </div>
         <AlertNotification></AlertNotification>
+        <ConfirmNotification></ConfirmNotification>
       </QueryClientProvider>
     </>
   );

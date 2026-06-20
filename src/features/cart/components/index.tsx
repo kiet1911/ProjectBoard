@@ -8,8 +8,18 @@ import type {
   ResponseGetByUserId,
 } from "../../../types/responseCustomType";
 import CartItems from "./cartItems";
+import {
+  useConfirmContent,
+  useToastNotification,
+} from "../../../store/notification/notification";
+import { useCheckOutComponent } from "../../../store/preCheckout/checkout";
+import CheckoutSnapshot from "./checkoutSnapshot";
+import { useShallow } from "zustand/shallow";
 
 export default function CartList() {
+  const confirmBtn = useConfirmContent((state) => state.active);
+  const checkoutConfig = useCheckOutComponent(useShallow((state) => ({active:state.active,clear:state.clear})));
+  const handleToast = useToastNotification((state) => state.add);
   const publicId = useAuthStore((state) => state.publicId);
   const [orderSummary, setOrderSummary] = useState<OrderSummary[]>();
   const [marginRight, setMarginRight] = useState<boolean>(false);
@@ -21,6 +31,7 @@ export default function CartList() {
       return data;
     },
     staleTime: 5000,
+    retry:0
   });
   const isResponseCartItems = useCallback(
     (input: any): input is ResponseGetByUserId =>
@@ -40,10 +51,11 @@ export default function CartList() {
 
     return () => {
       observation.disconnect();
+      checkoutConfig.clear();
     };
   }, []);
   useEffect(() => {
-    console.table(data);
+    console.log(data);
     if (!data?.cartItems) return;
     setOrderSummary((prev) =>
       data.cartItems.map((item: ResponseCartItems) => ({
@@ -71,9 +83,36 @@ export default function CartList() {
     [data, orderSummary],
   );
 
+  const handlePrePareCheckOut = useCallback(async () => {
+    const isActive = await confirmBtn("Do you want to checkout?");
+    if (!isActive) return;
+
+    if (
+      !orderSummary?.some((data) => data.checkBox === true) ||
+      orderSummary === undefined
+    ) {
+      console.log(isActive);
+      handleToast({
+        text: "There is none item be selected!",
+        type: "warning",
+      });
+    } else {
+      // trigger store checkout
+      const parseOrderSummary = orderSummary
+        ?.filter((data) => data.checkBox)
+        .map((data) => ({ CartId: data.id, Quantity: Number(data.quantity) }));
+      if (parseOrderSummary) {
+        console.log(parseOrderSummary);
+        checkoutConfig.active((parseOrderSummary));
+      } else {
+        handleToast({ text: "Can not parse item be selected!", type: "error" });
+      }
+    }
+  }, [orderSummary]);
+
   return (
     <>
-      <div className="w-full flex md:flex-row flex-col p-2 gap-4 box-border overflow-hidden">
+      <div className="w-full relative flex md:flex-row flex-col p-2 gap-4 box-border overflow-hidden">
         <div className="flex-3 w-full min-w-0 flex flex-col gap-2">
           <ul
             className={`border border-mist-900/10 bg-mist-100 rounded-xl w-full min-h-12 flex items-center px-3 gap-2 text-sm max-md:text-xs font-medium box-border ${
@@ -189,10 +228,15 @@ export default function CartList() {
               })}
           </div>
 
-          <button className="w-full border p-2 navbar-link flex justify-center bg-(--main-color) text-white text-sm font-medium">
+          <button
+            onClick={handlePrePareCheckOut}
+            className="w-full border p-2 navbar-link flex justify-center bg-(--main-color) text-white text-sm font-medium"
+          >
             <span>Prepare for CheckOut</span>
           </button>
         </div>
+
+        <CheckoutSnapshot></CheckoutSnapshot>
       </div>
     </>
   );
