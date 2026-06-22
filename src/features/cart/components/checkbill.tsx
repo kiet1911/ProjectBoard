@@ -4,6 +4,7 @@ import type { RecipientInfo } from "../../../types";
 import { User } from "lucide-react";
 import { useConfirmContent } from "../../../store/notification/notification";
 import { orderService } from "../../../services/order.service";
+import { useQueryClient } from "@tanstack/react-query";
 type CartItem = {
   cartId: string;
   name: string;
@@ -20,6 +21,7 @@ export const CheckBill = ({
   handleClear: () => void;
 }) => {
   const confirmBtn = useConfirmContent((state) => state.active);
+  const queryClient = useQueryClient();
   const [recipient, setRecipient] = useState<RecipientInfo>({
     fullName: "",
     phone: "",
@@ -30,7 +32,11 @@ export const CheckBill = ({
   useEffect(() => {
     if (vnPay) {
       console.log(vnPay);
-      window.location.href = vnPay.toString();
+      //trigger re-render cache 
+      queryClient.invalidateQueries({queryKey:["users_cart"]})
+      window.open(vnPay.toString(),"_blank");
+      handleClear();
+      // window.location.href = vnPay.toString();
     }
   }, [vnPay]);
   const handleSubmit = useCallback(

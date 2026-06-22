@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import type { OrderSummary, ResponseCartItems } from "../../../types/responseCustomType";
+import type { OrderSummary } from "../../../types/responseCustomType";
 import { Suspense, useCallback, useState } from "react";
 import { CurrencyConvert } from "../../ProductionCard/utilities/currencyConverter";
 import { Trash2 } from "lucide-react";

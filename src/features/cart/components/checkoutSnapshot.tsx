@@ -1,16 +1,12 @@
 import { useShallow } from "zustand/shallow";
 import { useCheckOutComponent } from "../../../store/preCheckout/checkout";
 import {
-  Suspense,
-  useCallback,
   useEffect,
-  useLayoutEffect,
   useState,
 } from "react";
 import { X } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { orderService } from "../../../services/order.service";
-import { useToastNotification } from "../../../store/notification/notification";
 import { CheckBill } from "./checkbill";
 
 export default function CheckoutSnapshot() {
@@ -23,23 +19,6 @@ export default function CheckoutSnapshot() {
   const [active, setActive] = useState<boolean>(isCheckOut);
   const [cartItems, setCartItems] = useState<[] | undefined>();
   const [cartToken, setCartToken] = useState<string>();
-  // const handleToast = useToastNotification((state) => state.add);
-  // const fetch = useCallback(async () => {
-  //   if (dataOrderSummary) {
-  //     try {
-  //       const data = await orderService.SnapShotOrderItem(
-  //         "v1/Order/SnapShotOrderItem",
-  //         dataOrderSummary,
-  //       );
-  //       return data;
-  //     } catch (error) {}
-  //   } else {
-  //     handleToast({
-  //       text: "Fail to process data because orders is empty",
-  //       type: "error",
-  //     });
-  //   }
-  // }, [dataOrderSummary]);
   const { data, isFetching, isError } = useQuery({
     queryKey: ["checkout"],
     queryFn: async () => {

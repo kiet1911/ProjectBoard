@@ -26,11 +26,12 @@ export default function CartPage() {
   const [currentTab, setCurrentTab] = useState<number>(0);
   const [render, setRender] = useState<boolean>(false);
   const ActiveComponent = tab[currentTab].component;
-  useEffect(() => { 
+  useEffect(() => {
     window.scrollTo({
-    top:0,
-    behavior: "smooth"
-  }) }, []);
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
   useEffect(() => {
     const timeOut = setTimeout(() => {
       if (!render) setRender(true);
@@ -54,9 +55,10 @@ export default function CartPage() {
                     <h2
                       className={`navbar-link ${index === currentTab ? "bg-(--main-color) text-white" : "text-black"} `}
                       onClick={() => {
-                        if (tab[index] && currentTab != index)
+                        if (tab[index] && currentTab != index) {
                           setCurrentTab(index);
-                        setRender(false);
+                          setRender(false);
+                        }
                       }}
                     >
                       {data.name}
