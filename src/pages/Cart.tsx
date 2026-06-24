@@ -2,6 +2,7 @@ import type React from "react";
 import PageContainer from "../components/PageContainer";
 import { useEffect, useState } from "react";
 import CartList from "../features/cart/components";
+import OrdersList from "../features/order/components";
 
 type tabType = { name: string; component: React.ComponentType };
 
@@ -12,13 +13,7 @@ const tab: tabType[] = [
   },
   {
     name: "Your Orders",
-    component: () => {
-      return (
-        <>
-          <h1>My Orders</h1>
-        </>
-      );
-    },
+    component: OrdersList
   },
 ];
 

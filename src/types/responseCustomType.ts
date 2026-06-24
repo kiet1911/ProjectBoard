@@ -17,3 +17,10 @@ export type OrderSummary = {
 } & {
     checkBox: boolean;
 }
+
+export type ResponseOrderItems = {
+    id: string,
+    isSuccessDelivery:boolean,
+    status: number,
+    totalPrice: number
+}

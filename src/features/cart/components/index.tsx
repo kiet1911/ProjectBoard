@@ -55,7 +55,7 @@ export default function CartList() {
     };
   }, []);
   useEffect(() => {
-    console.log(data);
+    // console.log(data);
     if (!data?.cartItems) return;
     setOrderSummary((prev) =>
       data.cartItems.map((item: ResponseCartItems) => ({

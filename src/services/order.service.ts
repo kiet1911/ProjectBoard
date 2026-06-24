@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import apiClient from "./apiClient"
 import type { VnPayRecipientInfo } from "../types";
 
@@ -21,6 +21,17 @@ export const orderService = {
                 console.log(error.response?.data)
             }
             // console.log(error);
+            throw error
+        }
+    },
+    GetById : async(uri:string, fromBody:string)=>{
+        try {
+            const res = await apiClient.get(`${uri}`,{params:{id:fromBody}})
+            return res.data;
+        } catch (error) {
+            if(error instanceof AxiosError){
+                console.log(error.response?.data);
+            }
             throw error
         }
     }

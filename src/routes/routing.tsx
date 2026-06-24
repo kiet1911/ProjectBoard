@@ -13,6 +13,8 @@ import FavoriteRoute from "./FavoriteRoute.tsx";
 import Favorite from "../pages/Favorite.tsx";
 import CartRoute from "./CartRoute.tsx";
 import CartPage from "../pages/Cart.tsx";
+import VnPayTransactionRoute from "./VnPayTransactionRoute.tsx";
+import VnPayPaymentResult from "../pages/VnPayPaymentResult.tsx";
 
 // create router
 export const router = createBrowserRouter([
@@ -46,30 +48,41 @@ export const router = createBrowserRouter([
             children: [
               {
                 index: true,
-                element: <Production></Production>
-              }
-              ,
+                element: <Production></Production>,
+              },
               {
                 path: ":id",
-                element: <ProductionDetail></ProductionDetail>
-              }
-            ]
+                element: <ProductionDetail></ProductionDetail>,
+              },
+            ],
           },
           {
             element: <FavoriteRoute></FavoriteRoute>,
-            children: [{
-              path: "favorites",
-              element: <Favorite></Favorite>
-            }]
+            children: [
+              {
+                path: "favorites",
+                element: <Favorite></Favorite>,
+              },
+            ],
           },
           {
             element: <CartRoute></CartRoute>,
-            children:[{
-              path: "cart",
-              element: <CartPage></CartPage>
-            }]
-            
-          }
+            children: [
+              {
+                path: "cart",
+                element: <CartPage></CartPage>,
+              },
+            ],
+          },
+          {
+            element: <VnPayTransactionRoute></VnPayTransactionRoute>,
+            children: [
+              {
+                path: "payment-result",
+                element: <VnPayPaymentResult></VnPayPaymentResult>
+              },
+            ],
+          },
         ],
       },
     ],
