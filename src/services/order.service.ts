@@ -34,5 +34,16 @@ export const orderService = {
             }
             throw error
         }
+    },
+    GetOrderDetail : async(uri:string, fromBody:any)=>{
+        try {
+            const res = await apiClient.get(`${uri}`,{params:fromBody})
+            return res
+        } catch (error) {
+            if(error instanceof AxiosError){
+                console.log(error.response?.data);
+            }
+            throw error
+        }
     }
 }

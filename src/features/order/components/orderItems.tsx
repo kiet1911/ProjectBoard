@@ -9,8 +9,14 @@ import { paymentService } from "../../../services/payment.service";
 import { AxiosError } from "axios";
 import { useToastNotification } from "../../../store/notification/notification";
 import { useQueryClient } from "@tanstack/react-query";
+import { orderService } from "../../../services/order.service";
+import type { OrderDetail } from "../../../types/orderCustomType";
+import { useOrderDetailComponent } from "../stores/orderDetail";
 
 export default function OrderItems({ data }: { data: ResponseOrderItems }) {
+  const handleActiveOrderDetail = useOrderDetailComponent(
+    useShallow((state) => state.Active),
+  );
   const queryClient = useQueryClient();
   const publicId = useAuthStore(useShallow((state) => state.publicId));
   const isAuth = useAuthStore(useShallow((state) => state.isAuthentication));
@@ -23,24 +29,22 @@ export default function OrderItems({ data }: { data: ResponseOrderItems }) {
           { PublicId: publicId, OrderId: data.id },
         );
         console.log(res);
-        useToastNotification
-          .getInitialState()
-          .add({
-            text: res.message || "Transaction checked successfully",
-            type: "success",
-          });
+        useToastNotification.getInitialState().add({
+          text: res.message || "Transaction checked successfully",
+          type: "success",
+        });
 
         await queryClient.invalidateQueries({ queryKey: ["user_orders"] });
-        console.log("Query đã được refetch xong!");
+        // console.log("Query đã được refetch xong!");
       } catch (error) {
         if (error instanceof AxiosError) {
           // console.log(error.response?.data.message);
-          useToastNotification
-            .getInitialState()
-            .add({
-              text: error.response?.data.message + "wait for 2 minutes to action again",
-              type: "error",
-            });
+          useToastNotification.getInitialState().add({
+            text:
+              error.response?.data.message +
+              "wait for 2 minutes to action again",
+            type: "error",
+          });
         } else {
           // console.log(error);
           useToastNotification
@@ -50,7 +54,19 @@ export default function OrderItems({ data }: { data: ResponseOrderItems }) {
       }
     }
   }, [publicId]);
-
+  const handleDetailOrder = useCallback(async () => {
+    if (publicId && isAuth) {
+      try {
+        handleActiveOrderDetail({PublicId:publicId,OrderId:data.id})
+        // const res = await orderService.GetOrderDetail("v1/Order/Detail",{PublicId: publicId, OrderId: data.id});
+        // if(res.data && res.data.data && res.data.data as OrderDetail){
+        //   console.log(res.data.data);
+        // }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }, [publicId]);
   return (
     <article
       key={data.id}
@@ -109,7 +125,10 @@ export default function OrderItems({ data }: { data: ResponseOrderItems }) {
           </dt>
 
           <dd className="flex flex-wrap justify-start md:justify-end gap-2">
-            <button className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-mist-200 transition">
+            <button
+              className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-mist-200 transition"
+              onClick={handleDetailOrder}
+            >
               <Form size={18} />
               <span className="hidden lg:inline">Details</span>
             </button>
