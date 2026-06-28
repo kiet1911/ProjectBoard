@@ -62,7 +62,7 @@ export const AuthActions = ({ isMobile = false }: { isMobile?: boolean }) => {
                 <ul className="text-[10px] space-y-2 last:mb-2">
                   <li className=" text-center">{fullName ?? "NaN"}</li>
                   <li className=" navbar-link p-1 flex justify-center hover:bg-(--main-color) hover:text-white transition-colors duration-200 ">
-                    <Link to="/">
+                    <Link to="/profile">
                       <span className="">Profiles</span>
                     </Link>
                   </li>

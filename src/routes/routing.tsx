@@ -15,6 +15,8 @@ import CartRoute from "./CartRoute.tsx";
 import CartPage from "../pages/Cart.tsx";
 import VnPayTransactionRoute from "./VnPayTransactionRoute.tsx";
 import VnPayPaymentResult from "../pages/VnPayPaymentResult.tsx";
+import UserRoute from "./UserRoute.tsx";
+import ProfilePage from "../pages/Profile.tsx";
 
 // create router
 export const router = createBrowserRouter([
@@ -83,6 +85,15 @@ export const router = createBrowserRouter([
               },
             ],
           },
+          {
+            element: <UserRoute></UserRoute>,
+            children:[
+              {
+                path: "profile",
+                element: <ProfilePage></ProfilePage>
+              }
+            ]
+          }
         ],
       },
     ],
