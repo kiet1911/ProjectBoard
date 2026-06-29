@@ -189,6 +189,12 @@ The project focuses on clean code organization, RESTful API design, and scalable
 git clone https://github.com/kiet1911/ProjectBoard.git
 ```
 
+### Env Setup 
+
+```bash
+VITE_API_URL = .../api
+```
+
 ### Backend
 
 ```bash
