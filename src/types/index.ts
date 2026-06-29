@@ -34,7 +34,8 @@ type BoardGamesGamePlay = {
 type BoardGamesReference = {
   categories: [{ category_Id: number; name: string }];
   creators: [{ id: string; name: string; type: number }];
-  description: Pick<BoardGamesDescription,"short_Description"|"full_Description">
+  description: Pick<BoardGamesDescription,"short_Description"|"full_Description">;
+  images: {id:string,alt:string,img_Url:string,is_Thumbnail:boolean}[]
 };
 type BoardGamesDescription = {
   boardGame_Id: string;

@@ -41,8 +41,8 @@ export default function ProductSection({
       const fetch = async () => {
         try {
           const res = await boardgamesService.get(apiUrl);
-          setList(res);
           // console.log(res);
+          setList(res);
         } catch (error) {
           setError(error as string);
           console.log(error as string);
