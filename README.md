@@ -123,43 +123,71 @@ The project focuses on clean code organization, RESTful API design, and scalable
 
 ### Home
 
-> TODO
+<img width="874" height="496" alt="image" src="https://github.com/user-attachments/assets/d1f40def-ea61-434a-9973-783db79aaaca" />
+
+---
+
+### Login & Register
+
+<img width="883" height="548" alt="image" src="https://github.com/user-attachments/assets/0eedb368-70ee-4e47-9ff9-66a103108f11" />
+
+<img width="875" height="491" alt="image" src="https://github.com/user-attachments/assets/745ec138-7822-4d0f-8482-a13f618369d2" />
 
 ---
 
 ### Product Details
 
-> TODO
+<img width="865" height="490" alt="image" src="https://github.com/user-attachments/assets/10ff82d1-7716-4071-a0cf-9b49b2253b08" />
 
 ---
 
 ### Shopping Cart
 
-> TODO
+<img width="875" height="484" alt="image" src="https://github.com/user-attachments/assets/0a78b1ed-2f32-4d2a-9bdf-047b26d944bf" />
+
+---
+
+### Favorite
+
+<img width="872" height="535" alt="image" src="https://github.com/user-attachments/assets/4ecbcefa-8e22-4463-abb9-18b5fe195af3" />
+
+---
+
+### Product Filter
+
+<img width="874" height="544" alt="image" src="https://github.com/user-attachments/assets/4098849e-fcd7-44cd-828e-9b278b0f224b" />
 
 ---
 
 ### Checkout
 
-> TODO
+<img width="874" height="432" alt="image" src="https://github.com/user-attachments/assets/2199c032-8262-4be3-b7fb-e15383b3d3a2" />
+
+<img width="872" height="479" alt="image" src="https://github.com/user-attachments/assets/d2ce65c0-4067-4683-b36b-58aed901ff4c" />
 
 ---
 
 ### VNPay Payment
 
-> TODO
+<img width="827" height="559" alt="image" src="https://github.com/user-attachments/assets/62c62afd-f60e-4617-9428-31b8bc0eecd4" />
+
+<img width="878" height="488" alt="image" src="https://github.com/user-attachments/assets/3199e91b-e816-4337-b2ca-2f5da192d643" />
 
 ---
 
 ### User Profile
 
-> TODO
+<img width="872" height="485" alt="image" src="https://github.com/user-attachments/assets/a4de2e9e-4cfb-41b9-adf1-526fd746d074" />
+
+<img width="863" height="493" alt="image" src="https://github.com/user-attachments/assets/a625a5ca-8641-4a30-979a-8451a643f2b8" />
 
 ---
 
 ### Order History
 
-> TODO
+<img width="873" height="459" alt="image" src="https://github.com/user-attachments/assets/dae57ab8-b540-49dc-bad8-a7206b778f57" />
+
+<img width="861" height="485" alt="image" src="https://github.com/user-attachments/assets/9a065682-b870-4c7a-9b60-8af6dfc5c375" />
 
 ---
 
