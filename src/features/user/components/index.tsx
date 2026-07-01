@@ -56,11 +56,12 @@ export default function UserProfile() {
       setUserForm(data.userInfo);
     }
   }, [data]);
-  // useEffect(() => {
-  //   if (userForm) {
-  //     console.log(userForm);
-  //   }
-  // }, [userForm]);
+  useEffect(() => {
+    window.scrollTo({
+      top:0,
+      behavior: "smooth"
+    })
+  }, []);
   const convertDate = useCallback(
     (x: string) => {
       try {

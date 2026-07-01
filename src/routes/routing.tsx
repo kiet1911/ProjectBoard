@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate, redirect } from "react-router-dom";
 import App from "../App.tsx";
 import { ProtectPath } from "../App.tsx";
 import Error404Page from "../pages/Error.tsx";
@@ -17,6 +17,12 @@ import VnPayTransactionRoute from "./VnPayTransactionRoute.tsx";
 import VnPayPaymentResult from "../pages/VnPayPaymentResult.tsx";
 import UserRoute from "./UserRoute.tsx";
 import ProfilePage from "../pages/Profile.tsx";
+import LoginAdminPage from "../pages/adminPages/LoginAdmin.tsx";
+import PublicAdminRoute from "./ProtectedAdminRoute.tsx";
+import DashBoardPage from "../pages/adminPages/DashBoard.tsx";
+import { useAuthAdminStore } from "../store/authentication/authState.ts";
+import { useShallow } from "zustand/shallow";
+import ProtectedAdminRoute from "./ProtectedAdminRoute.tsx";
 
 // create router
 export const router = createBrowserRouter([
@@ -81,19 +87,19 @@ export const router = createBrowserRouter([
             children: [
               {
                 path: "payment-result",
-                element: <VnPayPaymentResult></VnPayPaymentResult>
+                element: <VnPayPaymentResult></VnPayPaymentResult>,
               },
             ],
           },
           {
             element: <UserRoute></UserRoute>,
-            children:[
+            children: [
               {
                 path: "profile",
-                element: <ProfilePage></ProfilePage>
-              }
-            ]
-          }
+                element: <ProfilePage></ProfilePage>,
+              },
+            ],
+          },
         ],
       },
     ],
@@ -105,6 +111,24 @@ export const router = createBrowserRouter([
         path: "login",
         element: <Login />,
       },
+    ],
+  },
+  {
+    path: "/admin/login",
+    element: <LoginAdminPage></LoginAdminPage>,
+  },
+  {
+    path: "admin",
+    element : <ProtectedAdminRoute></ProtectedAdminRoute>,
+    children: [
+      {
+        index:true,
+        element: <Navigate to ="dashboard" replace></Navigate>
+      },
+      {
+        path:"dashboard",
+        element: <DashBoardPage></DashBoardPage>
+      }
     ],
   },
   {
