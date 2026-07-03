@@ -81,7 +81,7 @@ export default function NavBarAdmin({ node }: { node: React.ReactNode }) {
           </div>
 
           {/* body outlet */}
-          <div className="w-full flex-1 p-2 flex flex-col">{node}</div>
+          <div className="w-full flex-1 p-0 flex flex-col">{node}</div>
         </div>
       </div>
     </>
