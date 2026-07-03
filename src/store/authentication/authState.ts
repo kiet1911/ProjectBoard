@@ -37,7 +37,7 @@ export const useAuthAdminStore = create<AuthAdminState>()(persist((set) => ({
         set({ fullName: fullName, publicId: publicId, isAuthentication: true, role: role });
     },
     logout: () => {
-        set({ fullName: null, publicId: null, isAuthentication: false });
+        set({ fullName: null, publicId: null, isAuthentication: false, role:null });
         localStorage.removeItem('auth-admin-storage');
     }
 }), { name: 'auth-admin-storage' }))

@@ -1,11 +1,32 @@
 import { useShallow } from "zustand/shallow";
 import { useAuthAdminStore } from "../store/authentication/authState";
 import { Navigate, Outlet } from "react-router-dom";
-import { useEffect } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import NavBarAdmin from "../features/navBar/components/NavBarAdmin";
+import ConfirmNotification from "../components/ConfirmNotification";
+import AlertNotification from "../components/AlertNotification";
+import ToastNotification from "../components/ToastNotification";
 
+export default function ProtectedAdminRoute() {
+  const isAuthentication = useAuthAdminStore(
+    useShallow((state) => state.isAuthentication),
+  );
 
-export default function ProtectedAdminRoute (){
-    const isAuthentication = useAuthAdminStore(useShallow(state=>state.isAuthentication));
-    // useEffect(()=>{console.log("call")},[])
-    return !isAuthentication ? <Navigate to="/admin/login"></Navigate> : <Outlet></Outlet>
+  const queryClient = new QueryClient();
+  // useEffect(()=>{console.log("call")},[])
+  // return
+  return (
+    <QueryClientProvider client={queryClient}>
+      {!isAuthentication ? (
+        <Navigate to="/admin/login"></Navigate>
+      ) : (
+        <>
+          <NavBarAdmin node={<Outlet></Outlet>}></NavBarAdmin>{" "}
+          <AlertNotification></AlertNotification>
+          <ConfirmNotification></ConfirmNotification>
+          <ToastNotification></ToastNotification>
+        </>
+      )}
+    </QueryClientProvider>
+  );
 }

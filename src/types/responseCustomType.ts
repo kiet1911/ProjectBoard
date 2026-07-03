@@ -24,3 +24,9 @@ export type ResponseOrderItems = {
     status: number,
     totalPrice: number
 }
+
+export type ResponseAdminLogin = {
+    id:string,
+    role: string,
+    fullname: string,
+}
