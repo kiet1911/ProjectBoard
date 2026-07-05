@@ -95,27 +95,34 @@ The project focuses on clean code organization, RESTful API design, and scalable
 
 ---
 
-## System Architecture
-
-> TODO
-
----
 
 ## Database Design
 
-> TODO
-
----
-
-## API Architecture
-
-> TODO
+<img width="3468" height="2989" alt="image" src="https://github.com/user-attachments/assets/e66a1db2-d655-40aa-a3cc-c9e579c322fd" />
 
 ---
 
 ## Payment Flow (VNPay)
 
-> TODO
+    User->>Frontend: Initiate Payment
+    Frontend->>Backend: Request Payment Session (Order Details)
+    Backend->>Backend: Persist Order (Status: PENDING)
+    Backend->>VNPay: Request Payment URL (vnp_Amount, vnp_TxnRef)
+    VNPay-->>Backend: Provide Secure Payment URL
+    Backend-->>Frontend: Redirect to Payment URL
+    Frontend->>User: Redirect to VNPay Gateway
+    
+    Note over User, VNPay: User completes payment
+    
+    VNPay-->>User: Redirect to Return URL (with transaction params)
+    User->>Frontend: Forward transaction result params
+    Frontend->>Backend: POST verification data for validation
+    
+    Note over Backend: Security Check
+    Backend->>Backend: Validate vnp_SecureHash
+    Backend->>Backend: Update Order Status (PAID/FAILED)
+    
+    Backend-->>Frontend: Return transaction final status
 
 ---
 
@@ -193,19 +200,19 @@ The project focuses on clean code organization, RESTful API design, and scalable
 
 ### Admin Dashboard
 
-> TODO
+> ONGOING
 
 ---
 
 ### Product Management
 
-> TODO
+> ONGOING
 
 ---
 
 ### Order Management
 
-> TODO
+> ONGOING
 
 ---
 
