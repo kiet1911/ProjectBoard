@@ -33,7 +33,7 @@ export default function NavBarAdmin({ node }: { node: React.ReactNode }) {
         >
           {/* navbar siding */}
           <div
-            className={`h-full w-60 absolute top-0 left-0 z-10 flex flex-col justify-start items-center gap-0 border-2 border-mist-400/30 bg-mist-50 transition-all ease-in-out duration-500 ${slideMenu ? "translate-x-0" : "-translate-x-full"}`}
+            className={`h-full w-60 fixed top-0 left-0 z-10 flex flex-col justify-start items-center gap-0 border-2 border-mist-400/30 bg-mist-50 transition-all ease-in-out duration-500 ${slideMenu ? "translate-x-0" : "-translate-x-full"}`}
           >
             <div className="w-full p-2 flex justify-between items-center border-b-2 border-mist-400/30">
               <button type="button" className="navbar-link text-xs hover:bg-(--main-color) hover:text-white hover:cursor-pointer duration-200" onClick={handleLogout}>
@@ -81,7 +81,7 @@ export default function NavBarAdmin({ node }: { node: React.ReactNode }) {
           </div>
 
           {/* body outlet */}
-          <div className="w-full flex-1 p-0 flex flex-col">{node}</div>
+          <div className="w-full flex-1 p-0 flex flex-col bg-mist-200">{node}</div>
         </div>
       </div>
     </>
