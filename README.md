@@ -200,7 +200,9 @@ The project focuses on clean code organization, RESTful API design, and scalable
 
 ### Admin Dashboard
 
-> ONGOING
+<img width="930" height="488" alt="image" src="https://github.com/user-attachments/assets/122d983f-0bca-478a-aa9d-f81e2a3d2ebf" />
+
+<img width="922" height="491" alt="image" src="https://github.com/user-attachments/assets/eece7fed-61cd-4024-b47c-2f089871db3e" />
 
 ---
 
@@ -233,39 +235,24 @@ VITE_API_URL = .../api
 ### Backend
 
 ```bash
-# TODO
-```
-
-### Frontend
-
-```bash
-# TODO
+https://github.com/kiet1911/webResfulAPIs
 ```
 
 ---
 
-## API Documentation
-
-Swagger
-
-```text
-TODO
-```
-
----
 
 ## Live Demo
 
 Frontend
 
 ```text
-TODO
+ONGOING
 ```
 
 Backend
 
 ```text
-TODO
+ONGOING
 ```
 
 ---
@@ -273,7 +260,7 @@ TODO
 ## Video Demonstration
 
 ```text
-TODO
+ONGOING
 ```
 
 ---
@@ -298,5 +285,5 @@ TODO
 Full Stack Developer (.NET & React)
 
 * GitHub: https://github.com/kiet1911
-* Email: TODO
-* LinkedIn: TODO
+* Email: nguyentuankiet19112002@gmail.com
+* LinkedIn: (https://www.linkedin.com/in/tuankietnguyen1911/)
