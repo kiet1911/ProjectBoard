@@ -86,4 +86,40 @@ export const dashboardService = {
             throw error;
         }
     },
+    CustomerTable: async (x:{page:number,pageSize:number,sortBy?:String,sortDirection?:String}) => {
+        try {
+            const res = await apiAdmin.get("v1/UserDashboard/CustomerTable",{params:x})
+            return res.data;
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                console.log(error);
+                throw error;
+            }
+            throw error;
+        }
+    },
+    BoardgamesTable: async (x:{page:number,pageSize:number,statusSearch?:string,nameSearch?:String,sortBy?:String,sortDirection?:String}) => {
+        try {
+            const res = await apiAdmin.get("v1/BoardgamesDashboard/BoardgamesTable",{params:x})
+            return res.data;
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                console.log(error);
+                throw error;
+            }
+            throw error;
+        }
+    },
+    CategoryTable:async (x:{page:number,pageSize:number,sortBy?:String,sortDirection?:String,nameSearch:string,descriptionSearch:string}) => {
+        try {
+            const res = await apiAdmin.get("v1/BoardgamesDashboard/CategoryTable",{params:x})
+            return res.data;
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                console.log(error);
+                throw error;
+            }
+            throw error;
+        }
+    },
 }

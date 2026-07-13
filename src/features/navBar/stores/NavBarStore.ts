@@ -1,13 +1,8 @@
 import {
-  ChevronsLeft,
-  Home,
   House,
-  icons,
-  Menu,
   ShoppingBasket,
   ShoppingCart,
   User,
-  type LucideProps,
 } from "lucide-react";
 export const ListTabsAction = [
   {
@@ -22,6 +17,7 @@ export const ListTabsAction = [
       {
         icons: User,
         name: "Customer Account",
+        path: "/admin/customer-account"
       },
       {
         icons: User,
@@ -44,10 +40,12 @@ export const ListTabsAction = [
       {
         icons: ShoppingBasket,
         name: "Category",
+        path: "/admin/category"
       },
       {
         icons: ShoppingBasket,
         name: "BoardGame",
+        path: "/admin/board-game"
       },
     ],
   },

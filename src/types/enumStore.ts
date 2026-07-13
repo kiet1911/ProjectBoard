@@ -34,3 +34,10 @@ export function enumStoreOrder(status: number){
       };
   }
 }
+export function enumStoreBoardGameStatus(status:number){
+  switch(status){
+    case 2 : return "OutStock"
+    case 1 : return "Inactive"
+    default : return "Active"
+  }
+}

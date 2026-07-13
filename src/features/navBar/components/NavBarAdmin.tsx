@@ -4,7 +4,7 @@ import { useAuthAdminStore } from "../../../store/authentication/authState";
 import { useShallow } from "zustand/shallow";
 // import { NavLink } from "react-router-dom";
 import { ListTabsAction } from "../stores/NavBarStore";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useConfirmContent } from "../../../store/notification/notification";
 
 export default function NavBarAdmin({ node }: { node: React.ReactNode }) {
@@ -36,7 +36,11 @@ export default function NavBarAdmin({ node }: { node: React.ReactNode }) {
             className={`h-full w-60 fixed top-0 left-0 z-10 flex flex-col justify-start items-center gap-0 border-2 border-mist-400/30 bg-mist-50 transition-all ease-in-out duration-500 ${slideMenu ? "translate-x-0" : "-translate-x-full"}`}
           >
             <div className="w-full p-2 flex justify-between items-center border-b-2 border-mist-400/30">
-              <button type="button" className="navbar-link text-xs hover:bg-(--main-color) hover:text-white hover:cursor-pointer duration-200" onClick={handleLogout}>
+              <button
+                type="button"
+                className="navbar-link text-xs hover:bg-(--main-color) hover:text-white hover:cursor-pointer duration-200"
+                onClick={handleLogout}
+              >
                 <span>Logout</span>
               </button>
               <ChevronsLeft
@@ -81,7 +85,9 @@ export default function NavBarAdmin({ node }: { node: React.ReactNode }) {
           </div>
 
           {/* body outlet */}
-          <div className="w-full flex-1 p-0 flex flex-col bg-mist-200">{node}</div>
+          <div className="w-full flex-1 p-0 flex flex-col bg-mist-200">
+            {node}
+          </div>
         </div>
       </div>
     </>
@@ -103,19 +109,37 @@ const RenderListTab = ({
       icons: React.ForwardRefExoticComponent<
         Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
       >;
+      path?: string;
     }[];
   };
   location: string;
 }) => {
   const [open, setOpen] = useState<boolean>(false);
+  const navigate = useNavigate();
   const [id] = useState(() => `tab-${Math.random().toString(36).substr(2, 9)}`);
+  useEffect(()=>{
+    if(data.child?.some((data)=>{
+       if(data.path && data.path.includes(location)){
+         return true;
+       }
+       return false
+    })){
+      setOpen(true);
+    }
+  },[])
   return (
     <>
       <label
         className={`navbar-link text-sm flex flex-row items-center gap-2 border rounded py-2 px-5 line-clamp-1 cursor-pointer mt-2 ${location === data.path || location.includes(data.name, 0) ? "bg-(--main-color) text-white" : "hover:bg-(--main-color) hover:text-white"}`}
         htmlFor={id}
         onClick={() => {
-          setOpen(!open);
+          // setOpen(!open);
+          if (data.path && !data.child) {
+            navigate(data.path,{replace:true});
+          }
+          else{
+            setOpen(!open)
+          }
         }}
       >
         <data.icons size={20}></data.icons>{" "}

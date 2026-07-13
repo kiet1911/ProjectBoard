@@ -6,6 +6,10 @@ import NavBarAdmin from "../features/navBar/components/NavBarAdmin";
 import ConfirmNotification from "../components/ConfirmNotification";
 import AlertNotification from "../components/AlertNotification";
 import ToastNotification from "../components/ToastNotification";
+import { AllCommunityModule } from "ag-grid-community";
+import { AgGridProvider } from "ag-grid-react";
+
+const modules = [AllCommunityModule];
 
 export default function ProtectedAdminRoute() {
   const isAuthentication = useAuthAdminStore(
@@ -16,17 +20,19 @@ export default function ProtectedAdminRoute() {
   // useEffect(()=>{console.log("call")},[])
   // return
   return (
-    <QueryClientProvider client={queryClient}>
-      {!isAuthentication ? (
-        <Navigate to="/admin/login"></Navigate>
-      ) : (
-        <>
-          <NavBarAdmin node={<Outlet></Outlet>}></NavBarAdmin>{" "}
-          <AlertNotification></AlertNotification>
-          <ConfirmNotification></ConfirmNotification>
-          <ToastNotification></ToastNotification>
-        </>
-      )}
-    </QueryClientProvider>
+    <AgGridProvider modules={modules}>
+      <QueryClientProvider client={queryClient}>
+        {!isAuthentication ? (
+          <Navigate to="/admin/login"></Navigate>
+        ) : (
+          <>
+            <NavBarAdmin node={<Outlet></Outlet>}></NavBarAdmin>{" "}
+            <AlertNotification></AlertNotification>
+            <ConfirmNotification></ConfirmNotification>
+            <ToastNotification></ToastNotification>
+          </>
+        )}
+      </QueryClientProvider>
+    </AgGridProvider>
   );
 }

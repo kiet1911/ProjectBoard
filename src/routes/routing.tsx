@@ -23,6 +23,9 @@ import DashBoardPage from "../pages/adminPages/DashBoard.tsx";
 import { useAuthAdminStore } from "../store/authentication/authState.ts";
 import { useShallow } from "zustand/shallow";
 import ProtectedAdminRoute from "./ProtectedAdminRoute.tsx";
+import CustomerAccountDashboardPage from "../pages/adminPages/CustomerDashboard.tsx";
+import BoardgamesDashboardPage from "../pages/adminPages/BoardgameDashboard.tsx";
+import CategoryDashboardPage from "../pages/adminPages/CategoryDashboard.tsx";
 
 // create router
 export const router = createBrowserRouter([
@@ -127,7 +130,16 @@ export const router = createBrowserRouter([
       },
       {
         path:"dashboard",
-        element: <DashBoardPage></DashBoardPage>
+        element: <DashBoardPage></DashBoardPage>,        
+      },{
+        path:"customer-account",
+        element: <CustomerAccountDashboardPage></CustomerAccountDashboardPage>
+      },{
+        path:"board-game",
+        element: <BoardgamesDashboardPage></BoardgamesDashboardPage>
+      },{
+        path:"category",
+        element: <CategoryDashboardPage></CategoryDashboardPage>
       }
     ],
   },
