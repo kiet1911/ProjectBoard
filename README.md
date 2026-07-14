@@ -208,7 +208,11 @@ The project focuses on clean code organization, RESTful API design, and scalable
 
 ### Product Management
 
-> ONGOING
+<img width="928" height="488" alt="image" src="https://github.com/user-attachments/assets/91e2cb7b-b4ec-4483-9c01-13ce61a403ae" />
+
+<img width="929" height="490" alt="image" src="https://github.com/user-attachments/assets/7857df53-84c2-4fd8-b85f-27f95dd52dba" />
+
+
 
 ---
 
