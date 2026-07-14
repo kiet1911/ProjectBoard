@@ -112,7 +112,7 @@ export const dashboardService = {
     },
     CategoryTable:async (x:{page:number,pageSize:number,sortBy?:String,sortDirection?:String,nameSearch:string,descriptionSearch:string}) => {
         try {
-            const res = await apiAdmin.get("v1/BoardgamesDashboard/CategoryTable",{params:x})
+            const res = await apiAdmin.get("v1/CategoryDashBoard/CategoryTable",{params:x})
             return res.data;
         } catch (error) {
             if (error instanceof AxiosError) {

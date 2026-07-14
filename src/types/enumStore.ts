@@ -41,3 +41,11 @@ export function enumStoreBoardGameStatus(status:number){
     default : return "Active"
   }
 }
+
+export function enumStoreCategoryStatusConvertToNumber(status:string){
+  switch(status){
+    case "Active": return 0;
+    case "Inactive": return 1;
+    default : return 2;
+  }
+}

@@ -8,7 +8,7 @@ export default function ToastNotification() {
   const data = useToastNotification((state) => state.content);
   return (
     <>
-      <div className="p-1 min-w-50 fixed bottom-0 right-0 translate-y-0 origin-top-right flex flex-col gap-1 pointer-events-none">
+      <div className="p-1 z-50 min-w-50 fixed bottom-0 right-0 translate-y-0 origin-top-right flex flex-col gap-1 pointer-events-none">
         {data.map((data, index) => {
           return (
             <div key={data.id}>
