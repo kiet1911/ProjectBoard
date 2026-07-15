@@ -13,7 +13,7 @@ export default function UpdateForm({data,gridApi}:{data:Required<CategoryDTO>,gr
     const updateForm = useUpdateContainer(useShallow(state=>state.close));
     const notification = useToastNotification(useShallow(state=>state.add));
     const mutation = useMutation({
-      mutationKey: ["data_category",form],
+      mutationKey: ["data_update_category",form],
       mutationFn: async()=>{
         // console.log(form);
         const res = await category_service_dashboard.updateCategory(form);
@@ -44,7 +44,7 @@ export default function UpdateForm({data,gridApi}:{data:Required<CategoryDTO>,gr
         }
     },[data]);
     return<>
-        <form key={data.id} className="w-full h-full" action="" method="post" onSubmit={(e)=>{e.preventDefault();e.stopPropagation()}}>
+        <form key={data.id} className="w-full h-full" action="" method="post" onSubmit={(e)=>{e.preventDefault();e.stopPropagation();handleConfirm();}}>
          <fieldset className="w-full flex flex-col gap-2 px-1 items-start justify-center font-medium">
             <legend className="text-xl font-medium ">Update Category information</legend>
             <div className=" space-x-2 mt-2 w-full flex flex-row">
@@ -63,14 +63,12 @@ export default function UpdateForm({data,gridApi}:{data:Required<CategoryDTO>,gr
                 <label htmlFor="Status">Status :</label>
                 <select className="border px-0.5 rounded font-normal" name="Status" id="Status" required defaultValue={form.status ?? 0} onChange={(e)=>{ setForm({...form,status:Number(e.target.value)});}}>
                     {CategoryStatus.map((data,index)=>{
-                        return <>
-                            {index === form.status ? <option value={index} >{data}</option>:<option value={index}>{data}</option>}
-                        </>
+                      return <option key={index+data+index} value={index} >{data}</option>
                     })}
                 </select>
             </div>
          </fieldset>
-         <button type="button" onClick={handleConfirm} className="navbar-link hover:bg-(--main-color) hover:text-white my-2 mx-2 relative float-right">
+         <button type="submit" className="navbar-link hover:bg-(--main-color) hover:text-white my-2 mx-2 relative float-right">
             <span>Save change</span>
          </button>
         </form>

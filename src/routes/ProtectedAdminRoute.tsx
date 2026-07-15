@@ -9,6 +9,7 @@ import ToastNotification from "../components/ToastNotification";
 import { AllCommunityModule } from "ag-grid-community";
 import { AgGridProvider } from "ag-grid-react";
 import UpdateContainer from "../features/adminFeatures/dasboard-edit-create/components/updateContainer";
+import CreateContainer from "../features/adminFeatures/dasboard-edit-create/components/createContainer";
 
 const modules = [AllCommunityModule];
 
@@ -32,6 +33,7 @@ export default function ProtectedAdminRoute() {
             <ConfirmNotification></ConfirmNotification>
             <ToastNotification></ToastNotification>
             <UpdateContainer></UpdateContainer>
+            <CreateContainer></CreateContainer>
           </>
         )}
       </QueryClientProvider>

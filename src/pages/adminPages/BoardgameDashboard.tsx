@@ -96,7 +96,7 @@ export default function BoardgamesDashboardPage() {
   return (
     <>
       <div className="h-full">
-        <h1 className="text-xl font-bold py-2 px-1 bg-white border-2 border-mist-400/30">
+        <h1 className="text-2xl font-bold py-2 px-1 rounded bg-white/30 border-2 border-mist-400/30 text-(--main-color) text-shadow-lg/30 text-shadow-black/50">
           BoardGame
         </h1>
         <div className="w-full flex flex-col justify-center items-center">

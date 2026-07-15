@@ -29,5 +29,21 @@ export const category_service_dashboard = {
             }
             throw error;
         }
+    },
+    addCategory: async (fromBody: CategoryDTO) => {
+        try {
+            const res = apiAdmin.post("v1/CategoryDashBoard/CategoryCreate", {
+                id: Number(fromBody.id),
+                name: fromBody.name.toString(),
+                description: fromBody.description.toString(),
+                status: fromBody.status,
+            })
+            return res;
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                throw error;
+            }
+            throw error;
+        }
     }
 }

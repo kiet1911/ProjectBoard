@@ -9,13 +9,15 @@ import type {
 import { AgGridReact, type AgGridReactProps } from "ag-grid-react";
 import React, { useCallback, useMemo, useState } from "react";
 import { dashboardService } from "../../services/adminServices/dashboard.service";
-import { useConfirmContent } from "../../store/notification/notification";
+import { useConfirmContent, useToastNotification } from "../../store/notification/notification";
 import { useUpdateContainer } from "../../features/adminFeatures/dasboard-edit-create/stores/updateContainer";
 import { useShallow } from "zustand/shallow";
 import type { CategoryDTO } from "../../features/adminFeatures/dasboard-edit-create/stores/serivcesType";
 import UpdateForm from "../../features/adminFeatures/dasboard-edit-create/components/Category/updateForm";
 import { enumStoreCategoryStatusConvertToNumber } from "../../types/enumStore";
 import { PlusCircle } from "lucide-react";
+import { useCreateContainer } from "../../features/adminFeatures/dasboard-edit-create/stores/createContainer";
+import CreateForm from "../../features/adminFeatures/dasboard-edit-create/components/Category/createForm";
 
 interface ActionCellProps extends ICellRendererParams {
   fn: () => void;
@@ -23,6 +25,8 @@ interface ActionCellProps extends ICellRendererParams {
 
 export default function CategoryDashboardPage() {
   const query = useQueryClient();
+  const confirm = useConfirmContent((state) => state.active);
+  const active = useCreateContainer(useShallow(state=>state.active));
   const [gridApi, setGridApi] = useState<GridApi | null>(null);
   const refreshGrid = useCallback(() => {
     if (gridApi) {
@@ -142,20 +146,38 @@ export default function CategoryDashboardPage() {
     param.api.setGridOption("datasource", datasource);
   };
 
+  const handleAddNew = async()=>{
+      const result = await confirm("Are you want to add new category?")
+      if(result){
+        // console.log("open");
+        const data:CategoryDTO = {
+          id:0,
+          name:"",
+          description:"",
+          status:1
+        }
+
+        active(<CreateForm data={data} gridApi={refreshGrid}></CreateForm>)
+      }
+      else{
+        // console.log("close");
+      }
+  }
+
   return (
-    <div className="h-full">
-      <h1 className="text-xl font-bold py-2 px-1 bg-white border-2 border-mist-400/30">
+    <div className="h-full w-full flex flex-col justify-start">
+      <h1 className="text-2xl font-bold py-2 px-1 rounded bg-white/30 border-2 border-mist-400/30 text-(--main-color) text-shadow-lg/30 text-shadow-black/50">
         Category
       </h1>
       <div>
-        <button>
-          <h1 className="p-2 space-x-2 bg-white border-2 border-mist-400/30 navbar-link mb-2 mt-1 text-md hover:bg-(--main-color) hover:text-white active:text-white active:bg-(--main-color)">
+        <button onClick={handleAddNew}>
+          <h1 className="p-2 space-x-2 bg-white border-2 border-mist-400/30 navbar-link mb-2 mt-0.5 text-md hover:bg-(--main-color) hover:text-white active:text-white active:bg-(--main-color)">
             <PlusCircle size={20} ></PlusCircle>
             Add
           </h1>
         </button>
       </div>
-      <div className="w-full flex flex-col justify-center items-center">
+      <div className="w-full flex flex-col justify-center">
         <div className="ag-theme-quartz" style={{ height: 420, width: "100%" }}>
           <AgGridReact
             rowHeight={80}
@@ -170,14 +192,13 @@ export default function CategoryDashboardPage() {
           />
         </div>
       </div>
-
-      {/* edit / create view -> react memo component */}
     </div>
   );
 }
 const CustomButtonComponent = React.memo(({ data, fn }: ActionCellProps) => {
   const confirm = useConfirmContent((state) => state.active);
   const active = useUpdateContainer(useShallow((state) => state.active));
+  const notification = useToastNotification(useShallow(state=>state.add));
   return (
     <>
       <div className="flex flex-row gap-2 h-full justify-center items-center">
@@ -186,7 +207,7 @@ const CustomButtonComponent = React.memo(({ data, fn }: ActionCellProps) => {
           type="button"
           onClick={async () => {
             const isConfirm = await confirm(
-              "are you sure want to update this category?",
+              "Are you sure want to update this category?",
             );
             if (isConfirm) {
               if (data as CategoryDTO) {
@@ -201,6 +222,16 @@ const CustomButtonComponent = React.memo(({ data, fn }: ActionCellProps) => {
         >
           {" "}
           Update
+        </button>
+          <button
+          className=" navbar-link max-h-10 text-xs hover:bg-(--main-color) hover:text-white duration-200"
+          type="button"
+          onClick={async () => {
+            notification({text:"Coming Soon!",type:"information"})
+          }}
+        >
+          {" "}
+          Soft Delete
         </button>
       </div>
     </>
