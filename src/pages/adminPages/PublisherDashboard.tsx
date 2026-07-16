@@ -1,40 +1,47 @@
 import { useQueryClient } from "@tanstack/react-query";
+import {
+  useConfirmContent,
+  useToastNotification,
+} from "../../store/notification/notification";
+import { useCreateContainer } from "../../features/adminFeatures/dasboard-edit-create/stores/createContainer";
+import React, { useCallback, useMemo, useState } from "react";
+import { useShallow } from "zustand/shallow";
 import type {
+  AgGridEvent,
   GridApi,
   GridReadyEvent,
   ICellRendererParams,
   IDatasource,
   IGetRowsParams,
 } from "ag-grid-community";
-import { AgGridReact, type AgGridReactProps } from "ag-grid-react";
-import React, { useCallback, useMemo, useState } from "react";
+import { AgGridReact } from "ag-grid-react";
 import { dashboardService } from "../../services/adminServices/dashboard.service";
-import { useConfirmContent, useToastNotification } from "../../store/notification/notification";
 import { useUpdateContainer } from "../../features/adminFeatures/dasboard-edit-create/stores/updateContainer";
-import { useShallow } from "zustand/shallow";
-import type { CategoryDTO } from "../../features/adminFeatures/dasboard-edit-create/stores/serivcesType";
-import UpdateForm from "../../features/adminFeatures/dasboard-edit-create/components/Category/updateForm";
-import { enumStoreCategoryStatusConvertToNumber } from "../../types/enumStore";
 import { PlusCircle } from "lucide-react";
-import { useCreateContainer } from "../../features/adminFeatures/dasboard-edit-create/stores/createContainer";
-import CreateForm from "../../features/adminFeatures/dasboard-edit-create/components/Category/createForm";
 
-interface ActionCellProps extends ICellRendererParams {
-  fn: () => void;
-}
-
-export default function CategoryDashboardPage() {
+export default function PublisherDashboardPage() {
   const query = useQueryClient();
   const confirm = useConfirmContent((state) => state.active);
-  const active = useCreateContainer(useShallow(state=>state.active));
+  const active = useCreateContainer(useShallow((state) => state.active));
   const [gridApi, setGridApi] = useState<GridApi | null>(null);
   const refreshGrid = useCallback(() => {
     if (gridApi) {
       gridApi.refreshInfiniteCache();
     }
   }, [gridApi]);
-  const columnDefs = useMemo(
-    () => [
+  const columnDefs = useMemo(() => {
+    return [
+      {
+        field: "id",
+        header: "Sequence Id",
+        floatingFilter: true,
+        filter: true,
+        filterParams: {
+          filterOptions: ["contains"],
+          maxNumConditions: 1,
+          debounceMs: 500,
+        },
+      },
       {
         field: "name",
         header: "Name",
@@ -47,8 +54,8 @@ export default function CategoryDashboardPage() {
         },
       },
       {
-        field: "description",
-        header: "Description",
+        field: "bio",
+        header: "Bio",
         floatingFilter: true,
         filter: true,
         filterParams: {
@@ -58,21 +65,23 @@ export default function CategoryDashboardPage() {
         },
       },
       {
+        field: "type",
+        header: "Type",
+      },
+      {
         field: "created_at",
         header: "Created at",
-        valueFormatter: (p: any) => {
-          return String(p.value).replace("T", " ");
-        },
       },
       {
         field: "updated_at",
         header: "Updated at",
-        valueFormatter: (p: any) => {
-          return String(p.value).replace("T", " ");
-        },
       },
-      { field: "status", header: "Status" },
       {
+        field: "status",
+        header: "Status",
+      },
+      {
+        flex:1,
         field: "action",
         header: "Action",
         cellRenderer: CustomButtonComponent,
@@ -80,10 +89,8 @@ export default function CategoryDashboardPage() {
           fn: refreshGrid,
         },
       },
-    ],
-    [refreshGrid],
-  );
-
+    ];
+  }, [refreshGrid]);
   const onGridReady = (param: GridReadyEvent) => {
     setGridApi(param.api);
     const datasource: IDatasource = {
@@ -94,35 +101,29 @@ export default function CategoryDashboardPage() {
           const pageSize = end - start;
           const pageIndex = start / pageSize;
           const sort = requestParams.sortModel[0];
+          const idFilter = requestParams.filterModel.id?.filter;
           const nameFilter = requestParams.filterModel.name?.filter;
-          const descriptionFilter =
-            requestParams.filterModel.description?.filter;
-          // console.log(
-          //   start,
-          //   end,
-          //   pageSize,
-          //   sort,
-          //   nameFilter,
-          //   descriptionFilter,
-          // );
+          const bioFilter = requestParams.filterModel.bio?.filter;
           const res = await query.fetchQuery({
             queryKey: [
-              "category-get-dashboard",
+              "creator-get-dashboard",
               pageIndex,
               pageSize,
               sort?.colId,
               sort?.sort,
               nameFilter,
-              descriptionFilter,
+              idFilter,
+              bioFilter,
             ],
             queryFn: async () => {
-              return await dashboardService.CategoryTable({
+              return await dashboardService.CreatorTable({
                 page: pageIndex,
                 pageSize: pageSize,
                 sortBy: sort?.colId,
                 sortDirection: sort?.sort,
                 nameSearch: nameFilter,
-                descriptionSearch: descriptionFilter,
+                idSearch: idFilter,
+                bioSearch: bioFilter,
               });
             },
             staleTime: 4 * 1000,
@@ -147,39 +148,21 @@ export default function CategoryDashboardPage() {
     param.api.setGridOption("datasource", datasource);
   };
 
-  const handleAddNew = async()=>{
-      const result = await confirm("Are you want to add new category?")
-      if(result){
-        // console.log("open");
-        const data:CategoryDTO = {
-          id:0,
-          name:"",
-          description:"",
-          status:1
-        }
-
-        active(<CreateForm data={data} gridApi={refreshGrid}></CreateForm>)
-      }
-      else{
-        // console.log("close");
-      }
-  }
-
   return (
     <div className="h-full w-full flex flex-col justify-start">
       <h1 className="text-2xl font-bold py-2 px-1 rounded bg-white/30 border-2 border-mist-400/30 text-(--main-color) text-shadow-lg/30 text-shadow-black/50">
-        Category
+        Publisher
       </h1>
       <div>
-        <button onClick={handleAddNew}>
+        <button>
           <h1 className="p-2 space-x-2 bg-white border-2 border-mist-400/30 navbar-link mb-2 mt-0.5 text-md hover:bg-(--main-color) hover:text-white active:text-white active:bg-(--main-color)">
-            <PlusCircle size={20} ></PlusCircle>
+            <PlusCircle size={20}></PlusCircle>
             Add
           </h1>
         </button>
       </div>
       <div className="w-full flex flex-col justify-center">
-        <div className="ag-theme-quartz" style={{ height: 420, width: "100%" }}>
+        <div className="ag-theme-quartz h-140" style={{ width: "100%" }}>
           <AgGridReact
             rowHeight={80}
             columnDefs={columnDefs}
@@ -196,13 +179,16 @@ export default function CategoryDashboardPage() {
     </div>
   );
 }
+interface ActionCellProps extends ICellRendererParams {
+  fn: () => void;
+}
 const CustomButtonComponent = React.memo(({ data, fn }: ActionCellProps) => {
   const confirm = useConfirmContent((state) => state.active);
   const active = useUpdateContainer(useShallow((state) => state.active));
-  const notification = useToastNotification(useShallow(state=>state.add));
+  const notification = useToastNotification(useShallow((state) => state.add));
   return (
     <>
-      <div className="flex flex-row gap-2 h-full justify-center items-center">
+      <div className="flex flex-row gap-1 h-full justify-center items-center flex-wrap">
         <button
           className=" navbar-link max-h-10 text-xs hover:bg-(--main-color) hover:text-white duration-200"
           type="button"
@@ -211,24 +197,24 @@ const CustomButtonComponent = React.memo(({ data, fn }: ActionCellProps) => {
               "Are you sure want to update this category?",
             );
             if (isConfirm) {
-              if (data as CategoryDTO) {
-                const value: CategoryDTO = {
-                  ...data,
-                  status: enumStoreCategoryStatusConvertToNumber(data.status),
-                };
-                active(<UpdateForm data={value} gridApi={fn}></UpdateForm>);
-              }
+              //   if (data as CategoryDTO) {
+              //     const value: CategoryDTO = {
+              //       ...data,
+              //       status: enumStoreCategoryStatusConvertToNumber(data.status),
+              //     };
+              //     active(<UpdateForm data={value} gridApi={fn}></UpdateForm>);
+              //   }
             }
           }}
         >
           {" "}
           Update
         </button>
-          <button
+        <button
           className=" navbar-link max-h-10 text-xs hover:bg-(--main-color) hover:text-white duration-200"
           type="button"
           onClick={async () => {
-            notification({text:"Coming Soon!",type:"information"})
+            notification({ text: "Coming Soon!", type: "information" });
           }}
         >
           {" "}

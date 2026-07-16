@@ -36,6 +36,7 @@ export const ListTabsAction = [
       {
         icons: ShoppingBasket,
         name: "Publisher",
+        path: "/admin/publisher"
       },
       {
         icons: ShoppingBasket,

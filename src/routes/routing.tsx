@@ -18,14 +18,12 @@ import VnPayPaymentResult from "../pages/VnPayPaymentResult.tsx";
 import UserRoute from "./UserRoute.tsx";
 import ProfilePage from "../pages/Profile.tsx";
 import LoginAdminPage from "../pages/adminPages/LoginAdmin.tsx";
-import PublicAdminRoute from "./ProtectedAdminRoute.tsx";
 import DashBoardPage from "../pages/adminPages/DashBoard.tsx";
-import { useAuthAdminStore } from "../store/authentication/authState.ts";
-import { useShallow } from "zustand/shallow";
 import ProtectedAdminRoute from "./ProtectedAdminRoute.tsx";
 import CustomerAccountDashboardPage from "../pages/adminPages/CustomerDashboard.tsx";
 import BoardgamesDashboardPage from "../pages/adminPages/BoardgameDashboard.tsx";
 import CategoryDashboardPage from "../pages/adminPages/CategoryDashboard.tsx";
+import PublisherDashboardPage from "../pages/adminPages/PublisherDashboard.tsx";
 
 // create router
 export const router = createBrowserRouter([
@@ -140,6 +138,10 @@ export const router = createBrowserRouter([
       },{
         path:"category",
         element: <CategoryDashboardPage></CategoryDashboardPage>
+      },
+      {
+        path:"publisher",
+        element: <PublisherDashboardPage></PublisherDashboardPage>
       }
     ],
   },

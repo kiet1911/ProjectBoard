@@ -80,7 +80,7 @@ export default function BoardgamesDashboardPage() {
             const fetchedItems = res.data.items;
             const lastRow =
               fetchedItems.length < pageSize ? start + fetchedItems.length : -1;
-            console.log(fetchedItems, lastRow);
+            // console.log(fetchedItems, lastRow);
             requestParams.successCallback(fetchedItems, lastRow);
           } else {
             requestParams.successCallback([], 0);

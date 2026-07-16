@@ -122,4 +122,17 @@ export const dashboardService = {
             throw error;
         }
     },
+    CreatorTable:async (x:{page:number,pageSize:number,sortBy?:String,sortDirection?:String,nameSearch:string,idSearch:string,bioSearch:string}) => {
+        try {
+            const res = await apiAdmin.post("v1/PublisherDashBoard/CreatorsTable",x)
+            return res.data;
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                console.log(error);
+                throw error;
+            }
+            throw error;
+        }
+    },
+
 }
