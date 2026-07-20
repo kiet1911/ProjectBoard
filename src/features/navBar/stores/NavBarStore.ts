@@ -45,6 +45,11 @@ export const ListTabsAction = [
       },
       {
         icons: ShoppingBasket,
+        name: "Image-BoardGame",
+        path: "/admin/image-boardgames"
+      },
+      {
+        icons: ShoppingBasket,
         name: "BoardGame",
         path: "/admin/board-game"
       },

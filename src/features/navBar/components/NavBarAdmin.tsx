@@ -74,7 +74,7 @@ export default function NavBarAdmin({ node }: { node: React.ReactNode }) {
             >
               <Menu size={20}></Menu>
             </div>
-            <div className=" aspect-square w-15 border-2 border-mist-400/30 rounded-2xl bg-mist-50 shadow-2xl/50 shadow-mist-500">
+            <div className=" aspect-square w-15 border-2 border-(--main-color)/70 rounded-2xl bg-mist-50 shadow-2xl/50 shadow-mist-500">
               <img
                 src="../../../../../public/logoBrand.png"
                 className=""

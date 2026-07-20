@@ -134,5 +134,17 @@ export const dashboardService = {
             throw error;
         }
     },
+    ImageBoardgames: async (x:{page:number,pageSize:number,sortBy?:String,sortDirection?:String,nameGameSearch:string,idSearch:string})=>{
+        try {
+            const res = await apiAdmin.post("v1/ImageBoardgamesDashboard/ImageBoardgamesTable",x)
+            return res.data;
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                console.log(error);
+                throw error;
+            }
+            throw error;
+        }
+    }
 
 }

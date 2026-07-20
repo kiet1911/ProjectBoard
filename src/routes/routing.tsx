@@ -24,6 +24,7 @@ import CustomerAccountDashboardPage from "../pages/adminPages/CustomerDashboard.
 import BoardgamesDashboardPage from "../pages/adminPages/BoardgameDashboard.tsx";
 import CategoryDashboardPage from "../pages/adminPages/CategoryDashboard.tsx";
 import PublisherDashboardPage from "../pages/adminPages/PublisherDashboard.tsx";
+import ImageBoardgamesDashboardPage from "../pages/adminPages/ImageBoardgameDashboard.tsx";
 
 // create router
 export const router = createBrowserRouter([
@@ -142,6 +143,10 @@ export const router = createBrowserRouter([
       {
         path:"publisher",
         element: <PublisherDashboardPage></PublisherDashboardPage>
+      },
+      {
+        path:"image-boardgames",
+        element: <ImageBoardgamesDashboardPage></ImageBoardgamesDashboardPage>
       }
     ],
   },

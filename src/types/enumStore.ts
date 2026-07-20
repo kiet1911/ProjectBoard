@@ -49,3 +49,22 @@ export function enumStoreCategoryStatusConvertToNumber(status:string){
     default : return 2;
   }
 }
+
+export function enumStorePublisherTypeConvertToString(type:number){
+  switch(type){
+    case 0 : return {name:"Author",color:""};
+    case 1 : return {name:"Artist",color:""};
+    case 2 : return {name:"Designer",color:""};
+    case 3 : return {name:"Publisher",color:""};
+    default : return {name:"NaN",color:""};
+  }
+}
+
+export function enumStorePublisherStatusConvertToString(type:number){
+  switch(type){
+    case 0 : return {name:"Active",color:""};
+    case 1 : return {name:"Inactive",color:""};
+    case 2 : return {name:"Banned",color:""};
+    default : return {name:"NaN",color:""};
+  }
+}
