@@ -212,7 +212,9 @@ The project focuses on clean code organization, RESTful API design, and scalable
 
 <img width="929" height="490" alt="image" src="https://github.com/user-attachments/assets/7857df53-84c2-4fd8-b85f-27f95dd52dba" />
 
+<img width="930" height="491" alt="image" src="https://github.com/user-attachments/assets/3f10006f-1ee3-44bf-8230-ceaaaf6168fb" />
 
+<img width="929" height="490" alt="image" src="https://github.com/user-attachments/assets/c0c5a666-24fe-45c2-90bd-14211007040d" />
 
 ---
 
