@@ -1,5 +1,5 @@
 import { AgGridReact } from "ag-grid-react";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useEffectEvent, useMemo, useState } from "react";
 import { dashboardService } from "../../services/adminServices/dashboard.service";
 import type {
   GridApi,
@@ -8,7 +8,7 @@ import type {
   IDatasource,
   IGetRowsParams,
 } from "ag-grid-community";
-import { enumStoreBoardGameStatus } from "../../types/enumStore";
+import { enumStoreOrderStatusConvertToString } from "../../types/enumStore";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   useConfirmContent,
@@ -16,15 +16,15 @@ import {
 } from "../../store/notification/notification";
 import { useUpdateContainer } from "../../features/adminFeatures/dasboard-edit-create/stores/updateContainer";
 import { useShallow } from "zustand/shallow";
-import UpdateForm from "../../features/adminFeatures/dasboard-edit-create/components/boardGames/updateForm";
-import { PlusCircle } from "lucide-react";
-import { BoardGameStockType } from "../../features/adminFeatures/dasboard-edit-create/stores/enum.service.store";
-import { boardgames_service_dashboard } from "../../features/adminFeatures/dasboard-edit-create/services/boardgame.service";
+import UpdateForm from "../../features/adminFeatures/dasboard-edit-create/components/Order/updateForm";
+import { TableColumnsSplit } from "lucide-react";
 import { AxiosError } from "axios";
 import { useCreateContainer } from "../../features/adminFeatures/dasboard-edit-create/stores/createContainer";
-import CreateForm from "../../features/adminFeatures/dasboard-edit-create/components/boardGames/createForm";
+import { CurrencyConvert } from "../../features/ProductionCard/utilities/currencyConverter";
+import { order_service_dashboard } from "../../features/adminFeatures/dasboard-edit-create/services/order.service";
 
-export default function BoardgamesDashboardPage() {
+
+export default function OrderDashboardPage() {
   const query = useQueryClient();
   const [gridApi, setGridApi] = useState<GridApi | null>(null);
   const confirm = useConfirmContent((state) => state.active);
@@ -35,18 +35,17 @@ export default function BoardgamesDashboardPage() {
     }
   }, [gridApi]);
 
-  const handleAddNew = useCallback(async () => {
-    const result = await confirm("Are you want to add new board game?");
-    if (result) {
-      active(<CreateForm gridApi={refreshGrid} ></CreateForm>)
+  const refreshGridColumn = useCallback(() => {
+    if (gridApi) {
+      gridApi.sizeColumnsToFit();
     }
-  }, []);
+  }, [gridApi]);
 
   const columnDefs = useMemo(
     () => [
-      { field: "id", flex: 2 },
       {
-        field: "name",
+        field: "id",
+        header: "Id",
         floatingFilter: true,
         filter: true,
         filterParams: {
@@ -55,14 +54,66 @@ export default function BoardgamesDashboardPage() {
           debounceMs: 500,
         },
       },
-      { field: "stock_Quantity" },
-      { field: "sold_Quantity" },
-      { field: "reservation_Quantity" },
+      {
+        field: "public_id",
+        header: "Public id",
+        floatingFilter: true,
+        filter: true,
+        filterParams: {
+          filterOptions: ["contains"],
+          maxNumConditions: 1,
+          debounceMs: 500,
+        },
+      },
+      { field: "full_Name", header: "Account Name" },
+      {
+        field: "totalPrice",
+        header: "TotalPrice",
+        valueFormatter: (p: any) => {
+          return CurrencyConvert({ value: Number(p.value) || 0 }) + " đ";
+        },
+      },
       {
         field: "status",
-        valueFormatter: (p: any) => {
-          return enumStoreBoardGameStatus(Number(p.value));
+        header: "Status",
+        cellStyle: (param: any) => {
+          const data = enumStoreOrderStatusConvertToString(param.value);
+          if (data && data.color) {
+            return { color: data.color, fontWeight: "bold" };
+          } else {
+            return { color: "black", fontWeight: "bold" };
+          }
         },
+        valueFormatter: (p: any) => {
+          return enumStoreOrderStatusConvertToString(p.value)?.name || "NaN";
+        },
+      },
+      {
+        field: "isSuccessDelivery",
+        header: "Delivery Status",
+      },
+      {
+        field: "created_at",
+        header: "Created at",
+      },
+      {
+        field: "paid_at",
+        header: "Paid at",
+      },
+      {
+        field: "nameRecipient",
+        header: "Name Recipient",
+        floatingFilter: true,
+        filter: true,
+        filterParams: {
+          filterOptions: ["contains"],
+          maxNumConditions: 1,
+          debounceMs: 500,
+        },
+      },
+      {
+        field: "phone",
+        header: "Phone",
         floatingFilter: true,
         filter: true,
         filterParams: {
@@ -93,27 +144,35 @@ export default function BoardgamesDashboardPage() {
           const pageSize = end - start;
           const pageIndex = start / pageSize;
           const sort = requestParams.sortModel[0];
-          const nameFilter = requestParams.filterModel.name?.filter;
-          const statusFilter = requestParams.filterModel.status?.filter;
-          // console.log(start, end, pageSize, sort, nameFilter, statusFilter);
+
+          //   filter contain
+          const idFilter = requestParams.filterModel.id?.filter;
+          const publicIdFilter = requestParams.filterModel.public_id?.filter;
+          const nameRecipientFilter =
+            requestParams.filterModel.nameRecipient?.filter;
+          const phoneFilter = requestParams.filterModel.phone?.filter;
           const res = await query.fetchQuery({
             queryKey: [
-              "board-game-get-dashboard",
+              "order-get-dashboard",
               pageIndex,
               pageSize,
               sort?.colId,
               sort?.sort,
-              nameFilter,
-              statusFilter,
+              idFilter,
+              publicIdFilter,
+              nameRecipientFilter,
+              phoneFilter,
             ],
             queryFn: async () => {
-              return await dashboardService.BoardgamesTable({
+              return await dashboardService.OrderTable({
                 page: pageIndex,
                 pageSize: pageSize,
                 sortBy: sort?.colId,
                 sortDirection: sort?.sort,
-                nameSearch: nameFilter,
-                statusSearch: statusFilter,
+                idSearch: idFilter,
+                publicIdSearch: publicIdFilter,
+                nameReciptient: nameRecipientFilter,
+                phoneReciptient: phoneFilter,
               });
             },
             staleTime: 4 * 1000,
@@ -137,25 +196,25 @@ export default function BoardgamesDashboardPage() {
     params.api.sizeColumnsToFit();
     params.api.setGridOption("datasource", datasource);
   };
-  
+
   return (
     <>
       <div className="h-full">
         <h1 className="text-2xl font-bold py-2 px-1 rounded bg-white/30 border-2 border-mist-400/30 text-(--main-color) text-shadow-lg/30 text-shadow-black/50">
-          BoardGame
+          Order
         </h1>
         <div>
-          <button onClick={handleAddNew}>
+          <button onClick={refreshGridColumn}>
             <h1 className="p-2 space-x-2 bg-white border-2 border-mist-400/30 navbar-link mb-2 mt-0.5 text-md hover:bg-(--main-color) hover:text-white active:text-white active:bg-(--main-color)">
-              <PlusCircle size={20}></PlusCircle>
-              Add
+              <TableColumnsSplit size={20}></TableColumnsSplit>
+              Fit column
             </h1>
           </button>
         </div>
         <div className="w-full flex flex-col justify-center items-center">
           <div
             className="ag-theme-quartz"
-            style={{ height: 420, width: "100%" }}
+            style={{ height: 520, width: "100%" }}
           >
             <AgGridReact
               rowHeight={90}
@@ -167,6 +226,7 @@ export default function BoardgamesDashboardPage() {
               maxConcurrentDatasourceRequests={1}
               pagination={true}
               onGridReady={onGridReady}
+              paginationPageSize={20}
             />
           </div>
         </div>
@@ -183,22 +243,15 @@ const CustomButtonComponent = React.memo(({ data, fn }: ActionCellProps) => {
   const confirm = useConfirmContent((state) => state.active);
   const active = useUpdateContainer(useShallow((state) => state.active));
   const notification = useToastNotification(useShallow((state) => state.add));
-  const [quantity, setQuantity] = useState<number>(0);
-  const [selectedType, setSelectedType] = useState<"increase" | "decrease">(
-    "increase",
-  );
   const mutation = useMutation({
     mutationFn: async () => {
-      const res = await boardgames_service_dashboard.UpdateStockBoardGame({
-        id: data.id,
-        quantity: quantity,
-        type: selectedType,
-      });
+      const res = await order_service_dashboard.GetOrderById(data.id);
       return res.data;
     },
     onSuccess: (config) => {
-      notification({ text: config.message, type: "success" });
-      fn();
+      //   notification({ text: config.message, type: "success" });
+      //   fn();
+      console.log(config);
     },
     onError: (error) => {
       if (error instanceof AxiosError) {
@@ -214,15 +267,6 @@ const CustomButtonComponent = React.memo(({ data, fn }: ActionCellProps) => {
       }
     },
   });
-
-  const handleUpdateStock = async () => {
-    const isConfirm = await confirm(
-      `Are you sure want to ${selectedType} this boardgames stock`,
-    );
-    if (isConfirm) {
-      mutation.mutate();
-    }
-  };
   return (
     <>
       <div className="flex flex-row gap-1 h-full justify-center items-center flex-wrap">
@@ -231,16 +275,26 @@ const CustomButtonComponent = React.memo(({ data, fn }: ActionCellProps) => {
           type="button"
           onClick={async () => {
             const isConfirm = await confirm(
-              "Are you sure want to update this boardgames",
+              "Are you sure want to update this order",
             );
             if (isConfirm) {
-              if (data && data.id && data.name) {
+              if (data && data.id) {
+                // mutation.mutate();
+                // console.log(data)
+
                 active(
                   <UpdateForm
                     params={{ id: data.id }}
                     gridApi={fn}
                   ></UpdateForm>,
                 );
+
+                // active(
+                //   <UpdateForm
+                //     params={{ id: data.id }}
+                //     gridApi={fn}
+                //   ></UpdateForm>,
+                // );
               } else {
                 notification({ text: "Error", type: "error" });
               }
@@ -250,55 +304,6 @@ const CustomButtonComponent = React.memo(({ data, fn }: ActionCellProps) => {
           {" "}
           Update
         </button>
-        <div>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              handleUpdateStock();
-            }}
-            className="flex flex-row  p-0.5"
-          >
-            <input
-              className="min-h-1 min-w-1 w-full border px-1 rounded font-normal bg-gray-100"
-              type="number"
-              min={1}
-              max={100}
-              value={quantity}
-              name="Quantity"
-              id="Quantity"
-              onChange={(e) => {
-                setQuantity(Number(e.target.value));
-              }}
-            />
-            <select
-              name="Type"
-              id="Type"
-              value={selectedType}
-              onChange={(e) => {
-                if (e.target.value) {
-                  setSelectedType(
-                    e.target.value.toString() as "increase" | "decrease",
-                  );
-                }
-              }}
-            >
-              {BoardGameStockType.map((data, index) => {
-                return (
-                  <option key={data + index} value={data}>
-                    {data}
-                  </option>
-                );
-              })}
-            </select>
-            <button
-              className="flex-1 navbar-link text-xs px-1 py-1"
-              type="submit"
-            >
-              Change
-            </button>
-          </form>
-        </div>
       </div>
     </>
   );

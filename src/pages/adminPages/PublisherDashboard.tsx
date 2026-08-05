@@ -206,7 +206,7 @@ export default function PublisherDashboardPage() {
             rowBuffer={0}
             infiniteInitialRowCount={1}
             maxConcurrentDatasourceRequests={1}
-            pagination={false}
+            pagination={true}
             onGridReady={onGridReady}
           />
         </div>

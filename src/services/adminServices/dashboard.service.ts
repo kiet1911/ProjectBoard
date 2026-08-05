@@ -86,9 +86,9 @@ export const dashboardService = {
             throw error;
         }
     },
-    CustomerTable: async (x:{page:number,pageSize:number,sortBy?:String,sortDirection?:String}) => {
+    CustomerTable: async (x: { page: number, pageSize: number, sortBy?: String, sortDirection?: String }) => {
         try {
-            const res = await apiAdmin.get("v1/UserDashboard/CustomerTable",{params:x})
+            const res = await apiAdmin.get("v1/UserDashboard/CustomerTable", { params: x })
             return res.data;
         } catch (error) {
             if (error instanceof AxiosError) {
@@ -98,9 +98,9 @@ export const dashboardService = {
             throw error;
         }
     },
-    BoardgamesTable: async (x:{page:number,pageSize:number,statusSearch?:string,nameSearch?:String,sortBy?:String,sortDirection?:String}) => {
+    BoardgamesTable: async (x: { page: number, pageSize: number, statusSearch?: string, nameSearch?: String, sortBy?: String, sortDirection?: String }) => {
         try {
-            const res = await apiAdmin.get("v1/BoardgamesDashboard/BoardgamesTable",{params:x})
+            const res = await apiAdmin.get("v1/BoardgamesDashboard/BoardgamesTable", { params: x })
             return res.data;
         } catch (error) {
             if (error instanceof AxiosError) {
@@ -110,9 +110,9 @@ export const dashboardService = {
             throw error;
         }
     },
-    CategoryTable:async (x:{page:number,pageSize:number,sortBy?:String,sortDirection?:String,nameSearch:string,descriptionSearch:string}) => {
+    CategoryTable: async (x: { page: number, pageSize: number, sortBy?: String, sortDirection?: String, nameSearch: string, descriptionSearch: string }) => {
         try {
-            const res = await apiAdmin.get("v1/CategoryDashBoard/CategoryTable",{params:x})
+            const res = await apiAdmin.get("v1/CategoryDashBoard/CategoryTable", { params: x })
             return res.data;
         } catch (error) {
             if (error instanceof AxiosError) {
@@ -122,9 +122,9 @@ export const dashboardService = {
             throw error;
         }
     },
-    CreatorTable:async (x:{page:number,pageSize:number,sortBy?:String,sortDirection?:String,nameSearch:string,idSearch:string,bioSearch:string}) => {
+    CreatorTable: async (x: { page: number, pageSize: number, sortBy?: String, sortDirection?: String, nameSearch: string, idSearch: string, bioSearch: string }) => {
         try {
-            const res = await apiAdmin.post("v1/PublisherDashBoard/CreatorsTable",x)
+            const res = await apiAdmin.post("v1/PublisherDashBoard/CreatorsTable", x)
             return res.data;
         } catch (error) {
             if (error instanceof AxiosError) {
@@ -134,9 +134,26 @@ export const dashboardService = {
             throw error;
         }
     },
-    ImageBoardgames: async (x:{page:number,pageSize:number,sortBy?:String,sortDirection?:String,nameGameSearch:string,idSearch:string})=>{
+    ImageBoardgames: async (x: { page: number, pageSize: number, sortBy?: String, sortDirection?: String, nameGameSearch: string, idSearch: string }) => {
         try {
-            const res = await apiAdmin.post("v1/ImageBoardgamesDashboard/ImageBoardgamesTable",x)
+            const res = await apiAdmin.post("v1/ImageBoardgamesDashboard/ImageBoardgamesTable", x)
+            return res.data;
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                console.log(error);
+                throw error;
+            }
+            throw error;
+        }
+    }
+    ,
+    OrderTable: async (x: {
+        page: number, pageSize: number, sortBy?: String, sortDirection?: String, idSearch: string, publicIdSearch: string
+        nameReciptient: string,
+        phoneReciptient: string,
+    }) => {
+        try {
+            const res = await apiAdmin.get("v1/OrderDashboard/OrderTable", { params: x })
             return res.data;
         } catch (error) {
             if (error instanceof AxiosError) {

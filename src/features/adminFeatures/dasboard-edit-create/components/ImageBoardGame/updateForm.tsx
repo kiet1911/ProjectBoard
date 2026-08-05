@@ -150,12 +150,6 @@ export default function UpdateForm({
       setArrayImages(items);
     }
   }, [data]);
-  // useEffect(() => {
-  //   if (arrayImages) {
-  //     console.log(arrayImages);
-  //   }
-  // }, [arrayImages]);
-
   return (
     <>
       <div key={params.id} className={`w-full`}>
@@ -300,15 +294,6 @@ export default function UpdateForm({
                       </button>
                     );
                   })}
-                  {/* <button type="submit" name="action" value="update" className="navbar-link w-full hover:bg-(--main-color) hover:cursor-pointer hover:text-white">
-                    Update
-                  </button>
-                  <button type="submit" name="action" value="add" className="navbar-link w-full">
-                    Add
-                  </button>
-                   <button type="submit" name="action" value="delete" className="navbar-link w-full">
-                    Delete
-                  </button> */}
                   <button
                     type="button"
                     onClick={handleOnClear}

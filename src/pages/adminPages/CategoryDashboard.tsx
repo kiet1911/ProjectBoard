@@ -188,7 +188,7 @@ export default function CategoryDashboardPage() {
             rowBuffer={0}
             infiniteInitialRowCount={5}
             maxConcurrentDatasourceRequests={1}
-            pagination={false}
+            pagination={true}
             onGridReady={onGridReady}
           />
         </div>

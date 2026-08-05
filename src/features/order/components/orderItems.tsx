@@ -41,8 +41,7 @@ export default function OrderItems({ data }: { data: ResponseOrderItems }) {
           // console.log(error.response?.data.message);
           useToastNotification.getInitialState().add({
             text:
-              error.response?.data.message +
-              "wait for 2 minutes to action again",
+              error.response?.data.message,
             type: "error",
           });
         } else {

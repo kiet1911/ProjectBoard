@@ -1,6 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { AgGridReact } from "ag-grid-react";
-import { PlusCircle } from "lucide-react";
 import { useConfirmContent, useToastNotification } from "../../store/notification/notification";
 import { useCreateContainer } from "../../features/adminFeatures/dasboard-edit-create/stores/createContainer";
 import { useShallow } from "zustand/shallow";
@@ -8,8 +7,6 @@ import React, { useCallback, useMemo, useState } from "react";
 import type { GridApi, GridReadyEvent, ICellRendererParams, IDatasource, IGetRowsParams } from "ag-grid-community";
 import { dashboardService } from "../../services/adminServices/dashboard.service";
 import { useUpdateContainer } from "../../features/adminFeatures/dasboard-edit-create/stores/updateContainer";
-import { imageBoardgames_service_dashboard } from "../../features/adminFeatures/dasboard-edit-create/services/imageBoardgame.service";
-import type { GetImageBoardGameDTO } from "../../features/adminFeatures/dasboard-edit-create/stores/serivcesType";
 import UpdateForm from "../../features/adminFeatures/dasboard-edit-create/components/ImageBoardGame/updateForm";
 
 export default function ImageBoardgamesDashboardPage() {
@@ -120,14 +117,6 @@ const onGridReady = (param: GridReadyEvent) => {
       <h1 className="text-2xl font-bold py-2 px-1 rounded bg-white/30 border-2 border-mist-400/30 text-(--main-color) text-shadow-lg/30 text-shadow-black/50">
         Image Boardgames
       </h1>
-      {/* <div>
-        <button >
-          <h1 className="p-2 space-x-2 bg-white border-2 border-mist-400/30 navbar-link mb-2 mt-0.5 text-md hover:bg-(--main-color) hover:text-white active:text-white active:bg-(--main-color)">
-            <PlusCircle size={20}></PlusCircle>
-            Add
-          </h1>
-        </button>
-      </div> */}
       <div className="w-full flex flex-col justify-center">
         <div className="ag-theme-quartz h-140" style={{ width: "100%" }}>
           <AgGridReact
@@ -168,12 +157,6 @@ const CustomButtonComponent = React.memo(({ data, fn }: ActionCellProps) => {
                 if(data && data.id && data.name){
                   active(<UpdateForm params={{id:data.id,name:data.name}} gridApi={fn} ></UpdateForm>)
                 }
-                // const res = await imageBoardgames_service_dashboard.getImageBoardgames(data.id??"");
-                // if(res.data){
-                //   console.log(res.data);
-                //   const data:GetImageBoardGameDTO = res.data.data;
-                //   console.log(data)
-                // }
                 else{
                 notification({text:"Error",type:"error"});
                 }

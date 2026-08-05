@@ -1,4 +1,5 @@
 import {
+  CalendarSearch,
   House,
   ShoppingBasket,
   ShoppingCart,
@@ -58,5 +59,23 @@ export const ListTabsAction = [
   {
     icons: ShoppingCart,
     name: "Projects",
+    child:[
+      {
+        icons: ShoppingCart,
+        name: "Order",
+        path: "/admin/order"
+      }
+    ]
+  },
+  {
+    icons: CalendarSearch,
+    name: "Booking",
+    child:[
+      // {
+      //   icons: ShoppingCart,
+      //   name: "Order",
+      //   path: "/admin/order"
+      // }
+    ]
   },
 ];

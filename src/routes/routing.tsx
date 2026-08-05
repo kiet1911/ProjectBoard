@@ -25,6 +25,8 @@ import BoardgamesDashboardPage from "../pages/adminPages/BoardgameDashboard.tsx"
 import CategoryDashboardPage from "../pages/adminPages/CategoryDashboard.tsx";
 import PublisherDashboardPage from "../pages/adminPages/PublisherDashboard.tsx";
 import ImageBoardgamesDashboardPage from "../pages/adminPages/ImageBoardgameDashboard.tsx";
+import OrderDashboardPage from "../pages/adminPages/OrderDashboard.tsx";
+import BookingPage from "../pages/Booking.tsx";
 
 // create router
 export const router = createBrowserRouter([
@@ -52,6 +54,10 @@ export const router = createBrowserRouter([
           {
             path: "contact",
             element: <Contact />, //go here if have auth
+          },
+          {
+            path: "booking",
+            element: <BookingPage></BookingPage>
           },
           {
             path: "product",
@@ -147,6 +153,10 @@ export const router = createBrowserRouter([
       {
         path:"image-boardgames",
         element: <ImageBoardgamesDashboardPage></ImageBoardgamesDashboardPage>
+      },
+      {
+        path:"order",
+        element: <OrderDashboardPage></OrderDashboardPage>
       }
     ],
   },

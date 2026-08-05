@@ -24,6 +24,12 @@ const tabs = [
     path: "/Contact",
     hidden: false,
   },
+  {
+    key: "tabs04",
+    title: "Booking",
+    path: "/Booking",
+    hidden: false,
+  },
 ];
 export const NavLinks = ({
   className,
