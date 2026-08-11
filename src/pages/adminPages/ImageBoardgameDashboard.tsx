@@ -10,7 +10,7 @@ import { useUpdateContainer } from "../../features/adminFeatures/dasboard-edit-c
 import UpdateForm from "../../features/adminFeatures/dasboard-edit-create/components/ImageBoardGame/updateForm";
 
 export default function ImageBoardgamesDashboardPage() {
-   const query = useQueryClient();
+  const query = useQueryClient();
   const confirm = useConfirmContent((state) => state.active);
   const active = useCreateContainer(useShallow((state) => state.active));
   const [gridApi, setGridApi] = useState<GridApi | null>(null);

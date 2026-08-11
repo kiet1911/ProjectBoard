@@ -80,6 +80,16 @@ export function enumStoreOrderStatusConvertToString(type: number) {
   }
 }
 
+export function enumStoreBookingStatusConvertToString(type: number){
+  switch(type){
+    case 0 : return {name: "Pending", color: "yellow"}
+    case 1 : return {name: "Confirmed", color: "green"}
+    case 2 : return {name: "Arrived", color: "blue"}
+    case 3 : return {name: "Cancelled", color: "red"}
+    case 4 : return {name: "Rejected", color: "red"}
+  }
+}
+
 export function enumStoreOrderStatusTransactionConvert(dataType: OrderTransactionStatus) {
 
   if (dataType == null || dataType == undefined) {

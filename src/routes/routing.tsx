@@ -34,7 +34,7 @@ export const router = createBrowserRouter([
     path: "/",
     element: <App />,
     loader: async () => {
-      console.log("this runing home ");
+      // console.log("this runing home ");
       return {
         name: "Huy",
       };

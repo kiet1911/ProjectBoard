@@ -25,7 +25,7 @@ const tabs = [
     hidden: false,
   },
   {
-    key: "tabs04",
+    key: "tabs05",
     title: "Booking",
     path: "/Booking",
     hidden: false,

@@ -5,6 +5,7 @@ import Footer from "./components/Footer";
 import AlertNotification from "./components/AlertNotification";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ConfirmNotification from "./components/ConfirmNotification";
+import UpdateContainer from "./features/adminFeatures/dasboard-edit-create/components/updateContainer";
 
 // fake component
 export function ProtectPath({ auth = false }: { auth: boolean }) {
@@ -27,6 +28,7 @@ function App() {
         </div>
         <AlertNotification></AlertNotification>
         <ConfirmNotification></ConfirmNotification>
+        <UpdateContainer></UpdateContainer>
       </QueryClientProvider>
     </>
   );
