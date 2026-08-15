@@ -27,6 +27,7 @@ import PublisherDashboardPage from "../pages/adminPages/PublisherDashboard.tsx";
 import ImageBoardgamesDashboardPage from "../pages/adminPages/ImageBoardgameDashboard.tsx";
 import OrderDashboardPage from "../pages/adminPages/OrderDashboard.tsx";
 import BookingPage from "../pages/Booking.tsx";
+import BookingDashboardPage from "../pages/adminPages/BookingDashboard.tsx";
 
 // create router
 export const router = createBrowserRouter([
@@ -157,6 +158,10 @@ export const router = createBrowserRouter([
       {
         path:"order",
         element: <OrderDashboardPage></OrderDashboardPage>
+      },
+      {
+        path:"booking",
+        element: <BookingDashboardPage></BookingDashboardPage>
       }
     ],
   },

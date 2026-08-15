@@ -90,6 +90,15 @@ export function enumStoreBookingStatusConvertToString(type: number){
   }
 }
 
+export function enumStoreBookingStatusConvertToNumber(type:string){
+  switch(type){
+    case "Confirmed" : return 1;
+    case "Rejected" : return 4;
+    case "Arrived" : return 2;
+    default: return -1;
+  }
+}
+
 export function enumStoreOrderStatusTransactionConvert(dataType: OrderTransactionStatus) {
 
   if (dataType == null || dataType == undefined) {

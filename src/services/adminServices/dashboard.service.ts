@@ -162,6 +162,20 @@ export const dashboardService = {
             }
             throw error;
         }
+    },
+    BookingTable: async (x: {
+        page: number, pageSize: number, sortBy?: String, sortDirection?: String, idSearch: string, nameSearch: string, phoneSearch: string, statusSearch: string,
+    }) => {
+        try {
+            const res = await apiAdmin.get("v1/BookingDashboard/BookingTable", { params: x })
+            return res.data;
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                console.log(error);
+                throw error;
+            }
+            throw error;
+        }
     }
 
 }

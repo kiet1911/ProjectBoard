@@ -68,6 +68,25 @@ export interface OrderDTO {
     games: GamesOrderDTO[]
 }
 
+export interface BookingDTO {
+    id:string,
+    name:string,
+    phoneNumber:string,
+    email:string,
+    minPlayers:number,
+    maxsPlayers:number,
+    bookingTime:string,
+    gameReservation:string,
+    gameType:string,
+    note:string,
+    status:number,
+    isConfirmed:boolean,
+    confirmedAt:string,
+    rejectionReason:string,
+    isDeleted:boolean,
+    deleted_at:string,
+}
+
 interface GamesOrderDTO {
     id:string,
     name:string,

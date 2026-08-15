@@ -1,4 +1,5 @@
 import {
+  BookAlert,
   CalendarSearch,
   House,
   ShoppingBasket,
@@ -70,7 +71,11 @@ export const ListTabsAction = [
   {
     icons: CalendarSearch,
     name: "Booking",
-    child:[
+    child:[{
+      icons: BookAlert,
+      name: "Booking reservation",
+      path: "/admin/booking"
+    }
       // {
       //   icons: ShoppingCart,
       //   name: "Order",
