@@ -83,6 +83,7 @@ The project focuses on clean code organization, RESTful API design, and scalable
 * VNPay Payment
 * Order History
 * Profile Management
+* Booking table
 
 ### Administrator
 
@@ -92,6 +93,7 @@ The project focuses on clean code organization, RESTful API design, and scalable
 * User Management
 * Order Management
 * Inventory Management
+* Booking Management
 
 ---
 
@@ -224,6 +226,14 @@ The project focuses on clean code organization, RESTful API design, and scalable
 
 ---
 
+### Booking Management (in customer and admin side)
+
+<img width="905" height="484" alt="image" src="https://github.com/user-attachments/assets/e1092121-012a-42ca-adde-46e5c9858953" />
+
+<img width="910" height="480" alt="image" src="https://github.com/user-attachments/assets/d8bb54d4-f6d6-4feb-a365-afbff3747fce" />
+
+---
+
 ## Installation
 
 ### Clone repository
@@ -279,10 +289,11 @@ ONGOING
 
 ## Future Improvements
 
+* Client chart booking for updating realtime
+* Product Recommendation
 * Product Reviews & Ratings
 * Wishlist
 * Coupon System
-* Product Recommendation
 * Real-time Notification
 * Docker Deployment
 * CI/CD Pipeline
