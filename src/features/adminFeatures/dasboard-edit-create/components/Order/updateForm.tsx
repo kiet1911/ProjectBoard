@@ -89,7 +89,9 @@ export default function UpdateForm({
           id: form.id,
           orderState: x,
         });
-        query.invalidateQueries({queryKey:["data_orderBoardgames", params.id]})
+        query.invalidateQueries({
+          queryKey: ["data_orderBoardgames", params.id],
+        });
         return res;
       }
       return Promise.reject("Guid order id is not found");

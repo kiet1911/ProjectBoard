@@ -11,7 +11,7 @@ export const useBookingMutation = async ({ data, onNotification, onClear }: {
     onClear:()=>void
 }) => {
     const mutation = useMutation({
-        mutationFn: async () => {
+        mutationFn: async () => { 
             if (data) {
                 const res = await Client_Booking_Service.UserBookingsSubmission(data);
                 return res.data;
@@ -23,6 +23,7 @@ export const useBookingMutation = async ({ data, onNotification, onClear }: {
             console.log("success")
             onNotification({ text: "Booking successfully!", type: "success" })
             onClear();
+            
         },
         onError: (error) => {
             if (error instanceof AxiosError) {

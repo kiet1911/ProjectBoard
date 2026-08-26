@@ -8,6 +8,7 @@ import {
 } from "../../../store/notification/notification";
 import { useBookingMutation } from "../hooks/useBookingMutation";
 import ClientBooking from "./userBookings";
+import * as signalR from "@microsoft/signalr";
 
 const TitleBooking = {
   head: "Booking",
@@ -74,7 +75,7 @@ export default function UserBooking() {
             e.target.name.slice(1, e.target.name.length),
         )
       ) {
-        console.log(e.target.name);
+        // console.log(e.target.name);
         const key =
           e.target.name[0].toLowerCase() +
           e.target.name.slice(1, e.target.name.length);
@@ -121,19 +122,39 @@ export default function UserBooking() {
         maxPlayers: Number(state.maxPlayers),
       }));
 
-      console.log(form);
+      // console.log(form);
 
       (await mutation).mutation.mutate();
     }
   }, [form]);
   useEffect(() => {
     if (form) {
-      console.log(form);
+      // console.log(form);
     }
   }, [form]);
+
+  // const connectSignalR = () => {
+  //   try {
+  //     const baseURL = import.meta.env.VITE_API_URL || "https://localhost:7001";
+  //     const newConnection = new signalR.HubConnectionBuilder()
+  //       .withUrl(`${baseURL}/bookingHub`, {
+  //         skipNegotiation: true,
+  //         transport: signalR.HttpTransportType.WebSockets,
+  //         withCredentials: true,
+  //       })
+  //       .withAutomaticReconnect([0, 2000, 5000, 10000])
+  //       .configureLogging(signalR.LogLevel.Information)
+  //       .build();
+
+  //     newConnection.on("UserConnected", (data) => {
+  //       console.log("User connected:", data);
+  //     });
+  //   } catch (error) {}
+  // };
+
   return (
     <>
-      {isAuthentication&&publicId ? (
+      {isAuthentication && publicId ? (
         <PageContainer url="../BackgroundContent/bghomepage.png">
           <div className="w-full relative pt-10 border-4 border-double border-mist-500/50 p-4 bg-white/90 space-y-0 mt-5">
             <div className="h-28 flex flex-col items-center justify-center absolute -top-12 left-[50%] -translate-x-[50%]">
@@ -343,14 +364,11 @@ export default function UserBooking() {
           </div>
 
           <div className="w-full">
-            <ClientBooking publicId={publicId} ></ClientBooking>
-          </div>
-          
-          {/* chart feature */}
-          <div className=" w-full">
-            
+            <ClientBooking publicId={publicId}></ClientBooking>
           </div>
 
+          {/* chart feature */}
+          <div className=" w-full"></div>
         </PageContainer>
       ) : (
         <PageContainer url="../BackgroundContent/bghomepage.png">

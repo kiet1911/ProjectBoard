@@ -16,7 +16,7 @@ import {
 } from "../../../store/notification/notification";
 import { useCreateContainer } from "../../adminFeatures/dasboard-edit-create/stores/createContainer";
 import { Client_Booking_Service } from "../services/client.booking.service";
-import { TableColumnsSplit } from "lucide-react";
+import { RefreshCcw, TableColumnsSplit } from "lucide-react";
 import { enumStoreBookingStatusConvertToString } from "../../../types/enumStore";
 import { useUpdateContainer } from "../../adminFeatures/dasboard-edit-create/stores/updateContainer";
 import UserDetailBooking from "./useDetailBooking";
@@ -37,50 +37,21 @@ export default function ClientBooking({ publicId }: { publicId: string }) {
       gridApi.sizeColumnsToFit();
     }
   }, [gridApi]);
+
   const columnDefs = useMemo(() => {
     return [
       {
         field: "id",
         header: "Id",
-        // filter: true,
-        // floatingFilter:true,
-        // filterParams: {
-        //   filterOptions: ["contains"],
-        //   maxNumConditions: 1,
-        //   debounceMs: 500,
-        // },
       },
       {
         field: "name",
         header: "Name",
-        // filter: true,
-        // floatingFilter:true,
-        // filterParams: {
-        //   filterOptions: ["contains"],
-        //   maxNumConditions: 1,
-        //   debounceMs: 500,
-        // },
       },
       {
         field: "phoneNumber",
         header: "PhoneNumber",
       },
-      //   {
-      //     field: "email",
-      //     header: "Email",
-      //   },
-      //   {
-      //     field: "minPlayers",
-      //     header: "Min Players",
-      //   },
-      //   {
-      //     field: "maxsPlayers",
-      //     header: "Max Players",
-      //   },
-      //   {
-      //     field: "minPlayers",
-      //     header: "MinPlayers",
-      //   },
       {
         field: "bookingTime",
         header: "Booking Time",
@@ -173,11 +144,17 @@ export default function ClientBooking({ publicId }: { publicId: string }) {
       <h1 className="text-2xl font-bold py-2 px-1 rounded bg-white/30 border-2 border-mist-400/30 text-(--main-color) text-shadow-lg/30 text-shadow-black/50">
         Reservation
       </h1>
-      <div>
+      <div className=" space-x-2">
         <button onClick={refreshGridColumn}>
           <h1 className="p-2 space-x-2 bg-white border-2 border-mist-400/30 navbar-link mb-2 mt-0.5 text-md hover:bg-(--main-color) hover:text-white active:text-white active:bg-(--main-color)">
             <TableColumnsSplit size={20}></TableColumnsSplit>
             Fit column
+          </h1>
+        </button>
+        <button onClick={refreshGrid}>
+          <h1 className="p-2 space-x-2 bg-white border-2 border-mist-400/30 navbar-link mb-2 mt-0.5 text-md hover:bg-(--main-color) hover:text-white active:text-white active:bg-(--main-color)">
+            <RefreshCcw size={20}></RefreshCcw>
+            Refresh reservation
           </h1>
         </button>
       </div>
@@ -254,7 +231,7 @@ const CustomButtonComponent = React.memo(
             Detail
           </button>
 
-          { data &&  data.status != undefined && data.status != 0 ? (
+          {data && data.status != undefined && data.status != 0 ? (
             <></>
           ) : (
             <button
